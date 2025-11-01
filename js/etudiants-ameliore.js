@@ -1,18 +1,43 @@
 /* ===============================
-   MODULE 03: LISTE DES ÉTUDIANTS
-   Index: 50 10-10-2025a → Modularisation
-   
+   MODULE: LISTE DES ÉTUDIANTS (VERSION AMÉLIORÉE)
+   Beta 0.84 - Tableau amélioré
+
    ⚠️ AVERTISSEMENT ⚠️
    Ce module gère l'affichage de la liste des étudiants
-   dans la section Étudiants › Liste des individus.
-   
+   dans la section Tableau de bord › Liste des individus.
+
    Contenu de ce module:
-   - Affichage du tableau des étudiants
-   - Calcul de l'assiduité (indice A) pour chaque étudiant
-   - Filtrage par groupe, programme, statut
+   - Affichage du tableau amélioré des étudiants
+   - Calcul des indices A-C-P-M-R pour chaque étudiant
+   - Filtrage avancé (groupe, programme, risque, RàI, pattern)
    - Recherche par nom
+   - Tri par colonnes cliquables
+   - Surlignage conditionnel
+   - Cartes de statistiques du groupe
    - Navigation vers les portfolios
+
+   NOUVELLES FONCTIONNALITÉS BETA 0.84:
+   - Cartes de statistiques (Total, Risques faibles, RàI 1/2/3)
+   - Filtres avancés (Risque, RàI, Pattern)
+   - Colonnes supplémentaires (Mobilisation M, Risque, Pattern)
+   - Tri cliquable sur toutes les colonnes
+   - Badges visuels améliorés avec couleurs système
+   - Surlignage des cas critiques
+   - Police système moderne
    =============================== */
+
+/* ===============================
+   VARIABLES GLOBALES DE TRI
+   =============================== */
+
+// État du tri actuel
+let triActuel = {
+    colonne: 'nom', // Colonne par défaut: nom (ordre alphabétique)
+    ordre: 'asc'    // 'asc' ou 'desc'
+};
+
+// Cache des données pour optimisation
+let donneesTableauCache = [];
 
 /* ===============================
    DÉPENDANCES DE CE MODULE
@@ -449,6 +474,47 @@ function filtrerEtudiants(etudiants) {
         });
     }
 
+    // NOUVEAU: Filtre par niveau de risque
+    const filtreRisque = document.getElementById('filtre-risque-liste');
+    if (filtreRisque && filtreRisque.value) {
+        const niveauRisque = filtreRisque.value;
+        resultats = resultats.filter(function (e) {
+            const indices = calculerTousLesIndices(e.da);
+            const risque = indices.R;
+
+            switch(niveauRisque) {
+                case 'minimal': return risque <= 0.20;
+                case 'faible': return risque > 0.20 && risque <= 0.30;
+                case 'modere': return risque > 0.30 && risque <= 0.40;
+                case 'eleve': return risque > 0.40 && risque <= 0.50;
+                case 'tres-eleve': return risque > 0.50 && risque <= 0.70;
+                case 'critique': return risque > 0.70;
+                default: return true;
+            }
+        });
+    }
+
+    // NOUVEAU: Filtre par niveau RàI
+    const filtreRai = document.getElementById('filtre-rai-liste');
+    if (filtreRai && filtreRai.value) {
+        const niveauRai = parseInt(filtreRai.value);
+        resultats = resultats.filter(function (e) {
+            const cible = determinerCibleIntervention(e.da);
+            return cible.niveau === niveauRai;
+        });
+    }
+
+    // NOUVEAU: Filtre par pattern d'apprentissage
+    const filtrePattern = document.getElementById('filtre-pattern-liste');
+    if (filtrePattern && filtrePattern.value) {
+        const patternFiltre = filtrePattern.value;
+        resultats = resultats.filter(function (e) {
+            const cible = determinerCibleIntervention(e.da);
+            const pattern = cible.pattern.toLowerCase().replace(/\s+/g, '-');
+            return pattern === patternFiltre;
+        });
+    }
+
     // Recherche par nom/prénom
     const rechercheNom = document.getElementById('recherche-nom-liste');
     if (rechercheNom && rechercheNom.value.trim()) {
@@ -474,6 +540,9 @@ function filtrerEtudiants(etudiants) {
 function afficherListeEtudiantsConsultation() {
     console.log('🔵 Affichage de la liste des étudiants...');
 
+    // NOUVEAU: Mettre à jour l'indicateur de tri visuel au chargement
+    mettreAJourIndicateursTri();
+
     const tbody = document.getElementById('tbody-tableau-bord-liste');
     const compteur = document.getElementById('compteur-tableau-bord-liste');
     const messageVide = document.getElementById('message-aucun-etudiant');
@@ -493,9 +562,12 @@ function afficherListeEtudiantsConsultation() {
     console.log('Nombre total d\'étudiants:', etudiants.length);
 
     // Appliquer les filtres
-    const etudiantsFiltres = filtrerEtudiants(etudiants);
+    let etudiantsFiltres = filtrerEtudiants(etudiants);
 
     console.log('Nombre d\'étudiants après filtrage:', etudiantsFiltres.length);
+
+    // NOUVEAU: Mettre à jour les statistiques
+    mettreAJourStatistiques(etudiantsFiltres);
 
     // Mettre à jour le compteur
     if (compteur) {
@@ -538,38 +610,142 @@ function afficherListeEtudiantsConsultation() {
         tableContainer.style.display = 'block';
     }
 
-    // Trier par nom
+    // NOUVEAU: Enrichir les données pour le tri (sans assigner les numéros encore)
+    etudiantsFiltres = etudiantsFiltres.map((e) => {
+        const indices = calculerTousLesIndices(e.da);
+        const cible = determinerCibleIntervention(e.da);
+        return {
+            ...e,
+            indicesCalcules: indices,
+            cibleCalculee: cible
+        };
+    });
+
+    // NOUVEAU: Trier selon la colonne active
     etudiantsFiltres.sort(function (a, b) {
-        const nomA = (a.nom + ' ' + a.prenom).toLowerCase();
-        const nomB = (b.nom + ' ' + b.prenom).toLowerCase();
-        return nomA.localeCompare(nomB);
+        let valeurA, valeurB;
+
+        switch(triActuel.colonne) {
+            case 'num':
+                valeurA = a.num;
+                valeurB = b.num;
+                break;
+            case 'da':
+                valeurA = a.da;
+                valeurB = b.da;
+                break;
+            case 'groupe':
+                valeurA = a.groupe;
+                valeurB = b.groupe;
+                break;
+            case 'nom':
+                valeurA = a.nom.toLowerCase();
+                valeurB = b.nom.toLowerCase();
+                break;
+            case 'prenom':
+                valeurA = a.prenom.toLowerCase();
+                valeurB = b.prenom.toLowerCase();
+                break;
+            case 'assiduite':
+                valeurA = a.indicesCalcules.A;
+                valeurB = b.indicesCalcules.A;
+                break;
+            case 'completion':
+                valeurA = a.indicesCalcules.C;
+                valeurB = b.indicesCalcules.C;
+                break;
+            case 'performance':
+                valeurA = a.indicesCalcules.P;
+                valeurB = b.indicesCalcules.P;
+                break;
+            case 'mobilisation':
+                valeurA = a.indicesCalcules.A * a.indicesCalcules.C;
+                valeurB = b.indicesCalcules.A * b.indicesCalcules.C;
+                break;
+            case 'risque':
+                valeurA = a.indicesCalcules.R;
+                valeurB = b.indicesCalcules.R;
+                break;
+            case 'pattern':
+                valeurA = a.cibleCalculee.pattern;
+                valeurB = b.cibleCalculee.pattern;
+                break;
+            case 'rai':
+                valeurA = a.cibleCalculee.niveau;
+                valeurB = b.cibleCalculee.niveau;
+                break;
+            default:
+                valeurA = a.num;
+                valeurB = b.num;
+        }
+
+        // Comparer
+        let comparaison = 0;
+        if (typeof valeurA === 'string') {
+            comparaison = valeurA.localeCompare(valeurB);
+        } else {
+            comparaison = valeurA - valeurB;
+        }
+
+        // Inverser si ordre descendant
+        return triActuel.ordre === 'asc' ? comparaison : -comparaison;
+    });
+
+    // NOUVEAU: Assigner les numéros APRÈS le tri
+    etudiantsFiltres = etudiantsFiltres.map((e, index) => {
+        return {
+            ...e,
+            num: index + 1
+        };
     });
 
     // Générer le HTML
     tbody.innerHTML = '';
 
+    // NOUVEAU: Récupérer le surlignage
+    const surlignerCritique = document.getElementById('surligner-critique');
+    const doitSurligner = surlignerCritique && surlignerCritique.checked;
+
     etudiantsFiltres.forEach(function (etudiant) {
-        // Calcul des indices
-        const assiduite = calculerAssiduitéGlobale(etudiant.da);
-        const couleurAssiduite = obtenirCouleurAssiduite(assiduite);
-        const completion = calculerTauxCompletion(etudiant.da);
-        const couleurCompletion = obtenirCouleurCompletion(completion);
-        const performance = calculerPerformance(etudiant.da);
-        const couleurPerformance = obtenirCouleurPerformance(performance);
-        const niveauRaI = calculerNiveauRaI(etudiant.da);
+        // Utiliser les indices précalculés
+        const indices = etudiant.indicesCalcules;
+        const cible = etudiant.cibleCalculee;
+
+        // Calcul mobilisation
+        const mobilisation = Math.round(indices.A * indices.C);
+        const couleurMobilisation = obtenirCouleurMobilisation(mobilisation / 100);
+
+        // Génération des badges
+        const badgeRisque = genererBadgeRisque(indices.R);
+        const badgePattern = genererBadgePattern(cible.pattern);
+        const badgeRai = genererBadgeRaI(cible.niveau);
 
         const tr = document.createElement('tr');
+
+        // NOUVEAU: Surlignage conditionnel pour risque critique
+        const estCritique = indices.R > 0.70;
+        if (doitSurligner && estCritique) {
+            tr.style.backgroundColor = '#fff5f5';
+            tr.style.borderLeft = '4px solid #dc2626';
+        }
+
         // Rendre la ligne cliquable
         tr.style.cursor = 'pointer';
         tr.onclick = function () {
             afficherPortfolio(etudiant.da);
         };
+
         // Effet de survol
+        const bgOriginal = tr.style.backgroundColor || '';
         tr.onmouseenter = function () {
-            this.style.backgroundColor = 'var(--bleu-tres-pale)';
+            if (doitSurligner && estCritique) {
+                this.style.backgroundColor = '#fee2e2';
+            } else {
+                this.style.backgroundColor = 'var(--bleu-tres-pale)';
+            }
         };
         tr.onmouseleave = function () {
-            this.style.backgroundColor = '';
+            this.style.backgroundColor = bgOriginal;
         };
 
         // Échapper les valeurs pour sécurité
@@ -577,21 +753,47 @@ function afficherListeEtudiantsConsultation() {
         const groupe = echapperHtml(etudiant.groupe || '');
         const nom = echapperHtml(etudiant.nom || '');
         const prenom = echapperHtml(etudiant.prenom || '');
-        const nomProgramme = echapperHtml(obtenirNomProgramme(etudiant.programme) || '');
 
-        // Construire le HTML ligne par ligne pour éviter les erreurs
+        // NOUVEAU: Construire le HTML avec toutes les colonnes
         let html = '';
+        html += '<td style="text-align: center; color: #64748b; font-weight: 600;">' + etudiant.num + '</td>';
         html += '<td>' + da + '</td>';
         html += '<td style="text-align: center;"><strong>' + groupe + '</strong></td>';
         html += '<td>' + nom + '</td>';
         html += '<td>' + prenom + '</td>';
-        html += '<td>' + nomProgramme + '</td>';
         html += '<td style="text-align: center;">' + (etudiant.sa === 'Oui' ? '✓' : '') + '</td>';
-        html += '<td style="text-align: center;">' + (etudiant.caf === 'Oui' ? '✓' : '') + '</td>';
-        html += '<td style="text-align: center;"><strong style="color: ' + couleurAssiduite + ';">' + assiduite + '%</strong></td>';
-        html += '<td style="text-align: center;"><strong style="color: ' + couleurCompletion + ';">' + completion + '%</strong></td>';
-        html += '<td style="text-align: center;"><strong style="color: ' + couleurPerformance + ';">' + performance + '%</strong></td>';
-        html += '<td style="text-align: center;"><span style="background: ' + niveauRaI.couleurFond + '; color: ' + niveauRaI.couleurTexte + '; padding: 4px 10px; border-radius: 4px; font-weight: 600; display: inline-block; font-size: 0.85rem;">' + niveauRaI.label + '</span></td>';
+
+        // Colonnes A-C-P avec couleurs
+        const couleurA = obtenirCouleurAssiduite(Math.round(indices.A));
+        const couleurC = obtenirCouleurCompletion(Math.round(indices.C));
+        const couleurP = obtenirCouleurPerformance(Math.round(indices.P));
+
+        html += '<td style="text-align: center;"><strong style="color: ' + couleurA + ';">' + Math.round(indices.A) + '%</strong></td>';
+        html += '<td style="text-align: center;"><strong style="color: ' + couleurC + ';">' + Math.round(indices.C) + '%</strong></td>';
+        html += '<td style="text-align: center;"><strong style="color: ' + couleurP + ';">' + Math.round(indices.P) + '%</strong></td>';
+
+        // NOUVEAU: Colonne Mobilisation (M = A × C)
+        html += '<td style="text-align: center;"><strong style="color: ' + couleurMobilisation + ';">' + mobilisation + '%</strong></td>';
+
+        // NOUVEAU: Colonne Risque avec badge
+        html += '<td style="text-align: center;"><span class="' + badgeRisque.classe + '">' + badgeRisque.label + '</span></td>';
+
+        // NOUVEAU: Colonne Pattern avec badge
+        html += '<td><span class="' + badgePattern.classe + '">' + badgePattern.label + '</span></td>';
+
+        // NOUVEAU: Colonne RàI avec badge amélioré
+        html += '<td style="text-align: center;"><span class="' + badgeRai.classe + '">' + badgeRai.label + '</span></td>';
+
+        // NOUVEAU (Beta 0.85): Colonne Interventions
+        const nbInterventions = (typeof obtenirInterventionsEtudiant === 'function')
+            ? obtenirInterventionsEtudiant(etudiant.da).length
+            : 0;
+
+        if (nbInterventions > 0) {
+            html += '<td style="text-align: center;"><span style="color: var(--bleu-principal); font-weight: 600;">📋 ' + nbInterventions + '</span></td>';
+        } else {
+            html += '<td style="text-align: center;"><span style="color: #ccc;">—</span></td>';
+        }
 
         tr.innerHTML = html;
         tbody.appendChild(tr);
@@ -733,6 +935,171 @@ function afficherPortfolio(da) {
     }
 
     console.log('✅ Profil chargé pour DA:', da);
+}
+
+/* ===============================
+   🆕 NOUVELLES FONCTIONNALITÉS BETA 0.84
+   =============================== */
+
+/**
+ * Trie le tableau par une colonne donnée
+ * @param {string} colonne - Nom de la colonne à trier
+ */
+function trierTableauPar(colonne) {
+    console.log(`📊 Tri par colonne: ${colonne}`);
+
+    // Si on clique sur la même colonne, inverser l'ordre
+    if (triActuel.colonne === colonne) {
+        triActuel.ordre = triActuel.ordre === 'asc' ? 'desc' : 'asc';
+    } else {
+        triActuel.colonne = colonne;
+        triActuel.ordre = 'asc';
+    }
+
+    // Mettre à jour les indicateurs visuels
+    mettreAJourIndicateursTri();
+
+    // Réafficher le tableau avec le nouveau tri
+    afficherListeEtudiantsConsultation();
+}
+
+/**
+ * Met à jour les indicateurs visuels de tri (flèches)
+ */
+function mettreAJourIndicateursTri() {
+    // Réinitialiser tous les indicateurs
+    ['num', 'da', 'groupe', 'nom', 'prenom', 'assiduite', 'completion', 'performance', 'mobilisation', 'risque', 'pattern', 'rai'].forEach(col => {
+        const elem = document.getElementById(`tri-${col}`);
+        if (elem) elem.textContent = '↕';
+    });
+
+    // Mettre à jour l'indicateur actif
+    const elemActif = document.getElementById(`tri-${triActuel.colonne}`);
+    if (elemActif) {
+        elemActif.textContent = triActuel.ordre === 'asc' ? '↑' : '↓';
+    }
+}
+
+/**
+ * Met à jour les cartes de statistiques du groupe
+ * @param {Array} etudiants - Liste des étudiants après filtrage
+ */
+function mettreAJourStatistiques(etudiants) {
+    if (etudiants.length === 0) {
+        document.getElementById('stat-total-etudiants').textContent = '0';
+        document.getElementById('stat-risques-faibles').textContent = '0';
+        document.getElementById('stat-risques-faibles-pct').textContent = '(0%)';
+        document.getElementById('stat-rai-1').textContent = '0';
+        document.getElementById('stat-rai-1-pct').textContent = '(0%)';
+        document.getElementById('stat-rai-2').textContent = '0';
+        document.getElementById('stat-rai-2-pct').textContent = '(0%)';
+        document.getElementById('stat-rai-3').textContent = '0';
+        document.getElementById('stat-rai-3-pct').textContent = '(0%)';
+        return;
+    }
+
+    const total = etudiants.length;
+
+    // Compter les risques faibles (≤ 30%)
+    let risquesFaibles = 0;
+    let rai1 = 0, rai2 = 0, rai3 = 0;
+
+    etudiants.forEach(e => {
+        const indices = calculerTousLesIndices(e.da);
+        const risque = indices.R;
+        const cible = determinerCibleIntervention(e.da);
+
+        if (risque <= 0.30) risquesFaibles++;
+
+        if (cible.niveau === 1) rai1++;
+        else if (cible.niveau === 2) rai2++;
+        else if (cible.niveau === 3) rai3++;
+    });
+
+    // Mettre à jour les cartes
+    document.getElementById('stat-total-etudiants').textContent = total;
+    document.getElementById('stat-risques-faibles').textContent = risquesFaibles;
+    document.getElementById('stat-risques-faibles-pct').textContent = `(${Math.round(risquesFaibles/total*100)}%)`;
+    document.getElementById('stat-rai-1').textContent = rai1;
+    document.getElementById('stat-rai-1-pct').textContent = `(${Math.round(rai1/total*100)}%)`;
+    document.getElementById('stat-rai-2').textContent = rai2;
+    document.getElementById('stat-rai-2-pct').textContent = `(${Math.round(rai2/total*100)}%)`;
+    document.getElementById('stat-rai-3').textContent = rai3;
+    document.getElementById('stat-rai-3-pct').textContent = `(${Math.round(rai3/total*100)}%)`;
+}
+
+/**
+ * Obtient la couleur appropriée pour la mobilisation
+ * @param {number} mobilisation - Valeur de mobilisation (0-1)
+ * @returns {string} - Code couleur hexadécimal
+ */
+function obtenirCouleurMobilisation(mobilisation) {
+    if (mobilisation >= 0.85) return '#16a34a'; // Vert
+    if (mobilisation >= 0.80) return '#65a30d'; // Vert lime
+    if (mobilisation >= 0.70) return '#ca8a04'; // Jaune
+    if (mobilisation >= 0.60) return '#ea580c'; // Orange
+    return '#dc2626'; // Rouge
+}
+
+/**
+ * Génère un badge de risque avec classe CSS appropriée
+ * @param {number} risque - Valeur du risque (0-1)
+ * @returns {Object} - {label, classe}
+ */
+function genererBadgeRisque(risque) {
+    if (risque <= 0.20) {
+        return { label: 'Minimal', classe: 'badge-sys badge-risque-minimal' };
+    } else if (risque <= 0.30) {
+        return { label: 'Faible', classe: 'badge-sys badge-risque-faible' };
+    } else if (risque <= 0.40) {
+        return { label: 'Modéré', classe: 'badge-sys badge-risque-modere' };
+    } else if (risque <= 0.50) {
+        return { label: 'Élevé', classe: 'badge-sys badge-risque-eleve' };
+    } else if (risque <= 0.70) {
+        return { label: 'Très élevé', classe: 'badge-sys badge-risque-tres-eleve' };
+    } else {
+        return { label: 'Critique', classe: 'badge-sys badge-risque-critique' };
+    }
+}
+
+/**
+ * Génère un badge de pattern avec classe CSS appropriée
+ * @param {string} pattern - Pattern d'apprentissage
+ * @returns {Object} - {label, classe}
+ */
+function genererBadgePattern(pattern) {
+    switch(pattern) {
+        case 'Blocage critique':
+            return { label: pattern, classe: 'badge-sys badge-pattern-blocage-critique' };
+        case 'Blocage émergent':
+            return { label: pattern, classe: 'badge-sys badge-pattern-blocage-emergent' };
+        case 'Défi spécifique':
+            return { label: pattern, classe: 'badge-sys badge-pattern-defi-specifique' };
+        case 'Stable':
+            return { label: pattern, classe: 'badge-sys badge-pattern-stable' };
+        case 'En progression':
+            return { label: pattern, classe: 'badge-sys badge-pattern-progression' };
+        default:
+            return { label: pattern, classe: 'badge-sys' };
+    }
+}
+
+/**
+ * Génère un badge de RàI avec classe CSS appropriée
+ * @param {number} niveau - Niveau RàI (1, 2, ou 3)
+ * @returns {Object} - {label, classe}
+ */
+function genererBadgeRaI(niveau) {
+    switch(niveau) {
+        case 1:
+            return { label: 'Niveau 1', classe: 'badge-sys badge-rai-1' };
+        case 2:
+            return { label: 'Niveau 2', classe: 'badge-sys badge-rai-2' };
+        case 3:
+            return { label: 'Niveau 3', classe: 'badge-sys badge-rai-3' };
+        default:
+            return { label: '—', classe: 'badge-sys' };
+    }
 }
 
 /* ===============================
