@@ -1,5 +1,5 @@
 # INVENTAIRE COMPLET DES COMPOSANTS UI
-## Système de monitorage pédagogique - Beta 0.71
+## Système de monitorage pédagogique - Beta 71
 
 **Date**: 24 octobre 2025
 **Fichier analysé**: `index 71 (refonte des modules).html`

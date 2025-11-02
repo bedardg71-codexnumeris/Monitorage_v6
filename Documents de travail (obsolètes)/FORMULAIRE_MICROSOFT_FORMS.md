@@ -1,4 +1,4 @@
-# Formulaire Microsoft Forms - Tests Beta 0.74
+# Formulaire Microsoft Forms - Tests Beta 74
 
 ## 📋 Instructions pour créer le formulaire dans Teams
 
@@ -14,7 +14,7 @@
 
 ## 🎨 Configuration du formulaire
 
-**Titre :** Test du Système de Monitorage Pédagogique - Beta 0.74
+**Titre :** Test du Système de Monitorage Pédagogique - Beta 74
 
 **Description :**
 ```
@@ -81,9 +81,9 @@ Vos retours sont précieux pour améliorer l'outil et le rendre plus utile pour 
 - Type : Cases à cocher
 - Obligatoire : Oui
 - Options :
-  * Beta 0.72 (support SOM-PAN hybride)
-  * Beta 0.73 (refonte système jetons)
-  * Beta 0.74 (moteur recherche Aide)
+  * Beta 72 (support SOM-PAN hybride)
+  * Beta 73 (refonte système jetons)
+  * Beta 74 (moteur recherche Aide)
   * Autre
 
 ---

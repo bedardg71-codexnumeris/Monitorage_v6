@@ -1,4 +1,4 @@
-# Formulaire Google Forms - Tests Beta 0.74
+# Formulaire Google Forms - Tests Beta 74
 
 ## 📋 Instructions pour créer le formulaire
 
@@ -12,7 +12,7 @@
 
 ## 🎨 Configuration du formulaire
 
-**Titre :** Test du Système de Monitorage Pédagogique - Beta 0.74
+**Titre :** Test du Système de Monitorage Pédagogique - Beta 74
 
 **Description :**
 ```
@@ -80,9 +80,9 @@ Anonymat : Vous pouvez rester anonyme si vous le souhaitez
 - **Question :** Quelle(s) version(s) avez-vous testée(s) ?
 - **Obligatoire :** Oui
 - **Options :**
-  - ☐ Beta 0.72 (support SOM-PAN hybride)
-  - ☐ Beta 0.73 (refonte système jetons)
-  - ☐ Beta 0.74 (moteur recherche Aide)
+  - ☐ Beta 72 (support SOM-PAN hybride)
+  - ☐ Beta 73 (refonte système jetons)
+  - ☐ Beta 74 (moteur recherche Aide)
   - ☐ Autre (précisez)
 
 ---

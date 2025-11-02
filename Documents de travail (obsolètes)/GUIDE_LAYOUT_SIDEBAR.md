@@ -1,6 +1,6 @@
 # Guide d'utilisation - Layout Sidebar 2 Colonnes
 
-**Version** : Beta 0.80.2+
+**Version** : Beta 80.2+
 **Créé** : 30 octobre 2025
 **Design** : Épuré, efficace, uniforme
 
