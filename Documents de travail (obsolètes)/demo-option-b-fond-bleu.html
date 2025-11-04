@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Démo Option B - Fond bleu actuel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            /* Fond bleu identique à l'application */
+            background: linear-gradient(135deg, #4A90E2 0%, #357ABD 50%, #2E5F8F 100%);
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        .demo-container {
+            max-width: 100%;
+        }
+
+        .version-title {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .version-title .badge {
+            display: inline-block;
+            background: #27ae60;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-left: 10px;
+            font-weight: 500;
+        }
+
+        .version-title .note {
+            display: block;
+            font-size: 0.85rem;
+            color: #95a5a6;
+            margin-top: 5px;
+            font-weight: normal;
+        }
+
+        /* En-tête avec glassmorphisme */
+        .header-demo {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .mode-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mode-badge:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Navigation principale */
+        .nav-principale {
+            display: flex;
+            gap: 10px;
+            padding: 0 30px 15px 30px;
+        }
+
+        .nav-principale button {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-principale button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-principale button.actif {
+            background: rgba(255, 107, 53, 0.9);
+            border-color: rgba(255, 107, 53, 1);
+        }
+
+        /* OPTION B : Sous-navigation avec fond plus foncé */
+        .sous-nav-container {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 12px 30px;
+        }
+
+        .sous-nav {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* Boutons de sous-navigation (pills) */
+        .sous-nav button {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .sous-nav button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .sous-nav button.actif {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.4);
+            font-weight: 600;
+        }
+
+        /* Contenu simulé */
+        .content-demo {
+            background: white;
+            padding: 40px;
+            min-height: 500px;
+        }
+
+        .content-demo h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-demo p {
+            line-height: 1.8;
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #4A90E2;
+        }
+
+        .stat-card h3 {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .value {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        /* Notes d'explication */
+        .explanation {
+            background: #e8f4f8;
+            border-left: 4px solid #4A90E2;
+            padding: 20px;
+            margin: 30px 40px;
+        }
+
+        .explanation h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .explanation p {
+            color: #34495e;
+            line-height: 1.6;
+        }
+
+        .explanation ul {
+            margin-top: 15px;
+            padding-left: 20px;
+        }
+
+        .explanation li {
+            color: #34495e;
+            margin: 8px 0;
+        }
+
+        .comparison {
+            margin: 30px 40px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .comparison-header {
+            background: #34495e;
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+        }
+
+        .comparison-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        .comparison-item {
+            padding: 20px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .comparison-item:nth-child(odd) {
+            border-right: 1px solid #ecf0f1;
+        }
+
+        .comparison-item h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .comparison-item p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .check-icon {
+            color: #27ae60;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <!-- Bandeau d'information -->
+        <div class="version-title">
+            Option B - Fond moyennement plus foncé
+            <span class="badge">RECOMMANDÉ</span>
+            <span class="note">rgba(0, 0, 0, 0.15) appliqué au fond bleu actuel de votre application</span>
+        </div>
+
+        <!-- EN-TÊTE AVEC OPTION B -->
+        <div class="header-demo">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">📊</span>
+                    <span class="logo-text">Monitorage Beta 88</span>
+                </div>
+                <div class="mode-badge">Mode: Normal</div>
+            </div>
+            <div class="nav-principale">
+                <button>Tableau de bord</button>
+                <button>Profils</button>
+                <button class="actif">Réglages</button>
+                <button>Aide</button>
+            </div>
+            <!-- OPTION B : Zone avec fond plus foncé -->
+            <div class="sous-nav-container">
+                <div class="sous-nav">
+                    <button class="actif">Aperçu</button>
+                    <button>Cours</button>
+                    <button>Trimestre</button>
+                    <button>Groupe</button>
+                    <button>Pratiques</button>
+                    <button>Import/Export</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTENU SIMULÉ -->
+        <div class="content-demo">
+            <h2>Réglages → Aperçu</h2>
+            <p>
+                Cette démo montre l'<strong>Option B</strong> appliquée au fond bleu actuel de votre application.
+                La zone de sous-navigation a un fond <code>rgba(0, 0, 0, 0.15)</code> qui crée une impression
+                de profondeur par rapport à la navigation principale.
+            </p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Cours configurés</h3>
+                    <div class="value">3</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Étudiants</h3>
+                    <div class="value">42</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Productions</h3>
+                    <div class="value">12</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Version</h3>
+                    <div class="value">β 88</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EXPLICATION -->
+        <div class="explanation">
+            <h3>💡 Pourquoi l'Option B fonctionne bien avec le fond bleu</h3>
+            <p>
+                Le fond bleu de votre application utilise déjà un <strong>glassmorphisme élégant</strong>
+                (transparence + blur). L'Option B ajoute une couche de profondeur visuelle sans
+                compromettre cette esthétique.
+            </p>
+            <ul>
+                <li><strong>Hiérarchie claire :</strong> La zone plus foncée indique immédiatement que c'est un niveau secondaire</li>
+                <li><strong>Cohérence visuelle :</strong> Les boutons pills gardent leur style actuel</li>
+                <li><strong>Élégance préservée :</strong> L'effet glassmorphisme reste intact</li>
+                <li><strong>Lisibilité améliorée :</strong> Le contraste aide à distinguer les deux niveaux</li>
+            </ul>
+        </div>
+
+        <!-- COMPARAISON AVANT/APRÈS -->
+        <div class="comparison">
+            <div class="comparison-header">
+                📊 Comparaison : Avant (Baseline) vs Après (Option B)
+            </div>
+            <div class="comparison-body">
+                <div class="comparison-item">
+                    <h4>❌ AVANT (Baseline)</h4>
+                    <p>
+                        Sous-navigation au même niveau visuel que la navigation principale.
+                        Hiérarchie peu marquée. Utilisateur doit deviner la structure.
+                    </p>
+                </div>
+                <div class="comparison-item">
+                    <h4><span class="check-icon">✓</span> APRÈS (Option B)</h4>
+                    <p>
+                        Zone de sous-navigation visuellement distincte avec fond plus foncé.
+                        Hiérarchie immédiate. Structure claire et intuitive.
+                    </p>
+                </div>
+                <div class="comparison-item">
+                    <h4>Impact visuel</h4>
+                    <p>
+                        Faible. Les deux niveaux se mélangent. Peut créer de la confusion
+                        quand il y a beaucoup de boutons.
+                    </p>
+                </div>
+                <div class="comparison-item">
+                    <h4>Impact visuel</h4>
+                    <p>
+                        <strong>Fort.</strong> La distinction est claire sans être agressive.
+                        Impression de "niveau enfoncé" bien visible.
+                    </p>
+                </div>
+                <div class="comparison-item">
+                    <h4>Code CSS</h4>
+                    <p>
+                        Sous-navigation directement dans l'en-tête, sans conteneur dédié.
+                    </p>
+                </div>
+                <div class="comparison-item">
+                    <h4>Code CSS</h4>
+                    <p>
+                        Simple : ajouter un <code>div.sous-nav-container</code> avec
+                        <code>background: rgba(0,0,0,0.15)</code> et <code>padding: 12px 30px</code>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- EXPLICATION TECHNIQUE -->
+        <div class="explanation">
+            <h3>🔧 Implémentation technique (Option B)</h3>
+            <p><strong>Changements CSS requis :</strong></p>
+            <ul>
+                <li>
+                    Créer un conteneur <code>.sous-nav-container</code> autour des boutons de sous-navigation
+                </li>
+                <li>
+                    Appliquer <code>background: rgba(0, 0, 0, 0.15)</code> à ce conteneur
+                </li>
+                <li>
+                    Ajouter <code>padding: 12px 30px</code> pour créer un espacement vertical
+                </li>
+                <li>
+                    Les boutons pills gardent leur style actuel (border-radius: 16px)
+                </li>
+            </ul>
+            <p style="margin-top: 15px;">
+                <strong>Résultat :</strong> Une distinction nette entre navigation principale et sous-navigation,
+                tout en préservant l'élégance du glassmorphisme bleu.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
