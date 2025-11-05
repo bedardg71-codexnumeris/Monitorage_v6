@@ -1,7 +1,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Système de suivi Beta 84 - Tableau amélioré</title>
+    <title>Système de suivi Beta 0.83 - Seuils configurables</title>
 
     <!-- AJOUTER CETTE LIGNE -->
     <link rel="stylesheet" href="styles.css?v=1761871037">
@@ -50,7 +50,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             min-height: 100vh;
             padding: 20px;
@@ -507,7 +507,7 @@
                 <!-- Informations légales et techniques (à droite) -->
                 <div class="info-legales-section">
                     <div class="meta">
-                        Beta 84
+                        Beta 0.83
                         <br>Créé par Grégoire Bédard
                         <br>Double licence : GPL v3 (code) + CC BY-SA 4.0 (contenu)
                         <br>31 octobre 2025
@@ -852,43 +852,6 @@
                             </span>
                         </h3>
 
-                        <!-- CARTES DE STATISTIQUES DU GROUPE -->
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px;">
-                            <!-- Total étudiants -->
-                            <div style="background: var(--bleu-tres-pale); padding: 15px; border-radius: 8px; border-left: 4px solid var(--bleu-principal);">
-                                <div style="font-size: 0.85rem; color: #666; margin-bottom: 5px;">Total</div>
-                                <div id="stat-total-etudiants" style="font-size: 2rem; font-weight: 700; color: var(--bleu-principal);">—</div>
-                            </div>
-
-                            <!-- Risques faibles -->
-                            <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; border-left: 4px solid var(--succes);">
-                                <div style="font-size: 0.85rem; color: #666; margin-bottom: 5px;">Risques faibles</div>
-                                <div id="stat-risques-faibles" style="font-size: 2rem; font-weight: 700; color: var(--succes);">—</div>
-                                <div id="stat-risques-faibles-pct" style="font-size: 0.75rem; color: #666; margin-top: 2px;">—</div>
-                            </div>
-
-                            <!-- RàI Niveau 1 -->
-                            <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border-left: 4px solid #0ea5e9;">
-                                <div style="font-size: 0.85rem; color: #666; margin-bottom: 5px;">RàI Niveau 1</div>
-                                <div id="stat-rai-1" style="font-size: 2rem; font-weight: 700; color: #0ea5e9;">—</div>
-                                <div id="stat-rai-1-pct" style="font-size: 0.75rem; color: #666; margin-top: 2px;">—</div>
-                            </div>
-
-                            <!-- RàI Niveau 2 -->
-                            <div style="background: #fef3c7; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b;">
-                                <div style="font-size: 0.85rem; color: #666; margin-bottom: 5px;">RàI Niveau 2</div>
-                                <div id="stat-rai-2" style="font-size: 2rem; font-weight: 700; color: #f59e0b;">—</div>
-                                <div id="stat-rai-2-pct" style="font-size: 0.75rem; color: #666; margin-top: 2px;">—</div>
-                            </div>
-
-                            <!-- RàI Niveau 3 -->
-                            <div style="background: #fee2e2; padding: 15px; border-radius: 8px; border-left: 4px solid var(--risque-critique);">
-                                <div style="font-size: 0.85rem; color: #666; margin-bottom: 5px;">RàI Niveau 3</div>
-                                <div id="stat-rai-3" style="font-size: 2rem; font-weight: 700; color: var(--risque-critique);">—</div>
-                                <div id="stat-rai-3-pct" style="font-size: 0.75rem; color: #666; margin-top: 2px;">—</div>
-                            </div>
-                        </div>
-
                         <!-- ZONE INFO: Lien vers configuration -->
                         <div style="background: var(--bleu-tres-pale); padding: 15px; border-radius: 8px;
                 margin-bottom: 20px; border-left: 4px solid var(--bleu-principal);">
@@ -900,7 +863,8 @@
 
                         <!-- FILTRAGE ET RECHERCHE -->
                         <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 15px;">
+                            <div
+                                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
                                 <div class="groupe-form">
                                     <label for="filtre-groupe-liste">Groupe</label>
                                     <select id="filtre-groupe-liste" class="controle-form"
@@ -916,41 +880,6 @@
                                     </select>
                                 </div>
                                 <div class="groupe-form">
-                                    <label for="filtre-risque-liste">Niveau de risque</label>
-                                    <select id="filtre-risque-liste" class="controle-form"
-                                        onchange="afficherListeEtudiantsConsultation()">
-                                        <option value="">Tous les niveaux</option>
-                                        <option value="minimal">🔵 Minimal (≤ 20%)</option>
-                                        <option value="faible">🟢 Faible (20-30%)</option>
-                                        <option value="modere">🟡 Modéré (30-40%)</option>
-                                        <option value="eleve">🟠 Élevé (40-50%)</option>
-                                        <option value="tres-eleve">🔴 Très élevé (50-70%)</option>
-                                        <option value="critique">⚫ Critique (> 70%)</option>
-                                    </select>
-                                </div>
-                                <div class="groupe-form">
-                                    <label for="filtre-rai-liste">Niveau RàI</label>
-                                    <select id="filtre-rai-liste" class="controle-form"
-                                        onchange="afficherListeEtudiantsConsultation()">
-                                        <option value="">Tous les niveaux</option>
-                                        <option value="1">Niveau 1 (Universel)</option>
-                                        <option value="2">Niveau 2 (Préventif)</option>
-                                        <option value="3">Niveau 3 (Intensif)</option>
-                                    </select>
-                                </div>
-                                <div class="groupe-form">
-                                    <label for="filtre-pattern-liste">Pattern d'apprentissage</label>
-                                    <select id="filtre-pattern-liste" class="controle-form"
-                                        onchange="afficherListeEtudiantsConsultation()">
-                                        <option value="">Tous les patterns</option>
-                                        <option value="defi-specifique">Défi spécifique</option>
-                                        <option value="stable">Stable</option>
-                                        <option value="blocage-emergent">Blocage émergent</option>
-                                        <option value="blocage-critique">Blocage critique</option>
-                                        <option value="progression">En progression</option>
-                                    </select>
-                                </div>
-                                <div class="groupe-form">
                                     <label for="filtre-statut-liste">Statut</label>
                                     <select id="filtre-statut-liste" class="controle-form"
                                         onchange="afficherListeEtudiantsConsultation()">
@@ -958,18 +887,10 @@
                                         <option value="tous">Tous</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div style="display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: end;">
                                 <div class="groupe-form">
                                     <label for="recherche-nom-liste">Recherche (nom/prénom)</label>
                                     <input type="text" id="recherche-nom-liste" class="controle-form"
                                         placeholder="Rechercher..." oninput="afficherListeEtudiantsConsultation()">
-                                </div>
-                                <div style="display: flex; gap: 10px;">
-                                    <label style="display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: white; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; user-select: none;">
-                                        <input type="checkbox" id="surligner-critique" onchange="afficherListeEtudiantsConsultation()" style="cursor: pointer;">
-                                        <span style="font-size: 0.9rem;">Surligner critiques</span>
-                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -978,44 +899,30 @@
                         <div id="tableEtudiantsListe"
                             style="overflow-x: auto; border: 1px solid #ddd; border-radius: 4px;">
                             <table class="tableau" style="width: 100%; border-collapse: collapse; background: white;">
-                                <thead style="background: var(--bleu-principal); color: white;">
+                                <thead style="background: var(--bleu-moyen); color: white;">
                                     <tr>
-                                        <th onclick="trierTableauPar('num')" style="padding: 12px; text-align: center; width: 50px; cursor: pointer; user-select: none;" title="Cliquer pour trier">
-                                            #<span id="tri-num" style="margin-left: 4px;">↕</span>
+                                        <th style="padding: 12px; text-align: left; width: 100px;">DA</th>
+                                        <th style="padding: 12px; text-align: center; width: 80px;">Groupe</th>
+                                        <th style="padding: 12px; text-align: left;">Nom</th>
+                                        <th style="padding: 12px; text-align: left;">Prénom</th>
+                                        <th style="padding: 12px; text-align: left;">Nom du programme</th>
+                                        <th style="padding: 12px; text-align: center; width: 60px;">SA</th>
+                                        <th style="padding: 12px; text-align: center; width: 60px;">CAF</th>
+                                        <th style="padding: 12px; text-align: center; width: 100px;">
+                                            Assiduité<br>
+                                            <span style="font-weight: normal; font-size: 0.8rem;">(indice A)</span>
                                         </th>
-                                        <th onclick="trierTableauPar('da')" style="padding: 12px; text-align: left; width: 90px; cursor: pointer; user-select: none;" title="Cliquer pour trier">
-                                            DA<span id="tri-da" style="margin-left: 4px;">↕</span>
+                                        <th style="padding: 12px; text-align: center; width: 100px;">
+                                            Complétion<br>
+                                            <span style="font-weight: normal; font-size: 0.8rem;">(indice C)</span>
                                         </th>
-                                        <th onclick="trierTableauPar('groupe')" style="padding: 12px; text-align: center; width: 70px; cursor: pointer; user-select: none;" title="Cliquer pour trier">
-                                            Groupe<span id="tri-groupe" style="margin-left: 4px;">↕</span>
+                                        <th style="padding: 12px; text-align: center; width: 100px;">
+                                            Performance<br>
+                                            <span style="font-weight: normal; font-size: 0.8rem;">(indice P)</span>
                                         </th>
-                                        <th onclick="trierTableauPar('nom')" style="padding: 12px; text-align: left; cursor: pointer; user-select: none;" title="Cliquer pour trier">
-                                            Nom<span id="tri-nom" style="margin-left: 4px;">↕</span>
-                                        </th>
-                                        <th onclick="trierTableauPar('prenom')" style="padding: 12px; text-align: left; cursor: pointer; user-select: none;" title="Cliquer pour trier">
-                                            Prénom<span id="tri-prenom" style="margin-left: 4px;">↕</span>
-                                        </th>
-                                        <th style="padding: 12px; text-align: center; width: 40px;">SA</th>
-                                        <th onclick="trierTableauPar('assiduite')" style="padding: 12px; text-align: center; width: 90px; cursor: pointer; user-select: none;" title="Cliquer pour trier">
-                                            A<br><span style="font-weight: normal; font-size: 0.75rem;">(assiduité)</span><span id="tri-assiduite" style="margin-left: 4px;">↕</span>
-                                        </th>
-                                        <th onclick="trierTableauPar('completion')" style="padding: 12px; text-align: center; width: 90px; cursor: pointer; user-select: none;" title="Cliquer pour trier">
-                                            C<br><span style="font-weight: normal; font-size: 0.75rem;">(complétion)</span><span id="tri-completion" style="margin-left: 4px;">↕</span>
-                                        </th>
-                                        <th onclick="trierTableauPar('performance')" style="padding: 12px; text-align: center; width: 90px; cursor: pointer; user-select: none;" title="Cliquer pour trier">
-                                            P<br><span style="font-weight: normal; font-size: 0.75rem;">(performance)</span><span id="tri-performance" style="margin-left: 4px;">↕</span>
-                                        </th>
-                                        <th onclick="trierTableauPar('mobilisation')" style="padding: 12px; text-align: center; width: 90px; cursor: pointer; user-select: none;" title="Cliquer pour trier">
-                                            M<br><span style="font-weight: normal; font-size: 0.75rem;">(A×C)</span><span id="tri-mobilisation" style="margin-left: 4px;">↕</span>
-                                        </th>
-                                        <th onclick="trierTableauPar('risque')" style="padding: 12px; text-align: center; width: 120px; cursor: pointer; user-select: none;" title="Cliquer pour trier">
-                                            Risque<span id="tri-risque" style="margin-left: 4px;">↕</span>
-                                        </th>
-                                        <th onclick="trierTableauPar('pattern')" style="padding: 12px; text-align: left; width: 140px; cursor: pointer; user-select: none;" title="Cliquer pour trier">
-                                            Pattern<span id="tri-pattern" style="margin-left: 4px;">↕</span>
-                                        </th>
-                                        <th onclick="trierTableauPar('rai')" style="padding: 12px; text-align: center; width: 100px; cursor: pointer; user-select: none;" title="Cliquer pour trier">
-                                            RàI<span id="tri-rai" style="margin-left: 4px;">↕</span>
+                                        <th style="padding: 12px; text-align: center; width: 120px;">
+                                            Niveau RàI<br>
+                                            <span style="font-weight: normal; font-size: 0.8rem;">(risque)</span>
                                         </th>
                                     </tr>
                                 </thead>
@@ -4693,7 +4600,7 @@ Exemple :
                         </div>
 
                         <div class="alerte alerte-information" style="margin-top: 15px;">
-                            <strong>Format du fichier :</strong> JSON standard, lisible et modifiable. Inclut métadonnées (version Beta 84, date d'export, statistiques).
+                            <strong>Format du fichier :</strong> JSON standard, lisible et modifiable. Inclut métadonnées (version Beta 0.83, date d'export, statistiques).
                         </div>
                     </div>
 
@@ -6221,7 +6128,7 @@ Exemple :
                         <table style="width: 100%; border-collapse: collapse;">
                             <tr>
                                 <td style="padding: 10px; font-weight: bold; width: 30%; border-bottom: 1px solid var(--bleu-pale);">Version</td>
-                                <td style="padding: 10px; border-bottom: 1px solid var(--bleu-pale);">Beta 84 (tableau amélioré)</td>
+                                <td style="padding: 10px; border-bottom: 1px solid var(--bleu-pale);">Beta 0.83 (seuils configurables)</td>
                             </tr>
                             <tr>
                                 <td style="padding: 10px; font-weight: bold; border-bottom: 1px solid var(--bleu-pale);">Développé par</td>
@@ -6276,7 +6183,7 @@ Exemple :
 
     <!-- PRIORITÉ 2: Données de base -->
     <script src="js/trimestre.js?v=1761390149"></script>
-    <script src="js/etudiants-ameliore.js"></script>
+    <script src="js/etudiants.js"></script>
     <script src="js/productions.js?v=1761715000"></script>
     <script src="js/grilles.js?v=1761730000"></script>
     <script src="js/echelles.js?v=1761700200"></script>
@@ -6662,7 +6569,7 @@ Exemple :
         });
     </script>
 
-    <!-- Fonctions d'import/export du matériel pédagogique (Beta 78) -->
+    <!-- Fonctions d'import/export du matériel pédagogique (Beta 0.78) -->
     <script>
         // ========================================
         // DEBUG: AFFICHER LE CONTENU DU LOCALSTORAGE

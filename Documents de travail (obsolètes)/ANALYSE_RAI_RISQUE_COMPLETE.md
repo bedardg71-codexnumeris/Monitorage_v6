@@ -34,7 +34,7 @@
 | Niveau RàI | Nombre | % |
 |------------|---------|---|
 | Niveau 1 (Universel) | 0 | 0% |
-| Niveau 2 (Ciblé) | 22 | 73% |
+| Niveau 2 (Préventif) | 22 | 73% |
 | Niveau 3 (Intensif) | 8 | 27% |
 
 ---

@@ -87,16 +87,16 @@ SINON SI Blocage critique
    → RàI Niveau 3 (Intensif)
 
 SINON SI Blocage émergent
-   → RàI Niveau 2 (Ciblé)  ← ICI !
+   → RàI Niveau 2 (Préventif)  ← ICI !
 
 SINON SI Défi spécifique
-   → RàI Niveau 2 (Ciblé)  ← ICI !
+   → RàI Niveau 2 (Préventif)  ← ICI !
 
 SINON SI Stable ET Risque ≥ seuil modéré
-   → RàI Niveau 2 (Ciblé)  ← ICI !
+   → RàI Niveau 2 (Préventif)  ← ICI !
 
 SINON SI Stable ET Risque ≥ seuil faible
-   → RàI Niveau 2 (Ciblé)  ← ICI !
+   → RàI Niveau 2 (Préventif)  ← ICI !
 
 SINON SI Stable OU En progression
    → RàI Niveau 1 (Universel)

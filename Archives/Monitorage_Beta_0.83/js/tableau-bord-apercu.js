@@ -467,7 +467,6 @@ function afficherMetriquesGlobales(etudiants) {
 
 /**
  * Génère une carte de métrique avec les valeurs SOM et PAN
- * Format standard: fond blanc avec fine bordure
  * Valeurs colorées selon la pratique (orange=SOM, bleu=PAN)
  * @param {string} label - Nom de la métrique
  * @param {number} valeurSom - Valeur SOM
@@ -488,10 +487,12 @@ function genererCarteMetrique(label, valeurSom, valeurPan, afficherSom, afficher
     }
 
     return `
-        <div class="carte-metrique">
-            <span class="label">${label}</span>
-            <div style="display: flex; gap: 15px; align-items: baseline;">
-                ${valeurs.join('')}
+        <div style="background: var(--bleu-tres-pale); padding: 15px; border-radius: 8px; border: 2px solid var(--bleu-principal);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.9rem; color: #666;">${label}</span>
+                <div style="display: flex; gap: 15px; align-items: baseline;">
+                    ${valeurs.join('')}
+                </div>
             </div>
         </div>
     `;
@@ -833,7 +834,7 @@ function afficherNiveauxRaI(etudiants) {
     // Générer les cartes avec valeurs colorées
     const html = `
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 15px;">
-            ${genererCarteRaI('Niveau 1 (Universel)', 'Suivi régulier en classe', somPct1, panPct1, somNiveau1, panNiveau1, afficherSom, afficherPan, 'var(--alerte-fond-succes)', 'var(--btn-confirmer)')}
+            ${genererCarteRaI('Niveau 1 (Universel)', 'Suivi régulier', somPct1, panPct1, somNiveau1, panNiveau1, afficherSom, afficherPan, 'var(--alerte-fond-succes)', 'var(--btn-confirmer)')}
             ${genererCarteRaI('Niveau 2 (Préventif)', 'Interventions ciblées préventives en classe', somPct2, panPct2, somNiveau2, panNiveau2, afficherSom, afficherPan, '#fff9e6', '#f57c00')}
             ${genererCarteRaI('Niveau 3 (Intensif)', 'Interventions intensives individuelles hors classe', somPct3, panPct3, somNiveau3, panNiveau3, afficherSom, afficherPan, 'var(--alerte-fond-attention)', 'var(--btn-annuler)')}
         </div>

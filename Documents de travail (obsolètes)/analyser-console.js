@@ -112,7 +112,7 @@ if (etudiants.length === 0) {
     console.log('');
     console.log('RÀI :');
     console.log(`  Niveau 1 (Universel) : ${compteurs.rai1}`);
-    console.log(`  Niveau 2 (Ciblé) : ${compteurs.rai2}`);
+    console.log(`  Niveau 2 (Préventif) : ${compteurs.rai2}`);
     console.log(`  Niveau 3 (Intensif) : ${compteurs.rai3}`);
     console.log('');
     console.log('🎯 CAS SPÉCIFIQUES :');
