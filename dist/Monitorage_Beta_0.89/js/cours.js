@@ -11,7 +11,9 @@
    - Ajout/modification de cours
    - Duplication de cours
    - Activation d'un cours (cours actif)
+   - Verrouillage/déverrouillage
    - Suppression de cours
+   - Vue détaillée
    =============================== */
 
 /* ===============================
@@ -85,14 +87,16 @@ function initialiserModuleCours() {
  * UTILISÉ PAR:
  * - initialiserModuleCours()
  * - sauvegarderCours()
+ * - basculerVerrouillageCours()
  * - activerCours()
  * - dupliquerCours()
  * - supprimerCours()
- *
+ * 
  * STRUCTURE TABLEAU:
- * Code (100px) | Nom | Enseignant·e | Session (80px) | Actif (60px) | Actions (280px)
+ * Code | Nom | Enseignant·e | Session | Actif | 🔒 | Actions
  * 
  * ACTIONS DISPONIBLES:
+ * - voir : Affiche détails dans une alerte
  * - modifier : Ouvre le formulaire d'édition
  * - dupliquer : Crée une copie
  * - supprimer : Supprime après confirmation
@@ -119,27 +123,29 @@ function afficherTableauCours() {
     <table class="tableau">
         <thead>
             <tr>
-                <th style="width: 100px;">Code</th>
+                <th>Code</th>
                 <th>Nom du cours</th>
                 <th>Enseignant·e</th>
-                <th style="width: 80px;">Session</th>
+                <th>Session</th>
                 <th style="width: 60px;">Actif</th>
-                <th style="width: 280px;">Actions</th>
+                <th style="width: 200px;">Actions</th>
+                <th style="width: 60px;" title="Verrouillage">🔒/🔓</th>
             </tr>
         </thead>
         <tbody>
     `;
-
+    
     cours.forEach(c => {
+        const isVerrouille = c.verrouille || false;
         const codeEchappe = echapperHtml(c.codeCours);
         const nomEchappe = echapperHtml(c.nomCours);
         const competenceEchappe = echapperHtml(c.competence || '');
         const prenomEchappe = echapperHtml(c.prenomEnseignant);
         const nomEnsEchappe = echapperHtml(c.nomEnseignant);
         const sessionEchappe = echapperHtml(c.session + c.annee);
-
+        
         html += `
-        <tr>
+        <tr style="opacity: ${isVerrouille ? '0.7' : '1'};">
             <td><strong>${codeEchappe}</strong></td>
             <td>
                 ${nomEchappe}
@@ -156,8 +162,15 @@ function afficherTableauCours() {
             </td>
             <td>
                 <div class="btn-groupe" style="gap: 5px;">
+                    <button class="btn btn-principal btn-sm"
+                            onclick="voirCours('${c.id}')"
+                            title="Voir les détails"
+                            style="padding: 5px 10px; font-size: 0.85rem;">
+                        Voir
+                    </button>
                     <button class="btn btn-modifier btn-sm"
                             onclick="modifierCours('${c.id}')"
+                            ${isVerrouille ? 'disabled' : ''}
                             title="Modifier"
                             style="padding: 5px 10px; font-size: 0.85rem;">
                         Modifier
@@ -170,11 +183,19 @@ function afficherTableauCours() {
                     </button>
                     <button class="btn btn-supprimer btn-sm"
                             onclick="supprimerCours('${c.id}')"
+                            ${isVerrouille ? 'disabled' : ''}
                             title="Supprimer"
                             style="padding: 5px 10px; font-size: 0.85rem;">
                         Supprimer
                     </button>
                 </div>
+            </td>
+            <td style="text-align: center;">
+                <span onclick="basculerVerrouillageCours('${c.id}')"
+                      style="font-size: 1.2rem; cursor: pointer; user-select: none;"
+                      title="${isVerrouille ? 'Verrouillé - Cliquez pour déverrouiller' : 'Modifiable - Cliquez pour verrouiller'}">
+                    ${isVerrouille ? '🔒' : '🔓'}
+                </span>
             </td>
         </tr>
         `;
@@ -182,25 +203,16 @@ function afficherTableauCours() {
     
     html += '</tbody></table>';
     container.innerHTML = html;
-
-    // Mettre à jour les statistiques (vérifier existence élément DOM)
-    const elemNombreCours = document.getElementById('nombreCours');
-    if (elemNombreCours) {
-        elemNombreCours.textContent = cours.length;
-    }
-
+    
+    // Mettre à jour les statistiques
+    document.getElementById('nombreCours').textContent = cours.length;
+    
     // Trouver le cours actif
     const coursActif = cours.find(c => c.actif) || cours[0];
     if (coursActif) {
-        const elemSessionActive = document.getElementById('sessionActive');
-        const elemResumeCours = document.getElementById('resumeCours');
-
-        if (elemSessionActive) {
-            elemSessionActive.textContent = coursActif.session + coursActif.annee;
-        }
-        if (elemResumeCours) {
-            elemResumeCours.textContent = `${coursActif.codeCours} - ${coursActif.nomCours}`;
-        }
+        document.getElementById('sessionActive').textContent = coursActif.session + coursActif.annee;
+        document.getElementById('resumeCours').textContent =
+            `${coursActif.codeCours} - ${coursActif.nomCours}`;
     }
 }
 
@@ -397,6 +409,45 @@ function sauvegarderCours() {
 }
 
 /* ===============================
+   VUE DÉTAILLÉE
+   =============================== */
+
+/**
+ * Affiche les détails d'un cours dans une alerte
+ * 
+ * FONCTIONNEMENT:
+ * Récupère le cours et affiche ses informations principales
+ * 
+ * PARAMÈTRES:
+ * @param {string} id - ID du cours
+ * 
+ * UTILISÉ PAR:
+ * - Bouton «Voir» dans le tableau
+ * 
+ * INFORMATIONS AFFICHÉES:
+ * - Code
+ * - Nom
+ * - Compétence
+ * - Enseignant·e
+ * - Session
+ * - Format horaire
+ */
+function voirCours(id) {
+    const cours = JSON.parse(localStorage.getItem('listeCours') || '[]');
+    const c = cours.find(cours => cours.id === id);
+    
+    if (c) {
+        alert(`📚 Détails du cours\n\n` +
+            `Code: ${c.codeCours}\n` +
+            `Nom: ${c.nomCours}\n` +
+            `Compétence: ${c.competence}\n` +
+            `Enseignant·e: ${c.prenomEnseignant} ${c.nomEnseignant}\n` +
+            `Session: ${c.session}${c.annee}\n` +
+            `Format: ${c.formatHoraire}`);
+    }
+}
+
+/* ===============================
    MODIFICATION
    =============================== */
 
@@ -455,6 +506,42 @@ function dupliquerCours(id) {
         localStorage.setItem('listeCours', JSON.stringify(cours));
         afficherTableauCours();
         afficherNotificationSucces('Cours dupliqué avec succès !');
+    }
+}
+
+/* ===============================
+   🔒 VERROUILLAGE
+   =============================== */
+
+/**
+ * Bascule le verrouillage d'un cours
+ * Un cours verrouillé ne peut pas être modifié ou supprimé
+ * 
+ * FONCTIONNEMENT:
+ * 1. Récupère les cours depuis localStorage
+ * 2. Trouve le cours concerné
+ * 3. Bascule l'état verrouille
+ * 4. Sauvegarde
+ * 5. Rafraîchit l'affichage
+ * 
+ * PARAMÈTRES:
+ * @param {string} id - ID du cours
+ * 
+ * UTILISÉ PAR:
+ * - Checkbox dans le tableau
+ * 
+ * EFFET:
+ * - Désactive/active les boutons Modifier et Supprimer
+ * - Change l'opacité de la ligne
+ */
+function basculerVerrouillageCours(id) {
+    let cours = JSON.parse(localStorage.getItem('listeCours') || '[]');
+    const index = cours.findIndex(c => c.id === id);
+
+    if (index !== -1) {
+        cours[index].verrouille = !cours[index].verrouille;
+        localStorage.setItem('listeCours', JSON.stringify(cours));
+        afficherTableauCours();
     }
 }
 

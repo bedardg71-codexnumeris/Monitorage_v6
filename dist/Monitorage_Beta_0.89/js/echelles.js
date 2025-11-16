@@ -1553,9 +1553,9 @@ window.supprimerNiveau = supprimerNiveau;
 window.basculerVerrouillageNiveau = basculerVerrouillageNiveau;
 window.reinitialiserNiveauxDefaut = reinitialiserNiveauxDefaut;
 // window.afficherEchellesPerformance = afficherEchellesPerformance; // FIXME: fonction n'existe pas
-// window.fermerModalEchelles = fermerModalEchelles; // FIXME: fonction n'existe pas
-// window.convertirNiveauVersNote = convertirNiveauVersNote; // FIXME: fonction n'existe pas - utiliser convertirNiveauEnPourcentage() dans portfolio.js
-// window.convertirNoteVersNiveau = convertirNoteVersNiveau; // FIXME: fonction n'existe pas
+window.fermerModalEchelles = fermerModalEchelles;
+window.convertirNiveauVersNote = convertirNiveauVersNote;
+window.convertirNoteVersNiveau = convertirNoteVersNiveau;
 
 /* ===============================
    FONCTIONS SIDEBAR (Beta 80.5+)
@@ -1580,6 +1580,10 @@ function afficherListeEchelles() {
             <div class="sidebar-item" data-id="${echelle.id}" onclick="chargerEchellePourModif('${echelle.id}')">
                 <div class="sidebar-item-titre">${nomEchelle}</div>
                 <div class="sidebar-item-badge">${nbNiveaux} niveaux</div>
+                <div class="sidebar-item-actions">
+                    <button class="btn-icone" onclick="event.stopPropagation(); dupliquerEchelleDepuisSidebar('${echelle.id}')" title="Dupliquer">Dupliquer</button>
+                    <button class="btn-icone" onclick="event.stopPropagation(); supprimerEchelleDepuisSidebar('${echelle.id}')" title="Supprimer">Supprimer</button>
+                </div>
             </div>
         `;
     }).join('');
@@ -1592,18 +1596,10 @@ function creerNouvelleEchelle() {
     document.getElementById('conteneurEditionEchelle').style.display = 'block';
     document.getElementById('optionsImportExportEchelles').style.display = 'block';
 
-    // Masquer les boutons Dupliquer et Supprimer (mode création)
-    const btnDupliquer = document.getElementById('btnDupliquerEchelle');
-    const btnSupprimer = document.getElementById('btnSupprimerEchelle');
-    if (btnDupliquer) btnDupliquer.style.display = 'none';
-    if (btnSupprimer) btnSupprimer.style.display = 'none';
-
     // Réinitialiser le formulaire
     document.getElementById('nomEchelleTemplate').value = '';
     document.getElementById('tableauNiveauxEchelle').innerHTML = '';
-
-    // Réinitialiser la référence à l'échelle actuelle
-    echelleTemplateActuelle = null;
+    document.getElementById('nbNiveauxEchelle').textContent = '0';
 
     console.log('Création nouvelle échelle - Interface prête');
 }
@@ -1611,7 +1607,7 @@ function creerNouvelleEchelle() {
 /**
  * Annule l'édition d'une échelle et retourne à l'accueil
  */
-function annulerFormEchelle() {
+function annulerEditionEchelle() {
     // Masquer l'éditeur et réafficher l'accueil
     document.getElementById('conteneurEditionEchelle').style.display = 'none';
     document.getElementById('optionsImportExportEchelles').style.display = 'none';
@@ -1620,9 +1616,7 @@ function annulerFormEchelle() {
     // Réinitialiser les champs
     document.getElementById('nomEchelleTemplate').value = '';
     document.getElementById('tableauNiveauxEchelle').innerHTML = '';
-
-    // Réinitialiser la référence à l'échelle actuelle
-    echelleTemplateActuelle = null;
+    document.getElementById('nbNiveauxEchelle').textContent = '0';
 
     console.log('Édition annulée - Retour à l\'accueil');
 }
@@ -1640,14 +1634,9 @@ function chargerEchellePourModif(id) {
     document.getElementById('conteneurEditionEchelle').style.display = 'block';
     document.getElementById('optionsImportExportEchelles').style.display = 'block';
 
-    // Afficher les boutons Dupliquer et Supprimer (mode édition)
-    const btnDupliquer = document.getElementById('btnDupliquerEchelle');
-    const btnSupprimer = document.getElementById('btnSupprimerEchelle');
-    if (btnDupliquer) btnDupliquer.style.display = 'inline-block';
-    if (btnSupprimer) btnSupprimer.style.display = 'inline-block';
-
     // Remplir le formulaire
     document.getElementById('nomEchelleTemplate').value = echelle.nom || '';
+    document.getElementById('nbNiveauxEchelle').textContent = echelle.niveaux?.length || 0;
 
     // Afficher les niveaux
     afficherNiveauxEchelle(echelle);
@@ -1661,20 +1650,9 @@ function afficherNiveauxEchelle(echelle) {
     const container = document.getElementById('tableauNiveauxEchelle');
     const apercuContainer = document.getElementById('apercuEchelleNiveaux');
 
-    console.log('📊 afficherNiveauxEchelle appelée:', {
-        echelleNom: echelle?.nom,
-        nbNiveaux: echelle?.niveaux?.length,
-        niveaux: echelle?.niveaux,
-        containerExiste: !!container
-    });
-
-    if (!container) {
-        console.error('❌ Container tableauNiveauxEchelle introuvable');
-        return;
-    }
+    if (!container) return;
 
     if (!echelle.niveaux || echelle.niveaux.length === 0) {
-        console.warn('⚠️ Aucun niveau défini pour cette échelle');
         container.innerHTML = '<p style="color: #999; font-style: italic;">Aucun niveau défini</p>';
         if (apercuContainer) apercuContainer.innerHTML = '';
         return;
@@ -2159,52 +2137,13 @@ function supprimerEchelleDepuisSidebar(id) {
     }
 }
 
-/**
- * Duplique l'échelle actuellement en cours d'édition
- */
-function dupliquerEchelleActive() {
-    if (!echelleTemplateActuelle) {
-        alert('Aucune échelle à dupliquer');
-        return;
-    }
-    dupliquerEchelleDepuisSidebar(echelleTemplateActuelle.id);
-}
-
-/**
- * Supprime l'échelle actuellement en cours d'édition
- */
-function supprimerEchelleActive() {
-    if (!echelleTemplateActuelle) {
-        alert('Aucune échelle à supprimer');
-        return;
-    }
-    supprimerEchelleDepuisSidebar(echelleTemplateActuelle.id);
-}
-
-/**
- * Sauvegarde complète de l'échelle en cours d'édition
- */
-function sauvegarderEchelleComplete() {
-    // Sauvegarder le nom si modifié
-    sauvegarderNomEchelle();
-
-    // Message de confirmation
-    alert('Échelle sauvegardée avec succès');
-
-    // Recharger la liste pour refléter les changements
-    afficherListeEchelles();
-}
-
 // Export global
 window.afficherListeEchelles = afficherListeEchelles;
 window.creerNouvelleEchelle = creerNouvelleEchelle;
-window.annulerFormEchelle = annulerFormEchelle;
+window.annulerEditionEchelle = annulerEditionEchelle;
 window.chargerEchellePourModif = chargerEchellePourModif;
 window.dupliquerEchelleDepuisSidebar = dupliquerEchelleDepuisSidebar;
 window.supprimerEchelleDepuisSidebar = supprimerEchelleDepuisSidebar;
-window.dupliquerEchelleActive = dupliquerEchelleActive;
-window.supprimerEchelleActive = supprimerEchelleActive;
-window.sauvegarderEchelleComplete = sauvegarderEchelleComplete;
 window.deplacerNiveauHaut = deplacerNiveauHaut;
 window.deplacerNiveauBas = deplacerNiveauBas;
 window.deplacerNiveauEchelleHaut = deplacerNiveauEchelleHaut;
