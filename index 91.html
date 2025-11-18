@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Système de suivi Beta 90 - Architecture pratiques de notation</title>
+    <title>Système de suivi Beta 91 - Développement avancé</title>
 
     <!-- AJOUTER CETTE LIGNE -->
-    <link rel="stylesheet" href="styles.css?v=2025111701">
+    <link rel="stylesheet" href="styles.css?v=2025111803">
 
     <style>
         /* Les styles embarqués restent ici */
@@ -2705,7 +2705,7 @@
                 <!-- Titre et description centrés -->
                 <div class="titre-section">
                     <h1>Système de suivi des apprentissages</h1>
-                    <p class="meta">Beta 90 par Grégoire Bédard (16 novembre 2025)</p>
+                    <p class="meta">Beta 91 par Grégoire Bédard (18 novembre 2025)</p>
 
                     <!-- Sélecteur de mode au centre (sera généré par 17-modes.js) -->
                     <div id="selecteur-mode" class="selecteur-mode-centre" style="margin-top: 10px;">
@@ -2791,7 +2791,17 @@
 
                         <!-- Carte Note -->
                         <div id="note-indicateurs" class="carte-info-toggle carte-info-note" style="display: none;">
-                            <strong>Note :</strong> Les indices A-C-P mesurent l'engagement des étudiants. Assiduité (A) : présence en classe. Complétion (C) : remise des travaux. Performance (P) : qualité des productions évaluées. Ces indicateurs permettent de contextualiser l'apprentissage (contexte favorable ou non).
+                            <strong>Note :</strong> Les indices A-C-P mesurent l'engagement des étudiants dans l'apprentissage.
+                            <br><br>
+                            <strong>Assiduité (A)</strong> : Proportion des heures de présence parmi les heures de cours <strong>effectivement données jusqu'à maintenant</strong>. Calculé uniquement sur les séances passées, pas sur le total prévu pour la session.
+                            <br><br>
+                            <strong>Complétion (C)</strong> : Proportion de travaux remis parmi les travaux <strong>effectivement réalisés jusqu'à maintenant</strong>. Un artefact devient «réalisé» dès qu'une première évaluation existe pour celui-ci.
+                            <br><br>
+                            <strong>Performance (P)</strong> : Calculé selon la pratique de notation en vigueur (Sommative : moyenne pondérée provisoire de toutes les évaluations, ou PAN-Maîtrise : moyenne des N meilleurs artefacts selon l'échelle IDME).
+                            <br><br>
+                            <strong>Engagement (E)</strong> : Moyenne géométrique des trois indices, E = (A × C × P)^(1/3). Mesure l'engagement global combinant assiduité, complétion et performance.
+                            <br><br>
+                            <em style="color: var(--gris-moyen); font-size: 0.9rem;">💡 Les corrélations affichées (r) mesurent la force de la relation linéaire entre deux indices. L'interprétation suit les conventions de Cohen (1988) : |r| < 0.3 = très faible, 0.3-0.5 = faible, 0.5-0.7 = modérée, 0.7-0.9 = forte, ≥ 0.9 = très forte.</em>
                         </div>
 
                         <div class="grille-cartes-metriques">
@@ -2850,8 +2860,13 @@
 
                 <!-- Sous-section: Liste des individus -->
                 <div id="tableau-bord-liste" class="sous-section">
-                    <h2>Liste des étudiant·es</h2>
+                    <h2 id="titre-liste-etudiants">Liste des étudiant·es</h2>
                     <p class="text-muted">Consultation de la liste complète et accès aux portfolios individuels</p>
+
+                    <!-- Carte Note Détails Calcul (cachée par défaut) -->
+                    <div id="note-calcul-indices-liste" class="carte-info-toggle carte-info-note" style="display: none; margin-bottom: 20px;">
+                        <!-- Contenu généré dynamiquement par JS -->
+                    </div>
 
                     <div class="carte">
                         <h3>Étudiant·es inscrit·es
@@ -8984,7 +8999,7 @@ Exemple :
 
     <!-- PRIORITÉ 2: Données de base -->
     <script src="js/trimestre.js?v=2025111325"></script>
-    <script src="js/etudiants.js?v=2025111442"></script>
+    <script src="js/etudiants.js?v=2025111812"></script>
     <script src="js/productions.js?v=2025111303"></script>
     <script src="js/grilles.js?v=2025111215"></script>
     <script src="js/echelles.js?v=2025111202"></script>
@@ -8995,19 +9010,19 @@ Exemple :
     <!-- PRIORITÉ 3: Configuration et calcul des indices (AVANT affichage) -->
     <script src="js/interpretation-config.js?v=2025111501"></script>
 
-    <!-- Système de pratiques de notation (NOUVEAU - Beta 90) -->
+    <!-- Système de pratiques de notation (Beta 90-91) -->
     <script src="js/pratiques/pratique-registre.js"></script>
     <script src="js/pratiques/migration-pratiques.js"></script>
     <script src="js/pratiques/pratique-test.js"></script>
-    <script src="js/pratiques/pratique-pan-maitrise.js?v=2025111302"></script>
-    <script src="js/pratiques/pratique-sommative.js?v=2025111441"></script>
+    <script src="js/pratiques/pratique-pan-maitrise.js?v=2025111801"></script>
+    <script src="js/pratiques/pratique-sommative.js?v=2025111801"></script>
 
     <script src="js/portfolio.js?v=2025111310"></script>
     <script src="js/saisie-presences.js?v=2025111202"></script>
 
     <!-- PRIORITÉ 4: Modules d'affichage (APRÈS calcul) -->
-    <script src="js/tableau-bord-apercu.js?v=2025111503"></script>
-    <script src="js/profil-etudiant.js?v=2025111700"></script>
+    <script src="js/tableau-bord-apercu.js?v=2025111830"></script>
+    <script src="js/profil-etudiant.js?v=2025111802"></script>
     <script src="js/presences-apercu.js?v=2025111029"></script>
     <script src="js/evaluations-apercu.js?v=2025111026"></script>
 
