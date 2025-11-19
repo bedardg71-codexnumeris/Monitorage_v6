@@ -10,6 +10,9 @@
         body {
             margin: 0;
             padding: 0;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
         }
 
         .guide-header {
@@ -270,6 +273,116 @@
             color: #333 !important;
             text-shadow: none !important;
         }
+
+        /* === BARRES DE GRADIENT === */
+
+        /* Barres A-C-P-E (Indices primaires) */
+        .barre-indicateur {
+            height: 40px;
+            border-radius: 20px;
+            position: relative;
+            background: linear-gradient(to right,
+                #ff8c00 0%,   /* Orange foncé */
+                #ffa500 10%,  /* Orange */
+                #98d025 30%,  /* Vert citron */
+                #22c55e 50%,  /* Vert */
+                #14b8a6 65%,  /* Cyan/Sarcelle */
+                #06b6d4 80%,  /* Bleu ciel clair */
+                #0ea5e9 100%  /* Bleu ciel */
+            );
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .barre-indicateur-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 30, 58, 0.2);
+            border-radius: 20px;
+            pointer-events: none;
+        }
+
+        /* Barres Patterns d'apprentissage */
+        .barre-patterns {
+            height: 30px;
+            border-radius: 15px;
+            position: relative;
+            background: linear-gradient(to right,
+                #22c55e 0%,   /* Vert */
+                #14b8a6 25%,  /* Cyan/Sarcelle */
+                #0ea5e9 50%,  /* Bleu ciel */
+                #3b82f6 75%,  /* Bleu */
+                #6366f1 100%  /* Indigo */
+            );
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .barre-patterns-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 30, 58, 0.35);
+            border-radius: 15px;
+            pointer-events: none;
+        }
+
+        /* Barres RàI (Réponse à l'Intervention) */
+        .barre-rai {
+            height: 30px;
+            border-radius: 15px;
+            position: relative;
+            background: linear-gradient(to right,
+                #0ea5e9 0%,   /* Bleu ciel */
+                #3b82f6 25%,  /* Bleu */
+                #6366f1 50%,  /* Indigo */
+                #8b5cf6 75%,  /* Violet */
+                #6b21a8 100%  /* Mauve foncé */
+            );
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .barre-rai-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 30, 58, 0.4);
+            border-radius: 15px;
+            pointer-events: none;
+        }
+
+        /* Points de distribution (scatter plots) */
+        .barre-etudiant {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid white;
+            position: absolute;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .barre-etudiant:hover {
+            transform: scale(1.5);
+        }
+
+        /* Variantes couleur pour mode dual SOM/PAN */
+        .barre-etudiant-som {
+            background: #ff6f00;  /* Orange SOM */
+            border: 2px solid white;
+        }
+
+        .barre-etudiant-pan {
+            background: #0277bd;  /* Bleu PAN */
+            border: 2px solid white;
+        }
     </style>
 </head>
 <body>
@@ -289,10 +402,13 @@
             <a href="#tableaux" style="background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.2);">4. Tableaux</a>
             <a href="#cartes" style="background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.2);">5. Cartes et sidebars</a>
             <a href="#composants" style="background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.2);">6. Composants interactifs</a>
-            <a href="#navigation" style="background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.2);">7. Navigation</a>
-            <a href="#formulaires" style="background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.2);">8. Formulaires</a>
-            <a href="#messages" style="background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.2);">9. Messages et alertes</a>
-            <a href="#espacement" style="background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.2);">10. Espacement</a>
+            <a href="#espacements" style="background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.2);">7. Espacements</a>
+            <a href="#navigation" style="background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.2);">8. Navigation</a>
+            <a href="#formulaires" style="background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.2);">9. Formulaires</a>
+            <a href="#alertes" style="background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.2);">10. Messages et alertes</a>
+            <a href="#badges" style="background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.2);">11. Badges</a>
+            <a href="#gradients" style="background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.2);">12. Barres de gradient</a>
+            <a href="#entete" style="background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.2);">13. En-tête</a>
         </div>
     </div>
 </div>
@@ -865,23 +981,23 @@ body[data-mode="anonymisation"] .sous-nav {
                     </thead>
                     <tbody>
                         <tr style="cursor: pointer;">
-                            <td>2484602</td>
-                            <td>Bienvenue</td>
-                            <td>Eve</td>
+                            <td>2987654</td>
+                            <td>Tremblay</td>
+                            <td>Sophie</td>
                             <td style="text-align: center;">310.B1</td>
                             <td style="text-align: center;">✓</td>
                         </tr>
                         <tr style="cursor: pointer;">
-                            <td>2545079</td>
-                            <td>Binette</td>
-                            <td>Loïc</td>
+                            <td>2876543</td>
+                            <td>Gagnon</td>
+                            <td>Marc</td>
                             <td style="text-align: center;">200.B1</td>
                             <td style="text-align: center;"></td>
                         </tr>
                         <tr style="cursor: pointer;">
-                            <td>2544963</td>
-                            <td>Boisvert</td>
-                            <td>Alya</td>
+                            <td>2765432</td>
+                            <td>Lapointe</td>
+                            <td>Julie</td>
                             <td style="text-align: center;">200.B1</td>
                             <td style="text-align: center;"></td>
                         </tr>
@@ -911,9 +1027,9 @@ body[data-mode="anonymisation"] .sous-nav {
     &lt;/thead&gt;
     &lt;tbody&gt;
         &lt;tr style="cursor: pointer;"&gt;
-            &lt;td style="padding: 12px 8px;"&gt;2484602&lt;/td&gt;
-            &lt;td style="padding: 12px 8px;"&gt;Bienvenue&lt;/td&gt;
-            &lt;td style="padding: 12px 8px;"&gt;Eve&lt;/td&gt;
+            &lt;td style="padding: 12px 8px;"&gt;2987654&lt;/td&gt;
+            &lt;td style="padding: 12px 8px;"&gt;Tremblay&lt;/td&gt;
+            &lt;td style="padding: 12px 8px;"&gt;Sophie&lt;/td&gt;
         &lt;/tr&gt;
     &lt;/tbody&gt;
 &lt;/table&gt;</div>
@@ -1024,8 +1140,8 @@ body[data-mode="anonymisation"] .sous-nav {
                         <div class="sidebar-filtre">
                             <label style="font-size: 0.85rem; color: #666; margin-bottom: 5px; display: block;">Étudiant·e :</label>
                             <select class="controle-form">
-                                <option>Bienvenue, Eve (2484602)</option>
-                                <option>Binette, Loïc (2545079)</option>
+                                <option>Tremblay, Sophie (2987654)</option>
+                                <option>Gagnon, Marc (2876543)</option>
                             </select>
                         </div>
 
@@ -1037,9 +1153,9 @@ body[data-mode="anonymisation"] .sous-nav {
 
                         <!-- Informations étudiant -->
                         <div class="sidebar-info-card">
-                            <div class="sidebar-info-card-nom">Eve Bienvenue</div>
+                            <div class="sidebar-info-card-nom">Sophie Tremblay</div>
                             <div class="sidebar-info-card-details">
-                                <div><strong>DA:</strong> 2484602</div>
+                                <div><strong>DA:</strong> 2987654</div>
                                 <div><strong>Groupe:</strong> 01</div>
                                 <div><strong>Programme:</strong> Sciences de la nature</div>
                             </div>
@@ -1807,11 +1923,905 @@ body[data-mode="anonymisation"] .sous-navigation {
         </div>
     </section>
 
+    <!-- SECTION 9: FORMULAIRES -->
+    <section id="formulaires" class="guide-section">
+        <h2 class="guide-section-title">9. Formulaires</h2>
+        <p class="guide-section-intro">
+            Styles standardisés pour les champs de formulaire, incluant les états focus, validation et verrouillage.
+        </p>
+
+        <div class="guide-component">
+            <h3 class="guide-component-title">Groupe de formulaire</h3>
+            <p class="guide-component-description">
+                Conteneur standard pour un champ avec son label.
+            </p>
+
+            <div class="guide-example">
+                <div class="groupe-form" style="max-width: 400px;">
+                    <label for="demo-input">Nom de l'étudiant</label>
+                    <input type="text" id="demo-input" class="controle-form" placeholder="Entrez le nom...">
+                </div>
+            </div>
+
+            <div class="guide-specs">
+                <div class="guide-specs-title">🎨 Spécifications</div>
+                <ul>
+                    <li><strong>Margin-bottom:</strong> var(--espacement-moyen) (20px)</li>
+                    <li><strong>Label:</strong> Couleur var(--bleu-principal), font-weight 500, taille 0.9rem</li>
+                    <li><strong>Input:</strong> Padding 8px 12px, border 1px solid var(--bleu-leger), border-radius 4px</li>
+                    <li><strong>Focus:</strong> Border var(--bleu-clair), box-shadow 0 0 0 3px rgba(6,93,187,0.1)</li>
+                </ul>
+            </div>
+
+            <div class="guide-code-title">Code CSS</div>
+            <div class="guide-code">.groupe-form {
+    margin-bottom: var(--espacement-moyen);
+}
+
+.groupe-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--bleu-principal);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.controle-form {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--bleu-leger);
+    border-radius: 4px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+}
+
+.controle-form:focus {
+    outline: none;
+    border-color: var(--bleu-clair);
+    box-shadow: 0 0 0 3px rgba(6, 93, 187, 0.1);
+}</div>
+        </div>
+
+        <div class="guide-component">
+            <h3 class="guide-component-title">États de validation</h3>
+            <p class="guide-component-description">
+                Trois états visuels pour communiquer le statut des champs: erreur, validé, verrouillé.
+            </p>
+
+            <div class="guide-example">
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="etat-erreur" style="max-width: 500px;">
+                        ⚠️ Le nom de l'étudiant est requis
+                    </div>
+                    <div class="etat-valide" style="max-width: 500px;">
+                        ✓ Informations enregistrées avec succès
+                    </div>
+                    <div class="etat-verrouille" style="max-width: 500px;">
+                        🔒 Cette évaluation est verrouillée et ne peut plus être modifiée
+                    </div>
+                </div>
+            </div>
+
+            <div class="guide-specs">
+                <div class="guide-specs-title">🎨 Variables CSS</div>
+                <ul>
+                    <li><strong>Erreur:</strong> --etat-erreur-fond: #fff8f0 | --etat-erreur-bordure: #ff6b35 | --etat-erreur-texte: #8a4a2a</li>
+                    <li><strong>Valide:</strong> --etat-valide-fond: #e8f5f2 | --etat-valide-bordure: #1e5a4a | --etat-valide-texte: #165040</li>
+                    <li><strong>Verrouillé:</strong> --etat-verrouille-fond: #e9ecef | --etat-verrouille-bordure: #6c757d | --etat-verrouille-texte: #495057</li>
+                </ul>
+            </div>
+
+            <div class="guide-code-title">Code CSS</div>
+            <div class="guide-code">/* États de validation */
+:root {
+    /* Erreur */
+    --etat-erreur-fond: #fff8f0;
+    --etat-erreur-bordure: #ff6b35;
+    --etat-erreur-texte: #8a4a2a;
+
+    /* Valide */
+    --etat-valide-fond: #e8f5f2;
+    --etat-valide-bordure: #1e5a4a;
+    --etat-valide-texte: #165040;
+
+    /* Verrouillé */
+    --etat-verrouille-fond: #e9ecef;
+    --etat-verrouille-bordure: #6c757d;
+    --etat-verrouille-texte: #495057;
+}
+
+.etat-erreur {
+    padding: 16px 24px;
+    border-radius: 8px;
+    border: 2px solid var(--etat-erreur-bordure);
+    background: var(--etat-erreur-fond);
+    color: var(--etat-erreur-texte);
+}
+
+.etat-valide {
+    padding: 16px 24px;
+    border-radius: 8px;
+    border: 2px solid var(--etat-valide-bordure);
+    background: var(--etat-valide-fond);
+    color: var(--etat-valide-texte);
+}
+
+.etat-verrouille {
+    padding: 16px 24px;
+    border-radius: 8px;
+    border: 2px solid var(--etat-verrouille-bordure);
+    background: var(--etat-verrouille-fond);
+    color: var(--etat-verrouille-texte);
+}</div>
+        </div>
+    </section>
+
+    <!-- SECTION 10: MESSAGES ET ALERTES -->
+    <section id="alertes" class="guide-section">
+        <h2 class="guide-section-title">10. Messages et alertes</h2>
+        <p class="guide-section-intro">
+            Système de messages colorés pour communiquer différents types d'information à l'utilisateur.
+        </p>
+
+        <div class="guide-component">
+            <h3 class="guide-component-title">Types d'alertes</h3>
+            <p class="guide-component-description">
+                Quatre types d'alertes avec des couleurs distinctes selon le contexte.
+            </p>
+
+            <div class="guide-example">
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="alerte alerte-information">
+                        ℹ️ <strong>Information:</strong> Le trimestre a été configuré avec succès (16 semaines, 124 jours de cours).
+                    </div>
+                    <div class="alerte alerte-succes">
+                        ✓ <strong>Succès:</strong> Les 30 étudiants ont été importés avec succès.
+                    </div>
+                    <div class="alerte alerte-attention">
+                        ⚠️ <strong>Attention:</strong> Certaines évaluations n'ont pas de grille associée.
+                    </div>
+                    <div class="alerte alerte-erreur">
+                        ✗ <strong>Erreur:</strong> Impossible de charger les données. Vérifiez le fichier JSON.
+                    </div>
+                </div>
+            </div>
+
+            <div class="guide-specs">
+                <div class="guide-specs-title">🎨 Variables CSS</div>
+                <ul>
+                    <li><strong>Information (bleu):</strong> --alerte-fond-information: #e8f2fd | --alerte-bordure-information: #032e5c | --alerte-texte-information: #032e5c</li>
+                    <li><strong>Succès (sarcelle):</strong> --alerte-fond-succes: #e8f5f2 | --alerte-bordure-succes: #1e5a4a | --alerte-texte-succes: #165040</li>
+                    <li><strong>Attention (orange):</strong> --alerte-fond-attention: #fff8f0 | --alerte-bordure-attention: #ff6b35 | --alerte-texte-attention: #8a4a2a</li>
+                    <li><strong>Erreur (rouge):</strong> --alerte-fond-erreur: #f8e8e8 | --alerte-bordure-erreur: #8a2a2a | --alerte-texte-erreur: #7a1a1a</li>
+                </ul>
+            </div>
+
+            <div class="guide-code-title">Code CSS</div>
+            <div class="guide-code">/* Alertes - Variables */
+:root {
+    /* Information */
+    --alerte-fond-information: #e8f2fd;
+    --alerte-bordure-information: #032e5c;
+    --alerte-texte-information: #032e5c;
+
+    /* Succès */
+    --alerte-fond-succes: #e8f5f2;
+    --alerte-bordure-succes: #1e5a4a;
+    --alerte-texte-succes: #165040;
+
+    /* Attention */
+    --alerte-fond-attention: #fff8f0;
+    --alerte-bordure-attention: #ff6b35;
+    --alerte-texte-attention: #8a4a2a;
+
+    /* Erreur */
+    --alerte-fond-erreur: #f8e8e8;
+    --alerte-bordure-erreur: #8a2a2a;
+    --alerte-texte-erreur: #7a1a1a;
+}
+
+/* Classe de base */
+.alerte {
+    padding: 16px 24px;
+    border-radius: 8px;
+    border-left: 4px solid;
+    margin-bottom: 15px;
+}
+
+/* Types */
+.alerte-information {
+    background: var(--alerte-fond-information);
+    border-color: var(--alerte-bordure-information);
+    color: var(--alerte-texte-information);
+}
+
+.alerte-succes {
+    background: var(--alerte-fond-succes);
+    border-color: var(--alerte-bordure-succes);
+    color: var(--alerte-texte-succes);
+}
+
+.alerte-attention {
+    background: var(--alerte-fond-attention);
+    border-color: var(--alerte-bordure-attention);
+    color: var(--alerte-texte-attention);
+}
+
+.alerte-erreur {
+    background: var(--alerte-fond-erreur);
+    border-color: var(--alerte-bordure-erreur);
+    color: var(--alerte-texte-erreur);
+}</div>
+        </div>
+
+        <div class="guide-do-dont">
+            <div class="guide-do">
+                <div class="guide-do-title">✅ À FAIRE</div>
+                <ul style="margin: 10px 0 0 0; padding-left: 20px;">
+                    <li>Utiliser Information pour des messages neutres</li>
+                    <li>Utiliser Succès pour confirmer une action réussie</li>
+                    <li>Utiliser Attention pour prévenir l'utilisateur</li>
+                    <li>Utiliser Erreur uniquement pour les erreurs critiques</li>
+                    <li>Ajouter des icônes/emojis pour renforcer le message</li>
+                </ul>
+            </div>
+            <div class="guide-dont">
+                <div class="guide-dont-title">❌ À ÉVITER</div>
+                <ul style="margin: 10px 0 0 0; padding-left: 20px;">
+                    <li>Empiler trop d'alertes (max 2-3 simultanées)</li>
+                    <li>Utiliser Erreur pour des avertissements mineurs</li>
+                    <li>Omettre le contexte (toujours expliquer pourquoi)</li>
+                    <li>Messages trop techniques (vulgariser pour l'utilisateur)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 11: BADGES -->
+    <section id="badges" class="guide-section">
+        <h2 class="guide-section-title">11. Badges</h2>
+        <p class="guide-section-intro">
+            Petits indicateurs visuels pour marquer les statuts et états dans l'interface.
+        </p>
+
+        <div class="guide-component">
+            <h3 class="guide-component-title">Badges de statut d'évaluation</h3>
+            <p class="guide-component-description">
+                Indiquent si une production a été évaluée ou non.
+            </p>
+
+            <div class="guide-example">
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <span class="badge-evalue">✓ Évalué</span>
+                    <span class="badge-non-evalue">○ Non évalué</span>
+                </div>
+            </div>
+
+            <div class="guide-specs">
+                <div class="guide-specs-title">🎨 Variables CSS</div>
+                <ul>
+                    <li><strong>Évalué:</strong> --badge-evalue-fond: #e8f5f2 | --badge-evalue-texte: #165040 | --badge-evalue-bordure: #b3d9cf</li>
+                    <li><strong>Non évalué:</strong> --badge-non-evalue-fond: #f8f9fa | --badge-non-evalue-texte: #6c757d | --badge-non-evalue-bordure: #dee2e6</li>
+                </ul>
+            </div>
+
+            <div class="guide-code-title">Code CSS</div>
+            <div class="guide-code">/* Badges - Variables */
+:root {
+    /* Évalué */
+    --badge-evalue-fond: #e8f5f2;
+    --badge-evalue-texte: #165040;
+    --badge-evalue-bordure: #b3d9cf;
+
+    /* Non évalué */
+    --badge-non-evalue-fond: #f8f9fa;
+    --badge-non-evalue-texte: #6c757d;
+    --badge-non-evalue-bordure: #dee2e6;
+}
+
+.badge-evalue {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    background: var(--badge-evalue-fond);
+    color: var(--badge-evalue-texte);
+    border: 1px solid var(--badge-evalue-bordure);
+}
+
+.badge-non-evalue {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    background: var(--badge-non-evalue-fond);
+    color: var(--badge-non-evalue-texte);
+    border: 1px solid var(--badge-non-evalue-bordure);
+}</div>
+        </div>
+    </section>
+
+    <!-- SECTION 12: BARRES DE GRADIENT -->
+    <section id="gradients" class="guide-section">
+        <h2 class="guide-section-title">12. Barres de gradient</h2>
+        <p class="guide-section-intro">
+            Système de visualisation avec gradients colorés pour afficher les indices A-C-P-E, les patterns d'apprentissage et les niveaux RàI (Réponse à l'Intervention).
+        </p>
+
+        <div class="guide-component">
+            <h3 class="guide-component-title">Barres A-C-P-E (Indicateurs globaux)</h3>
+            <p class="guide-component-description">
+                Barres pour afficher les indices Assiduité, Complétion, Performance et Engagement avec gradient Orange → Vert → Bleu.
+            </p>
+
+            <div class="guide-example">
+                <div class="barre-indicateur">
+                    <div class="barre-indicateur-overlay"></div>
+                    <div class="barre-etudiant barre-etudiant-som" style="left: 65%;" title="Tremblay, Sophie : Niveau 2 Préventif"></div>
+                    <div class="barre-etudiant barre-etudiant-pan" style="left: 78%;" title="Gagnon, Marc : Niveau 1 Universel"></div>
+                </div>
+                <p style="margin-top: 10px; font-size: 0.85rem; color: #666;">
+                    ● Orange (SOM) à 65% • ● Bleu (PAN) à 78% • Survolez les points pour voir les détails
+                </p>
+            </div>
+
+            <div class="guide-specs">
+                <div class="guide-specs-title">🎨 Spécifications</div>
+                <ul>
+                    <li><strong>Dimensions:</strong> height: 40px, border-radius: 20px</li>
+                    <li><strong>Gradient:</strong> linear-gradient(to right, #ff8c00 0%, #ffa500 10%, #98d025 30%, #22c55e 50%, #14b8a6 65%, #06b6d4 80%, #0ea5e9 100%)</li>
+                    <li><strong>Zones:</strong> Orange foncé (0-10% faible) → Vert (10-50% moyen) → Bleu ciel (50-100% fort)</li>
+                    <li><strong>Overlay:</strong> rgba(15, 30, 58, 0.2) - "Nuit Élégante" à 20% d'opacité</li>
+                    <li><strong>Points:</strong> Diamètre 8px, bordure blanche 2px, SOM orange (#ff6f00), PAN bleu (#0277bd)</li>
+                    <li><strong>Répartition:</strong> Points dispersés autour de leur indice pour éviter chevauchement (jitter horizontal et vertical)</li>
+                    <li><strong>Agglomération:</strong> Dilatation des groupes de points pour meilleure visibilité de la densité</li>
+                    <li><strong>Tooltips:</strong> Tooltip natif du navigateur au survol (attribut title)</li>
+                    <li><strong>Interaction:</strong> Hover scale(1.5), cursor pointer</li>
+                </ul>
+            </div>
+
+            <div class="guide-code-title">Code CSS</div>
+            <div class="guide-code">.barre-indicateur {
+    height: 40px;
+    border-radius: 20px;
+    position: relative;
+    background: linear-gradient(to right,
+        #ff8c00 0%,   /* Orange foncé */
+        #ffa500 10%,  /* Orange */
+        #98d025 30%,  /* Vert citron */
+        #22c55e 50%,  /* Vert */
+        #14b8a6 65%,  /* Cyan/Sarcelle */
+        #06b6d4 80%,  /* Bleu ciel clair */
+        #0ea5e9 100%  /* Bleu ciel */
+    );
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.barre-indicateur-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 30, 58, 0.2);
+    border-radius: 20px;
+    pointer-events: none;
+}</div>
+        </div>
+
+        <div class="guide-component">
+            <h3 class="guide-component-title">Barres Patterns d'apprentissage</h3>
+            <p class="guide-component-description">
+                Visualisation des patterns détectés (Progression, Défi spécifique, Blocage émergent, Blocage critique) avec gradient Vert → Indigo.
+            </p>
+
+            <div class="guide-example">
+                <div class="barre-patterns">
+                    <div class="barre-patterns-overlay"></div>
+                    <div class="barre-etudiant barre-etudiant-som" style="left: 15%;" title="Lapointe, Julie : Progression"></div>
+                    <div class="barre-etudiant barre-etudiant-som" style="left: 40%;" title="Roy, Maxime : Défi spécifique"></div>
+                    <div class="barre-etudiant barre-etudiant-som" style="left: 85%;" title="Nadeau, Émilie : Blocage critique"></div>
+                </div>
+                <p style="margin-top: 10px; font-size: 0.85rem; color: #666;">
+                    Progression (15%) • Défi spécifique (40%) • Blocage critique (85%) • Survolez les points pour voir les détails
+                </p>
+            </div>
+
+            <div class="guide-specs">
+                <div class="guide-specs-title">🎨 Spécifications</div>
+                <ul>
+                    <li><strong>Dimensions:</strong> height: 30px, border-radius: 15px</li>
+                    <li><strong>Gradient:</strong> linear-gradient(to right, #22c55e 0%, #14b8a6 25%, #0ea5e9 50%, #3b82f6 75%, #6366f1 100%)</li>
+                    <li><strong>Zones:</strong> Vert (0-25% Progression) → Cyan (25-50% Défi) → Bleu (50-75% Émergent) → Indigo (75-100% Critique)</li>
+                    <li><strong>Overlay:</strong> rgba(15, 30, 58, 0.35) - "Nuit Élégante" à 35% d'opacité</li>
+                </ul>
+            </div>
+
+            <div class="guide-code-title">Code CSS</div>
+            <div class="guide-code">.barre-patterns {
+    height: 30px;
+    border-radius: 15px;
+    position: relative;
+    background: linear-gradient(to right,
+        #22c55e 0%,   /* Vert */
+        #14b8a6 25%,  /* Cyan/Sarcelle */
+        #0ea5e9 50%,  /* Bleu ciel */
+        #3b82f6 75%,  /* Bleu */
+        #6366f1 100%  /* Indigo */
+    );
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.barre-patterns-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 30, 58, 0.35);
+    border-radius: 15px;
+    pointer-events: none;
+}</div>
+        </div>
+
+        <div class="guide-component">
+            <h3 class="guide-component-title">Barres RàI (Niveaux d'intervention)</h3>
+            <p class="guide-component-description">
+                Visualisation des niveaux de Réponse à l'Intervention (Niveau 1 Universel, 2 Préventif, 3 Intensif) avec gradient Bleu → Mauve.
+            </p>
+
+            <div class="guide-example">
+                <div class="barre-rai">
+                    <div class="barre-rai-overlay"></div>
+                    <div class="barre-etudiant barre-etudiant-pan" style="left: 20%;" title="Bergeron, Antoine : Niveau 1 Universel"></div>
+                    <div class="barre-etudiant barre-etudiant-pan" style="left: 50%;" title="Côté, Léa : Niveau 2 Préventif"></div>
+                    <div class="barre-etudiant barre-etudiant-pan" style="left: 88%;" title="Bouchard, Thomas : Niveau 3 Intensif"></div>
+                </div>
+                <p style="margin-top: 10px; font-size: 0.85rem; color: #666;">
+                    Niveau 1 (20%) • Niveau 2 (50%) • Niveau 3 (88%) • Survolez les points pour voir les détails
+                </p>
+            </div>
+
+            <div class="guide-specs">
+                <div class="guide-specs-title">🎨 Spécifications</div>
+                <ul>
+                    <li><strong>Dimensions:</strong> height: 30px, border-radius: 15px</li>
+                    <li><strong>Gradient:</strong> linear-gradient(to right, #0ea5e9 0%, #3b82f6 25%, #6366f1 50%, #8b5cf6 75%, #6b21a8 100%)</li>
+                    <li><strong>Zones:</strong> Bleu ciel (0-33% Niveau 1) → Indigo (33-66% Niveau 2) → Mauve (66-100% Niveau 3)</li>
+                    <li><strong>Overlay:</strong> rgba(15, 30, 58, 0.4) - "Nuit Élégante" à 40% d'opacité</li>
+                </ul>
+            </div>
+
+            <div class="guide-code-title">Code CSS</div>
+            <div class="guide-code">.barre-rai {
+    height: 30px;
+    border-radius: 15px;
+    position: relative;
+    background: linear-gradient(to right,
+        #0ea5e9 0%,   /* Bleu ciel */
+        #3b82f6 25%,  /* Bleu */
+        #6366f1 50%,  /* Indigo */
+        #8b5cf6 75%,  /* Violet */
+        #6b21a8 100%  /* Mauve foncé */
+    );
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.barre-rai-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 30, 58, 0.4);
+    border-radius: 15px;
+    pointer-events: none;
+}</div>
+        </div>
+
+        <div class="guide-component">
+            <h3 class="guide-component-title">Points de distribution (Scatter plots)</h3>
+            <p class="guide-component-description">
+                Points circulaires positionnés sur les gradients pour représenter les étudiants. Couleurs distinctes pour SOM (orange) et PAN (bleu).
+            </p>
+
+            <div class="guide-example">
+                <div style="position: relative; height: 60px; background: #f0f8ff; border-radius: 8px; padding: 15px;">
+                    <div class="barre-etudiant barre-etudiant-som" style="position: absolute; left: 30%; top: 50%;"></div>
+                    <div class="barre-etudiant barre-etudiant-pan" style="position: absolute; left: 60%; top: 50%;"></div>
+                    <div class="barre-etudiant barre-etudiant-som" style="position: absolute; left: 45%; top: 50%;"></div>
+                </div>
+                <p style="margin-top: 10px; font-size: 0.85rem; color: #666;">
+                    ● Orange = Sommative (SOM) • ● Bleu = PAN-Maîtrise
+                </p>
+            </div>
+
+            <div class="guide-specs">
+                <div class="guide-specs-title">🎨 Spécifications</div>
+                <ul>
+                    <li><strong>Dimensions:</strong> width: 8px, height: 8px, border-radius: 50%</li>
+                    <li><strong>Couleurs:</strong> SOM #ff6f00 (var(--som-orange)), PAN #0277bd (var(--pan-bleu))</li>
+                    <li><strong>Bordure:</strong> 1px solid white (2px au hover)</li>
+                    <li><strong>Animation:</strong> float-subtle au hover (7s ease-in-out, translation ±1-2px)</li>
+                    <li><strong>Hover:</strong> scale(1.5), z-index: 20, box-shadow augmentée</li>
+                    <li><strong>Jitter:</strong> Position aléatoire ±1.5% horizontal, ±12px vertical</li>
+                </ul>
+            </div>
+
+            <div class="guide-code-title">Code CSS</div>
+            <div class="guide-code">.barre-etudiant {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    border: 1px solid white;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+
+.barre-etudiant:hover {
+    z-index: 20;
+    border-width: 2px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    animation: float-subtle 7s ease-in-out infinite;
+}
+
+.barre-etudiant-som {
+    background: var(--som-orange);   /* #ff6f00 */
+}
+
+.barre-etudiant-pan {
+    background: var(--pan-bleu);     /* #0277bd */
+}
+
+@keyframes float-subtle {
+    0%, 100% { transform: translate(-50%, -50%) translateX(0px) translateY(0px) scale(1.5); }
+    25% { transform: translate(-50%, -50%) translateX(1px) translateY(-1px) scale(1.5); }
+    50% { transform: translate(-50%, -50%) translateX(0px) translateY(-2px) scale(1.5); }
+    75% { transform: translate(-50%, -50%) translateX(-1px) translateY(-1px) scale(1.5); }
+}</div>
+        </div>
+
+        <div class="guide-do-dont">
+            <div class="guide-do">
+                <div class="guide-do-title">✅ À FAIRE</div>
+                <ul style="margin: 10px 0 0 0; padding-left: 20px;">
+                    <li>Toujours inclure l'overlay "Nuit Élégante" pour cohérence visuelle</li>
+                    <li>Respecter les hauteurs: 40px (ACPE), 30px (Patterns/RàI)</li>
+                    <li>Utiliser les variables CSS --som-orange et --pan-bleu pour les points</li>
+                    <li>Ajouter jitter aléatoire pour éviter superposition des points</li>
+                    <li>Limiter animation au hover pour performance</li>
+                </ul>
+            </div>
+            <div class="guide-dont">
+                <div class="guide-dont-title">❌ À ÉVITER</div>
+                <ul style="margin: 10px 0 0 0; padding-left: 20px;">
+                    <li>Modifier les couleurs des gradients (sémantique pédagogique)</li>
+                    <li>Omettre l'overlay (perd l'identité visuelle "Nuit Élégante")</li>
+                    <li>Animer tous les points en même temps (surcharge visuelle)</li>
+                    <li>Utiliser des couleurs custom pour SOM/PAN (confusion utilisateur)</li>
+                    <li>Oublier border: 1px solid white (lisibilité réduite)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 13: EN-TÊTE DE L'APPLICATION -->
+    <section id="entete" class="guide-section">
+        <h2 class="guide-section-title">13. En-tête de l'application</h2>
+        <p class="guide-section-intro">
+            Structure et style de l'en-tête principal avec gradient "Nuit Élégante", logo, titre centré et boutons d'action.
+        </p>
+
+        <div class="guide-component">
+            <h3 class="guide-component-title">Structure de l'en-tête</h3>
+            <p class="guide-component-description">
+                L'en-tête est organisé en trois zones : logo à gauche, titre centré, et actions à droite (Courriel, Soutenir).
+            </p>
+
+            <div class="guide-example">
+                <div style="background: linear-gradient(135deg, #032e5c 0%, #0f1e3a 100%); color: white; padding: 30px 40px; border-radius: 8px; position: relative;">
+                    <!-- Conteneur principal -->
+                    <div style="display: flex; align-items: center; gap: 30px;">
+                        <!-- Logo section gauche -->
+                        <div style="flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                            <div style="width: 70px; height: 70px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);">
+                                <div style="font-size: 2rem; color: #032e5c;">📊</div>
+                            </div>
+                            <div style="font-size: 0.85rem; color: #9fc5e8; text-align: center; line-height: 1.2;">
+                                Réfléchir, expérimenter, partager
+                            </div>
+                        </div>
+
+                        <!-- Titre centré (position absolue) -->
+                        <div style="position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); text-align: center;">
+                            <h1 style="font-size: 2rem; font-weight: bold; margin: 0 0 3px 0; color: white;">Système de suivi</h1>
+                            <div style="font-size: 1.05rem; color: #d0e4f5; margin: 0 0 5px 0;">Monitorage pédagogique</div>
+                            <div style="font-size: 0.7rem; color: #9fc5e8; margin: 0;">Beta 91 • 18 novembre 2025</div>
+                        </div>
+
+                        <!-- Actions droite -->
+                        <div style="margin-left: auto; display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
+                            <a href="#" style="display: inline-block; padding: 4px 8px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 6px; color: white; text-decoration: none; font-size: 0.85rem; transition: all 0.3s ease;">
+                                Courriel
+                            </a>
+                            <a href="#" style="display: inline-block; padding: 4px 8px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 6px; color: white; text-decoration: none; font-size: 0.85rem; transition: all 0.3s ease;">
+                                Soutenir le projet
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="guide-specs">
+                <div class="guide-specs-title">🎨 Spécifications</div>
+                <ul>
+                    <li><strong>Background:</strong> linear-gradient(135deg, #032e5c 0%, #0f1e3a 100%) - Dégradé "Nuit Élégante"</li>
+                    <li><strong>Padding:</strong> 30px 40px</li>
+                    <li><strong>Layout:</strong> Flexbox avec gap 30px</li>
+                    <li><strong>Logo:</strong> 70×70px, background white, border-radius 12px, box-shadow</li>
+                    <li><strong>Titre:</strong> Position absolue centrée (left: 50%, transform: translate(-50%, -50%))</li>
+                    <li><strong>Boutons:</strong> Glassmorphisme avec backdrop-filter blur(5px)</li>
+                </ul>
+            </div>
+
+            <div class="guide-code-title">Code CSS</div>
+            <div class="guide-code">.entete {
+    background: linear-gradient(135deg, var(--bleu-principal) 0%, var(--bleu-fonce) 100%);
+    color: white;
+    padding: 30px 40px;
+    position: relative;
+}
+
+.entete-conteneur {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+/* Logo section */
+.logo-section {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    width: 70px;
+    height: 70px;
+    background: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.logo-meta {
+    font-size: 0.85rem;
+    color: #9fc5e8;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* Titre centré */
+.titre-section {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1;
+}
+
+.titre-section h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0 0 3px 0;
+    color: white;
+}
+
+.titre-section .sous-titre {
+    font-size: 1.05rem;
+    color: #d0e4f5;
+    margin: 0 0 5px 0;
+}
+
+.titre-section .meta {
+    font-size: 0.7rem;
+    color: #9fc5e8;
+    margin: 0;
+}</div>
+        </div>
+
+        <div class="guide-component">
+            <h3 class="guide-component-title">Boutons d'action (Glassmorphisme)</h3>
+            <p class="guide-component-description">
+                Boutons avec effet de verre translucide utilisant backdrop-filter. Variante neutre avec fond blanc semi-transparent.
+            </p>
+
+            <div class="guide-example">
+                <div style="background: linear-gradient(135deg, #032e5c 0%, #0f1e3a 100%); padding: 40px; border-radius: 8px; display: flex; gap: 15px; justify-content: center;">
+                    <a href="#" style="display: inline-block; padding: 4px 8px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 6px; color: white; text-decoration: none; font-size: 0.85rem; transition: all 0.3s ease;">
+                        Courriel
+                    </a>
+                    <a href="#" style="display: inline-block; padding: 4px 8px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 6px; color: white; text-decoration: none; font-size: 0.85rem; transition: all 0.3s ease;">
+                        Soutenir le projet
+                    </a>
+                </div>
+            </div>
+
+            <div class="guide-specs">
+                <div class="guide-specs-title">🎨 Spécifications</div>
+                <ul>
+                    <li><strong>Padding:</strong> 4px 8px</li>
+                    <li><strong>Border-radius:</strong> 6px</li>
+                    <li><strong>Font-size:</strong> 0.85rem</li>
+                    <li><strong>Transition:</strong> all 0.3s ease</li>
+                    <li><strong>Background:</strong> rgba(255,255,255,0.1) - Blanc semi-transparent 10%</li>
+                    <li><strong>Border:</strong> 1px solid rgba(255,255,255,0.2) - Blanc semi-transparent 20%</li>
+                    <li><strong>Effet verre:</strong> backdrop-filter: blur(5px) + -webkit-backdrop-filter (Safari)</li>
+                </ul>
+            </div>
+
+            <div class="guide-code-title">Code CSS</div>
+            <div class="guide-code">/* Boutons d'action dans le header */
+.info-legales-section .btn-action-header {
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    color: white;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.info-legales-section .btn-action-header:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}</div>
+        </div>
+
+        <div class="guide-component">
+            <h3 class="guide-component-title">Adaptation modes (Normal, Simulation, Anonymisation)</h3>
+            <p class="guide-component-description">
+                Le dégradé de l'en-tête s'adapte automatiquement selon le mode sélectionné pour une identification visuelle immédiate.
+            </p>
+
+            <div class="guide-example">
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <!-- Mode Normal -->
+                    <div style="background: linear-gradient(135deg, #032e5c 0%, #0f1e3a 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">Mode Normal</div>
+                        <div style="font-size: 0.85rem; color: #9fc5e8;">Bleu principal → Bleu foncé</div>
+                    </div>
+
+                    <!-- Mode Simulation -->
+                    <div style="background: linear-gradient(135deg, #1a5266 0%, #0d3540 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">Mode Simulation</div>
+                        <div style="font-size: 0.85rem; color: #9fc5e8;">Sarcelle/vert → Vert foncé</div>
+                    </div>
+
+                    <!-- Mode Anonymisation -->
+                    <div style="background: linear-gradient(135deg, #0f1e3a 0%, #071428 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">Mode Anonymisation</div>
+                        <div style="font-size: 0.85rem; color: #9fc5e8;">Bleu nuit désaturé → Très foncé</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="guide-specs">
+                <div class="guide-specs-title">🎨 Gradients par mode</div>
+                <ul>
+                    <li><strong>Normal:</strong> linear-gradient(135deg, #032e5c 0%, #0f1e3a 100%)</li>
+                    <li><strong>Simulation:</strong> linear-gradient(135deg, #1a5266 0%, #0d3540 100%)</li>
+                    <li><strong>Anonymisation:</strong> linear-gradient(135deg, #0f1e3a 0%, #071428 100%)</li>
+                </ul>
+            </div>
+
+            <div class="guide-code-title">Code CSS</div>
+            <div class="guide-code">/* Mode Normal (par défaut) */
+body[data-mode="normal"] .entete {
+    background: linear-gradient(135deg, #032e5c 0%, #0f1e3a 100%);
+}
+
+/* Mode Simulation */
+body[data-mode="simulation"] .entete {
+    background: linear-gradient(135deg, #1a5266 0%, #0d3540 100%);
+}
+
+/* Mode Anonymisation */
+body[data-mode="anonymisation"] .entete {
+    background: linear-gradient(135deg, #0f1e3a 0%, #071428 100%);
+}</div>
+        </div>
+
+        <div class="guide-component">
+            <h3 class="guide-component-title">Responsive (Mobile/Tablette)</h3>
+            <p class="guide-component-description">
+                Sur petits écrans, l'en-tête passe en disposition verticale centrée.
+            </p>
+
+            <div class="guide-specs">
+                <div class="guide-specs-title">📱 Breakpoint: max-width 768px</div>
+                <ul>
+                    <li><strong>Layout:</strong> flex-direction: column</li>
+                    <li><strong>Alignement:</strong> text-align: center</li>
+                    <li><strong>Titre:</strong> font-size réduit à 1.8rem</li>
+                    <li><strong>Logo meta:</strong> max-width: 100%</li>
+                    <li><strong>Actions:</strong> align-items: center, margin-left: 0</li>
+                </ul>
+            </div>
+
+            <div class="guide-code-title">Code CSS</div>
+            <div class="guide-code">@media (max-width: 768px) {
+    .entete-conteneur {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .titre-section h1 {
+        font-size: 1.8rem;
+    }
+
+    .logo-meta {
+        max-width: 100%;
+    }
+
+    .info-legales-section {
+        align-items: center;
+        margin-left: 0;
+    }
+
+    .info-legales-section .meta {
+        text-align: center;
+    }
+}</div>
+        </div>
+
+        <div class="guide-do-dont">
+            <div class="guide-do">
+                <div class="guide-do-title">✅ À FAIRE</div>
+                <ul style="margin: 10px 0 0 0; padding-left: 20px;">
+                    <li>Toujours utiliser position absolue pour le titre centré</li>
+                    <li>Inclure -webkit-backdrop-filter pour compatibilité Safari</li>
+                    <li>Respecter les couleurs de gradient par mode</li>
+                    <li>Ajouter transition: all 0.3s ease sur les boutons</li>
+                    <li>Tester le responsive sur mobile (< 768px)</li>
+                </ul>
+            </div>
+            <div class="guide-dont">
+                <div class="guide-dont-title">❌ À ÉVITER</div>
+                <ul style="margin: 10px 0 0 0; padding-left: 20px;">
+                    <li>Modifier l'angle du gradient (135deg est optimal)</li>
+                    <li>Omettre z-index: 1 sur le titre centré</li>
+                    <li>Utiliser des couleurs custom pour les modes (confusion utilisateur)</li>
+                    <li>Oublier box-shadow sur le logo</li>
+                    <li>Retirer backdrop-filter (perd l'effet glassmorphisme)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
     <!-- FOOTER -->
     <div style="margin-top: 80px; padding: 40px; background: linear-gradient(135deg, #032e5c 0%, #0f1e3a 100%); color: white; text-align: center; border-radius: 8px;">
         <h3 style="margin: 0 0 10px 0;">📚 Guide de Design System</h3>
         <p style="margin: 0; color: #9fc5e8;">
-            Document vivant • Version Beta 85 • Palette Nuit Élégante
+            Document vivant • Version Beta 91 • Palette Nuit Élégante
         </p>
     </div>
 
