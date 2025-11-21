@@ -427,7 +427,7 @@ function cartoucheSelectionnee() {
     const statut = document.getElementById('remiseProduction1').value;
     if (statut !== 'remis') {
         document.getElementById('listeCriteresGrille1').innerHTML =
-            '<p class="eval-texte-italic-gris">Le travail doit être remis avant évaluation</p>';
+            '<p style="color: #999; font-style: italic;">Le travail doit être remis avant évaluation</p>';
         return;
     }
 
@@ -457,97 +457,26 @@ function cartoucheSelectionnee() {
     const html = cartouche.criteres.map(critere => {
         const critereGrille = grille.criteres.find(c => c.id === critere.id);
         const ponderation = critereGrille ? critereGrille.ponderation : '?';
-        const estAlgorithmique = critereGrille?.type === 'algorithmique';
-        const facteur = critereGrille?.facteurNormalisation || 500;
-
-        // Vérifier si la catégorisation des erreurs est activée
-        const modalites = JSON.parse(localStorage.getItem('modalitesEvaluation') || '{}');
-        const categorisationActive = modalites.activerCategorisationErreurs === true;
 
         return `
-    <div style="margin-bottom: 15px; padding: 12px; background: white; border-left: 3px solid ${estAlgorithmique ? 'var(--orange-accent)' : 'var(--bleu-moyen)'};">
-        <div class="eval-grid-critere">
+    <div style="margin-bottom: 15px; padding: 12px; background: white; border-left: 3px solid var(--bleu-moyen);">
+        <div style="display: grid; grid-template-columns: 300px 1fr; gap: 20px; align-items: start;">
             <div>
     <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px;">
-        <strong class="u-texte-09">${echapperHtml(critere.nom)}</strong>
+        <strong style="font-size: 0.9rem;">${echapperHtml(critere.nom)}</strong>
         <small style="color: #666;">(${ponderation}%)</small>
-        ${estAlgorithmique ? '<span style="font-size: 0.7rem; color: var(--orange-accent); font-weight: bold; margin-left: 6px;">ALGORITHMIQUE</span>' : ''}
     </div>
     ${critereGrille?.description ?
                 `<small style="display: block; color: #888; font-style: italic; margin-bottom: 10px; line-height: 1.3;">${echapperHtml(critereGrille.description)}</small>` : ''}
-
-    ${estAlgorithmique ? (categorisationActive ? `
-        <!-- Interface algorithmique AVEC catégorisation -->
-        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 10px;">
-            <div class="groupe-form">
-                <label style="font-size: 0.75rem; color: #666;">Catégories d'erreurs (séparées par ;)</label>
-                <input type="text"
-                       id="eval_categories_${critere.id}"
-                       class="controle-form"
-                       placeholder="Ex: 1;4;6;1;4;10"
-                       oninput="calculerNoteAlgorithmiqueAvecCategories('${critere.id}', ${ponderation}, ${facteur}, '${critereGrille?.id || ''}')"
-                       style="font-size: 0.85rem;">
-                <small style="font-size: 0.7rem; color: #999;">ⓘ Codes de 0 à 10 (voir configuration de la grille)</small>
-            </div>
-            <div class="groupe-form">
-                <label style="font-size: 0.75rem; color: #666;">Nombre de mots</label>
-                <input type="number"
-                       id="eval_mots_${critere.id}"
-                       class="controle-form"
-                       min="1"
-                       placeholder="500"
-                       oninput="calculerNoteAlgorithmiqueAvecCategories('${critere.id}', ${ponderation}, ${facteur}, '${critereGrille?.id || ''}')"
-                       style="font-size: 0.85rem;">
-            </div>
-        </div>
-        <div id="resultat_algo_${critere.id}" style="padding: 8px; background: #f0f8ff; border-radius: 4px; font-size: 0.85rem; color: #666; margin-bottom: 8px;">
-            <strong>Total erreurs:</strong> <span id="total_erreurs_${critere.id}">--</span><br>
-            <strong>Formule:</strong> ${ponderation} − (<span id="total_erreurs_formule_${critere.id}">--</span> ÷ <span id="mots_formule_${critere.id}">--</span> Mots × ${facteur})<br>
-            <strong>Résultat:</strong> <span id="note_algo_${critere.id}">--</span> / ${ponderation} = <span id="pct_algo_${critere.id}">--</span>%<br>
-            <strong>Niveau IDME:</strong> <span id="niveau_algo_${critere.id}">--</span><br>
-            <strong>Catégorie dominante:</strong> <span id="cat_dominante_${critere.id}" style="color: var(--orange-accent);">--</span>
-        </div>
-    ` : `
-        <!-- Interface algorithmique SIMPLE (sans catégorisation) -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-            <div class="groupe-form">
-                <label style="font-size: 0.75rem; color: #666;">Nombre d'erreurs</label>
-                <input type="number"
-                       id="eval_erreurs_${critere.id}"
-                       class="controle-form"
-                       min="0"
-                       placeholder="0"
-                       oninput="calculerNoteAlgorithmiqueSimple('${critere.id}', ${ponderation}, ${facteur})"
-                       style="font-size: 0.85rem;">
-            </div>
-            <div class="groupe-form">
-                <label style="font-size: 0.75rem; color: #666;">Nombre de mots</label>
-                <input type="number"
-                       id="eval_mots_${critere.id}"
-                       class="controle-form"
-                       min="1"
-                       placeholder="500"
-                       oninput="calculerNoteAlgorithmiqueSimple('${critere.id}', ${ponderation}, ${facteur})"
-                       style="font-size: 0.85rem;">
-            </div>
-        </div>
-        <div id="resultat_algo_${critere.id}" style="padding: 8px; background: #f0f8ff; border-radius: 4px; font-size: 0.85rem; color: #666; margin-bottom: 8px;">
-            <strong>Formule:</strong> ${ponderation} − (Erreurs ÷ Mots × ${facteur})<br>
-            <strong>Résultat:</strong> <span id="note_algo_${critere.id}">--</span> / ${ponderation} = <span id="pct_algo_${critere.id}">--</span>%<br>
-            <strong>Niveau IDME:</strong> <span id="niveau_algo_${critere.id}">--</span>
-        </div>
-    `) : `
-        <!-- Interface standard (holistique/analytique) -->
-        <select id="eval_${critere.id}" class="controle-form"
-                onchange="niveauSelectionne('${critere.id}')"
-                style="font-size: 0.85rem; transition: background-color 0.3s ease; border: 2px solid #ddd; width: 100%;">
-            <option value="">--</option>
-            ${niveauxDisponibles.map(n => `<option value="${n.code}">${echapperHtml(n.code)} - ${echapperHtml(n.nom)}</option>`).join('')}
-        </select>
-    `}
+    <select id="eval_${critere.id}" class="controle-form"
+            onchange="niveauSelectionne('${critere.id}')"
+            style="font-size: 0.85rem; transition: background-color 0.3s ease; border: 2px solid #ddd; width: 100%;">
+        <option value="">--</option>
+        ${niveauxDisponibles.map(n => `<option value="${n.code}">${echapperHtml(n.code)} - ${echapperHtml(n.nom)}</option>`).join('')}
+    </select>
 </div>
             <div id="comm_${critere.id}" style="font-size: 0.85rem; line-height: 1.5; color: #555; font-style: italic; padding: 8px; background: #f8f9fa; border-radius: 4px; min-height: 60px;">
-                ${estAlgorithmique ? 'Saisissez les erreurs et le nombre de mots' : 'Sélectionnez un niveau'}
+                Sélectionnez un niveau
             </div>
         </div>
     </div>
@@ -617,418 +546,6 @@ function niveauSelectionne(critereId) {
     genererRetroaction(1);
 }
 
-/**
- * Calcule automatiquement la note pour un critère algorithmique
- * Formule: Note = Pondération − (Erreurs ÷ Mots × Facteur)
- *
- * @param {string} critereId - ID du critère
- * @param {number} ponderation - Pondération du critère (ex: 30)
- * @param {number} facteur - Facteur de normalisation (ex: 500 mots)
- */
-function calculerNoteAlgorithmique(critereId, ponderation, facteur) {
-    if (!evaluationEnCours) return;
-
-    const erreursInput = document.getElementById(`eval_erreurs_${critereId}`);
-    const motsInput = document.getElementById(`eval_mots_${critereId}`);
-
-    const erreurs = parseInt(erreursInput?.value) || 0;
-    const mots = parseInt(motsInput?.value) || 0;
-
-    if (mots === 0) {
-        // Réinitialiser l'affichage
-        document.getElementById(`note_algo_${critereId}`).textContent = '--';
-        document.getElementById(`pct_algo_${critereId}`).textContent = '--';
-        document.getElementById(`niveau_algo_${critereId}`).textContent = '--';
-        return;
-    }
-
-    // Calcul selon la formule: Pondération − (Erreurs ÷ Mots × Facteur)
-    const noteCalculee = ponderation - (erreurs / mots * facteur);
-    const pourcentage = (noteCalculee / ponderation) * 100;
-
-    // Limiter entre 0 et 100%
-    const pctFinal = Math.max(0, Math.min(100, pourcentage));
-
-    // Déterminer le niveau IDME selon l'échelle
-    const echelleId = evaluationEnCours?.echelleId || document.getElementById('selectEchelle1')?.value;
-    const echelles = JSON.parse(localStorage.getItem('echellesTemplates') || '[]');
-    const echelleSelectionnee = echelles.find(e => e.id === echelleId);
-
-    let niveauIDME = '--';
-    if (echelleSelectionnee && echelleSelectionnee.niveaux) {
-        const niveau = echelleSelectionnee.niveaux.find(n => {
-            return pctFinal >= n.min && pctFinal <= n.max;
-        });
-        niveauIDME = niveau ? niveau.code : '--';
-    }
-
-    // Afficher les résultats
-    document.getElementById(`note_algo_${critereId}`).textContent = noteCalculee.toFixed(2);
-    document.getElementById(`pct_algo_${critereId}`).textContent = pctFinal.toFixed(1);
-    document.getElementById(`niveau_algo_${critereId}`).textContent = niveauIDME;
-
-    // Sauvegarder dans evaluationEnCours
-    evaluationEnCours.criteres[critereId] = niveauIDME;
-
-    // Sauvegarder les données algorithmiques séparément pour pouvoir les recharger
-    if (!evaluationEnCours.donneesAlgorithmiques) {
-        evaluationEnCours.donneesAlgorithmiques = {};
-    }
-    evaluationEnCours.donneesAlgorithmiques[critereId] = {
-        erreurs: erreurs,
-        mots: mots,
-        noteCalculee: noteCalculee,
-        pourcentage: pctFinal
-    };
-
-    // Calculer la note globale et générer la rétroaction
-    calculerNote();
-    genererRetroaction(1);
-}
-
-/**
- * Génère une rétroaction sur le ratio d'erreurs en prévision de l'EUF
- * Formule: motsParErreur = Mots ÷ Erreurs
- * Interprétation: 1 erreur à chaque X mots
- * Seuil EUF: minimum 1 erreur à chaque 30 mots pour réussir
- *
- * @param {number} erreurs - Nombre total d'erreurs
- * @param {number} mots - Nombre de mots
- * @returns {string} Rétroaction EUF
- */
-function genererRetroactionEUF(erreurs, mots) {
-    if (erreurs === 0) {
-        return ' En prévision de l\'EUF, l\'absence d\'erreur est exceptionnelle.';
-    }
-    if (mots === 0) return '';
-
-    // Calcul: 1 erreur à chaque X mots
-    const motsParErreur = mots / erreurs;
-
-    let retroactionEUF = ` Tu fais en moyenne 1 erreur à chaque ${Math.round(motsParErreur)} mots.`;
-
-    // Seuil EUF: minimum 30 mots par erreur pour réussir
-    if (motsParErreur >= 100) {
-        retroactionEUF += ' En prévision de l\'EUF, ce ratio est excellent.';
-    } else if (motsParErreur >= 75) {
-        retroactionEUF += ' En prévision de l\'EUF, ce ratio est très bien.';
-    } else if (motsParErreur >= 60) {
-        retroactionEUF += ' En prévision de l\'EUF, ce ratio est bien.';
-    } else if (motsParErreur >= 30) {
-        retroactionEUF += ' En prévision de l\'EUF, ce ratio est risqué parce qu\'il est près du seuil de l\'échec. Il est recommandé de t\'inscrire au Centre d\'aide en français (CAF).';
-    } else {
-        retroactionEUF += ' En prévision de l\'EUF, ce ratio mènerait à un échec automatique. Il est fortement recommandé de t\'inscrire au Centre d\'aide en français (CAF).';
-    }
-
-    return retroactionEUF;
-}
-
-/**
- * Calcule la note algorithmique AVEC catégorisation des erreurs
- * Formule: Note = Pondération − (Total Erreurs ÷ Mots × Facteur)
- * + Calcul du mode (catégorie dominante) pour rétroaction différenciée
- *
- * @param {string} critereId - ID du critère
- * @param {number} ponderation - Pondération du critère (ex: 30)
- * @param {number} facteur - Facteur de normalisation (ex: 500 mots)
- * @param {string} critereGrilleId - ID du critère dans la grille (pour récupérer les catégories)
- */
-function calculerNoteAlgorithmiqueAvecCategories(critereId, ponderation, facteur, critereGrilleId) {
-    if (!evaluationEnCours) return;
-
-    const categoriesInput = document.getElementById(`eval_categories_${critereId}`);
-    const motsInput = document.getElementById(`eval_mots_${critereId}`);
-
-    const categoriesTexte = categoriesInput?.value.trim() || '';
-    const mots = parseInt(motsInput?.value) || 0;
-
-    // Parser les codes de sous-critères (ex: "1;4;6;1;4" → ['1', '4', '6', '1', '4'])
-    let codesSousCriteres = [];
-    if (categoriesTexte) {
-        codesSousCriteres = categoriesTexte.split(';')
-            .map(c => c.trim())
-            .filter(c => c !== '');
-    }
-
-    const totalErreurs = codesSousCriteres.length;
-
-    // Afficher le total d'erreurs
-    document.getElementById(`total_erreurs_${critereId}`).textContent = totalErreurs;
-    document.getElementById(`total_erreurs_formule_${critereId}`).textContent = totalErreurs;
-
-    // Afficher le nombre de mots dans la formule
-    document.getElementById(`mots_formule_${critereId}`).textContent = mots;
-
-    if (mots === 0 || totalErreurs === 0) {
-        // Réinitialiser l'affichage
-        document.getElementById(`note_algo_${critereId}`).textContent = '--';
-        document.getElementById(`pct_algo_${critereId}`).textContent = '--';
-        document.getElementById(`niveau_algo_${critereId}`).textContent = '--';
-        document.getElementById(`cat_dominante_${critereId}`).textContent = '--';
-
-        // Vérifier si l'élément existe avant d'y accéder
-        const retroDiv = document.getElementById(`retroaction_cat_${critereId}`);
-        if (retroDiv) retroDiv.style.display = 'none';
-
-        return;
-    }
-
-    // === RÉCUPÉRER LES SOUS-CRITÈRES DEPUIS LA GRILLE ===
-    const grilles = JSON.parse(localStorage.getItem('grillesTemplates') || '[]');
-    const grilleId = evaluationEnCours?.grilleId;
-    const grille = grilles.find(g => g.id === grilleId);
-
-    let sousCriteres = [];
-    if (grille && grille.criteres) {
-        const critereGrille = grille.criteres.find(c => c.id === critereId);
-        if (critereGrille && critereGrille.sousCriteres) {
-            sousCriteres = critereGrille.sousCriteres;
-        }
-    }
-
-    // === CALCUL DE LA SOMME PONDÉRÉE DES ERREURS ===
-    let sommePonderee = 0;
-    codesSousCriteres.forEach(code => {
-        // Trouver le sous-critère correspondant au code
-        const sc = sousCriteres.find(s => s.code === code);
-        if (sc) {
-            // Ajouter la pondération (par défaut 1.0 si non définie)
-            sommePonderee += (sc.ponderation !== undefined ? sc.ponderation : 1.0);
-        } else {
-            // Si le code n'existe pas dans les sous-critères, compter comme 1.0
-            sommePonderee += 1.0;
-        }
-    });
-
-    // Calcul selon la formule: Pondération − (Somme Pondérée ÷ Mots × Facteur)
-    const noteCalculee = ponderation - (sommePonderee / mots * facteur);
-    const pourcentage = (noteCalculee / ponderation) * 100;
-
-    // Limiter entre 0 et 100%
-    const pctFinal = Math.max(0, Math.min(100, pourcentage));
-
-    // Déterminer le niveau IDME selon l'échelle
-    const echelleId = evaluationEnCours?.echelleId || document.getElementById('selectEchelle1')?.value;
-    const echelles = JSON.parse(localStorage.getItem('echellesTemplates') || '[]');
-    const echelleSelectionnee = echelles.find(e => e.id === echelleId);
-
-    let niveauIDME = '--';
-    if (echelleSelectionnee && echelleSelectionnee.niveaux) {
-        const niveau = echelleSelectionnee.niveaux.find(n => {
-            return pctFinal >= n.min && pctFinal <= n.max;
-        });
-        niveauIDME = niveau ? niveau.code : '--';
-    }
-
-    // Afficher les résultats
-    document.getElementById(`note_algo_${critereId}`).textContent = noteCalculee.toFixed(2);
-    document.getElementById(`pct_algo_${critereId}`).textContent = pctFinal.toFixed(1);
-    document.getElementById(`niveau_algo_${critereId}`).textContent = niveauIDME;
-
-    // ⚠️ IMPORTANT: Sauvegarder le niveau dans evaluationEnCours pour qu'il soit inclus dans calculerNote()
-    evaluationEnCours.criteres[critereId] = niveauIDME;
-
-    // === CALCUL DU MODE (sous-critère dominant) ===
-    const frequences = {};
-    let maxFreq = 0;
-    let codeDominant = null;
-
-    codesSousCriteres.forEach(code => {
-        frequences[code] = (frequences[code] || 0) + 1;
-        if (frequences[code] > maxFreq) {
-            maxFreq = frequences[code];
-            codeDominant = code; // Premier en cas d'égalité
-        }
-    });
-
-    // Afficher le sous-critère dominant
-    if (codeDominant !== null) {
-        // Trouver le nom du sous-critère dominant
-        const scDominant = sousCriteres.find(s => s.code === codeDominant);
-        const nomDominant = scDominant ? scDominant.nom : `Code ${codeDominant}`;
-
-        document.getElementById(`cat_dominante_${critereId}`).textContent =
-            `${nomDominant} (${maxFreq} occurrence${maxFreq > 1 ? 's' : ''})`;
-
-        // Récupérer la rétroaction du sous-critère dominant
-        if (scDominant && scDominant.retroaction) {
-            // Construire la rétroaction complète avec le nombre d'erreurs et la somme pondérée
-            let retroactionComplete = `Ta rédaction contient ${totalErreurs} erreur${totalErreurs > 1 ? 's' : ''} de français`;
-
-            // Si la somme pondérée est différente du nombre d'erreurs, l'indiquer
-            if (Math.abs(sommePonderee - totalErreurs) > 0.01) {
-                retroactionComplete += ` (${sommePonderee.toFixed(1)} points)`;
-            }
-
-            retroactionComplete += ` pour ${mots} mots.`;
-
-            // Ajouter la rétroaction EUF (Épreuve Uniforme de Français) immédiatement après le décompte
-            const retroactionEUF = genererRetroactionEUF(totalErreurs, mots);
-            if (retroactionEUF) {
-                retroactionComplete += retroactionEUF;
-            }
-
-            // Ajouter la rétroaction spécifique à la catégorie dominante
-            retroactionComplete += ` ${scDominant.retroaction}`;
-
-            // Afficher la rétroaction dans la zone de commentaire normale
-            const commDiv = document.getElementById(`comm_${critereId}`);
-            if (commDiv) {
-                commDiv.textContent = retroactionComplete;
-            }
-
-            // Sauvegarder la rétroaction finale pour genererRetroaction()
-            const retroactionFinale = retroactionComplete;
-
-            // Sauvegarder les données algorithmiques
-            if (!evaluationEnCours.donneesAlgorithmiques) {
-                evaluationEnCours.donneesAlgorithmiques = {};
-            }
-
-            evaluationEnCours.donneesAlgorithmiques[critereId] = {
-                codes: codesSousCriteres,
-                mots: mots,
-                totalErreurs: totalErreurs,
-                sommePonderee: sommePonderee,
-                noteCalculee: noteCalculee,
-                pourcentage: pctFinal,
-                retroaction: retroactionFinale
-            };
-
-            // Masquer la zone orange (on ne l'utilise plus)
-            const retroDiv = document.getElementById(`retroaction_cat_${critereId}`);
-            if (retroDiv) retroDiv.style.display = 'none';
-        } else {
-            // Pas de rétroaction personnalisée, rétroaction générique
-            let retroactionGenerique = `Ta rédaction contient ${totalErreurs} erreur${totalErreurs > 1 ? 's' : ''} de français pour ${mots} mots.`;
-
-            // Ajouter la rétroaction EUF (Épreuve Uniforme de Français)
-            const retroactionEUF = genererRetroactionEUF(totalErreurs, mots);
-            if (retroactionEUF) {
-                retroactionGenerique += retroactionEUF;
-            }
-
-            const commDiv = document.getElementById(`comm_${critereId}`);
-            if (commDiv) {
-                commDiv.textContent = retroactionGenerique;
-            }
-
-            // Sauvegarder les données algorithmiques
-            if (!evaluationEnCours.donneesAlgorithmiques) {
-                evaluationEnCours.donneesAlgorithmiques = {};
-            }
-
-            evaluationEnCours.donneesAlgorithmiques[critereId] = {
-                codes: codesSousCriteres,
-                mots: mots,
-                totalErreurs: totalErreurs,
-                sommePonderee: sommePonderee,
-                noteCalculee: noteCalculee,
-                pourcentage: pctFinal,
-                retroaction: retroactionGenerique
-            };
-        }
-    } else {
-        document.getElementById(`cat_dominante_${critereId}`).textContent = '--';
-        const commDiv = document.getElementById(`comm_${critereId}`);
-        if (commDiv) {
-            commDiv.textContent = 'Saisissez les codes des sous-critères (ex: 1;4;6;1;4)';
-        }
-    }
-
-    // Calculer la note globale et générer la rétroaction
-    calculerNote();
-    genererRetroaction(1);
-}
-
-/**
- * Calcule la note algorithmique SIMPLE (sans catégorisation des erreurs)
- * Formule: Note = Pondération − (Total Erreurs ÷ Mots × Facteur)
- * Rétroaction générique: "Ta rédaction contient X erreurs de français pour Y mots."
- *
- * @param {string} critereId - ID du critère
- * @param {number} ponderation - Pondération du critère (ex: 30)
- * @param {number} facteur - Facteur de normalisation (ex: 500 mots)
- */
-function calculerNoteAlgorithmiqueSimple(critereId, ponderation, facteur) {
-    if (!evaluationEnCours) return;
-
-    const erreursInput = document.getElementById(`eval_erreurs_${critereId}`);
-    const motsInput = document.getElementById(`eval_mots_${critereId}`);
-
-    const erreurs = parseInt(erreursInput?.value) || 0;
-    const mots = parseInt(motsInput?.value) || 0;
-
-    if (mots === 0) {
-        // Réinitialiser l'affichage
-        document.getElementById(`note_algo_${critereId}`).textContent = '--';
-        document.getElementById(`pct_algo_${critereId}`).textContent = '--';
-        document.getElementById(`niveau_algo_${critereId}`).textContent = '--';
-        return;
-    }
-
-    // Calcul selon la formule: Pondération − (Total Erreurs ÷ Mots × Facteur)
-    const noteCalculee = ponderation - (erreurs / mots * facteur);
-    const pourcentage = (noteCalculee / ponderation) * 100;
-
-    // Limiter entre 0 et 100%
-    const pctFinal = Math.max(0, Math.min(100, pourcentage));
-
-    // Déterminer le niveau IDME selon l'échelle
-    const echelleId = evaluationEnCours?.echelleId || document.getElementById('selectEchelle1')?.value;
-    const echelles = JSON.parse(localStorage.getItem('echellesTemplates') || '[]');
-    const echelleSelectionnee = echelles.find(e => e.id === echelleId);
-
-    let niveauIDME = '--';
-    if (echelleSelectionnee && echelleSelectionnee.niveaux) {
-        const niveau = echelleSelectionnee.niveaux.find(n => {
-            return pctFinal >= n.min && pctFinal <= n.max;
-        });
-        niveauIDME = niveau ? niveau.code : '--';
-    }
-
-    // Afficher les résultats
-    document.getElementById(`note_algo_${critereId}`).textContent = noteCalculee.toFixed(2);
-    document.getElementById(`pct_algo_${critereId}`).textContent = pctFinal.toFixed(1);
-    document.getElementById(`niveau_algo_${critereId}`).textContent = niveauIDME;
-
-    // Construire la rétroaction générique simple
-    let retroactionGenerique = `Ta rédaction contient ${erreurs} erreur${erreurs > 1 ? 's' : ''} de français pour ${mots} mots.`;
-
-    // Ajouter la rétroaction EUF (Épreuve Uniforme de Français)
-    const retroactionEUF = genererRetroactionEUF(erreurs, mots);
-    if (retroactionEUF) {
-        retroactionGenerique += retroactionEUF;
-    }
-
-    // Afficher dans le champ commentaire standard
-    const champCommentaire = document.getElementById(`comm_${critereId}`);
-    if (champCommentaire) {
-        champCommentaire.value = retroactionGenerique;
-    }
-
-    // === SAUVEGARDE DANS evaluationEnCours ===
-    if (!evaluationEnCours.donneesAlgorithmiques) {
-        evaluationEnCours.donneesAlgorithmiques = {};
-    }
-
-    evaluationEnCours.donneesAlgorithmiques[critereId] = {
-        erreurs: erreurs,
-        mots: mots,
-        noteCalculee: noteCalculee,
-        pourcentage: pctFinal,  // Sauvegarder comme nombre, pas string
-        niveau: niveauIDME,
-        retroaction: retroactionGenerique
-    };
-
-    // Sauvegarder le critère dans evaluationEnCours.criteres avec le niveau
-    evaluationEnCours.criteres[critereId] = niveauIDME;
-
-    // Déclencher le recalcul et la régénération de rétroaction
-    calculerNote();
-    genererRetroaction(1);
-}
-
 /* ===============================
    🧮 CALCUL DE LA NOTE
    =============================== */
@@ -1076,36 +593,12 @@ function calculerNote() {
     let noteTotal = 0;
     let ponderationTotal = 0;
 
-    // 🔍 DEBUG: Afficher les données algorithmiques disponibles
-    console.log('🔍 DEBUG calculerNote() - Données algorithmiques:', evaluationEnCours.donneesAlgorithmiques);
-
     grille.criteres.forEach(critere => {
         const niveau = evaluationEnCours.criteres[critere.id];
-        if (niveau) {
+        if (niveau && valeurs[niveau]) {
             const ponderation = (critere.ponderation || 0) / 100;
-
-            // IMPORTANT: Pour les critères algorithmiques, utiliser le pourcentage exact calculé
-            // au lieu de la valeur par défaut du niveau (ex: 61.5% au lieu de 32% pour I)
-            let valeurCritere = valeurs[niveau];
-            let sourceValeur = 'niveau défaut';
-
-            if (evaluationEnCours.donneesAlgorithmiques &&
-                evaluationEnCours.donneesAlgorithmiques[critere.id] &&
-                evaluationEnCours.donneesAlgorithmiques[critere.id].pourcentage !== undefined) {
-                // Utiliser le pourcentage exact du calcul algorithmique
-                valeurCritere = evaluationEnCours.donneesAlgorithmiques[critere.id].pourcentage;
-                sourceValeur = 'algorithme exact';
-            }
-
-            if (valeurCritere !== undefined) {
-                const contribution = valeurCritere * ponderation;
-                noteTotal += contribution;
-                ponderationTotal += ponderation;
-
-                // 🔍 DEBUG: Afficher le détail de chaque critère (convertir en nombre pour toFixed)
-                const valNum = typeof valeurCritere === 'number' ? valeurCritere : parseFloat(valeurCritere);
-                console.log(`  • ${critere.nom}: niveau=${niveau}, valeur=${valNum.toFixed(1)}%, source="${sourceValeur}", pond=${(ponderation * 100).toFixed(0)}%, contrib=${contribution.toFixed(2)}%`);
-            }
+            noteTotal += valeurs[niveau] * ponderation;
+            ponderationTotal += ponderation;
         }
     });
 
@@ -1116,18 +609,12 @@ function calculerNote() {
         // La moyenne pondérée est directement en pourcentage
         pourcentage = noteTotal / ponderationTotal;
 
-        // 🔍 DEBUG: Afficher le résultat final
-        console.log(`🔍 DEBUG calculerNote() - Résultat: noteTotal=${noteTotal.toFixed(2)}%, ponderationTotal=${(ponderationTotal * 100).toFixed(0)}%, pourcentageFinal=${pourcentage.toFixed(1)}%`);
-
         // Déterminer le niveau global selon l'échelle
         const niveauFinal = niveaux.find(n => {
             return pourcentage >= n.min && pourcentage <= n.max;
         });
 
         niveauGlobal = niveauFinal ? niveauFinal.code : '--';
-
-        // 🔍 DEBUG: Afficher le niveau déterminé
-        console.log(`🔍 DEBUG calculerNote() - Niveau final: ${niveauGlobal} (${niveauFinal ? niveauFinal.nom : 'non trouvé'})`);
     }
 
     // Mettre à jour l'affichage
@@ -1259,19 +746,11 @@ function genererRetroaction(num) {
         grille.criteres.forEach(critere => {
             const niveau = evaluationEnCours.criteres[critere.id];
             if (niveau) {
-                // Vérifier si c'est un critère algorithmique
-                if (critere.type === 'algorithmique' && evaluationEnCours.donneesAlgorithmiques?.[critere.id]?.retroaction) {
-                    // Utiliser la rétroaction algorithmique sauvegardée
-                    const retroAlgo = evaluationEnCours.donneesAlgorithmiques[critere.id].retroaction;
-                    texte += `${critere.nom} (${niveau}) : ${retroAlgo}\n\n`;
-                } else {
-                    // Critère standard (holistique/analytique)
-                    const cle = `${critere.id}_${niveau}`;
-                    const commentaire = cartouche.commentaires[cle];
+                const cle = `${critere.id}_${niveau}`;
+                const commentaire = cartouche.commentaires[cle];
 
-                    if (commentaire) {
-                        texte += `${critere.nom} (${niveau}) : ${commentaire}\n\n`;
-                    }
+                if (commentaire) {
+                    texte += `${critere.nom} (${niveau}) : ${commentaire}\n\n`;
                 }
             }
         });
@@ -1384,7 +863,6 @@ function sauvegarderEvaluation() {
             adresse: document.getElementById('afficherAdresse1').checked,
             contexte: document.getElementById('afficherContexte1').checked
         },
-        donneesAlgorithmiques: evaluationEnCours.donneesAlgorithmiques || {}, // Sauvegarder données du français écrit algorithmique
         verrouillee: true // Verrouiller par défaut toutes les nouvelles évaluations
     };
 
@@ -1440,7 +918,7 @@ function changerStatutRemise(num) {
     // Si non remis, masquer les critères
     if (statut !== 'remis') {
         document.getElementById('listeCriteresGrille1').innerHTML =
-            '<p class="eval-texte-italic-gris">Le travail doit être remis avant évaluation</p>';
+            '<p style="color: #999; font-style: italic;">Le travail doit être remis avant évaluation</p>';
     } else if (evaluationEnCours?.cartoucheId) {
         // Si remis et cartouche sélectionnée, afficher les critères
         cartoucheSelectionnee();
@@ -1757,7 +1235,7 @@ function nouvelleEvaluation() {
     document.getElementById('selectEchelle1').value = '';
     document.getElementById('selectCartoucheEval').value = '';
     document.getElementById('remiseProduction1').value = 'non-remis';
-    document.getElementById('listeCriteresGrille1').innerHTML = '<p class="eval-texte-placeholder">Sélectionnez une grille et une cartouche</p>';
+    document.getElementById('listeCriteresGrille1').innerHTML = '<p style="color: #999; font-style: italic; font-size: 0.85rem;">Sélectionnez une grille et une cartouche</p>';
     document.getElementById('retroactionFinale1').value = '';
     document.getElementById('noteProduction1').textContent = '0.0';
     document.getElementById('niveauProduction1').textContent = '--';
@@ -1811,7 +1289,7 @@ function nouvelleEvaluation() {
  */
 function reinitialiserFormulaire() {
     // Réinitialiser uniquement les éléments du formulaire de notation
-    document.getElementById('listeCriteresGrille1').innerHTML = '<p class="eval-texte-placeholder">Sélectionnez une grille et une cartouche</p>';
+    document.getElementById('listeCriteresGrille1').innerHTML = '<p style="color: #999; font-style: italic; font-size: 0.85rem;">Sélectionnez une grille et une cartouche</p>';
     document.getElementById('retroactionFinale1').value = '';
     document.getElementById('noteProduction1').textContent = '0.0';
     document.getElementById('niveauProduction1').textContent = '--';
@@ -2262,7 +1740,7 @@ function genererBadgeCompletion(etudiant) {
     // Affichage unique (les indices C et P n'ont pas de modalité sommatif/alternatif)
     return `
         <span class="carte-metrique" style="padding:8px 15px; background: ${couleurFond}; border-radius: 6px;">
-            <strong class="eval-texte-11">C</strong>
+            <strong style="font-size: 1.1rem;">C</strong>
             <span style="font-size: 1.1rem; font-weight: 600; margin-left: 8px;">
                 ${Math.round(completion * 100)}%
             </span>
@@ -2371,7 +1849,7 @@ function genererDetailsEtudiant(etudiant) {
 
     // Générer le tableau HTML
     const tableauHTML = `
-        <table class="tableau u-mt-15">
+        <table class="tableau" style="margin-top: 15px;">
             <thead>
                 <tr>
                     <th>Production</th>
@@ -2380,7 +1858,7 @@ function genererDetailsEtudiant(etudiant) {
                     <th>Note</th>
                     <th>Date</th>
                     <th>Actions</th>
-                    <th class="eval-width-60" title="Verrouillage">🔒/🔓</th>
+                    <th style="width: 60px;" title="Verrouillage">🔒/🔓</th>
                 </tr>
             </thead>
             <tbody>
@@ -2396,7 +1874,7 @@ function genererDetailsEtudiant(etudiant) {
                                 const noteAffichage = noteLettre !== '--' ? `${noteLettre} (${notePourcent}%)` : `-- (${notePourcent}%)`;
 
                                 return `
-                            <tr ${estRemplacee ? 'class="eval-desactive"' : ''}>
+                            <tr ${estRemplacee ? 'style="opacity: 0.6; background: #f5f5f5;"' : ''}>
                                 <td>${echapperHtml(item.production.titre || item.production.nom || '—')}</td>
                                 <td>${echapperHtml(item.evaluation.grilleNom || '—')}</td>
                                 <td>${echapperHtml(obtenirNomCartouche(item.evaluation.cartoucheId, item.evaluation.grilleId) || '—')}</td>
@@ -2404,7 +1882,7 @@ function genererDetailsEtudiant(etudiant) {
                                     <span ${obtenirClasseNote(item.evaluation.niveauFinal, item.evaluation.echelleId)}>
                                         ${noteAffichage}
                                     </span>
-                                    ${estRemplacee ? '<span class="badge-statut eval-ml-6">Remplacée</span>' : ''}
+                                    ${estRemplacee ? '<span class="badge-statut" style="margin-left: 6px;">Remplacée</span>' : ''}
                                     ${estReprise ? '<span style="color: #9c27b0; font-size: 1.2rem; margin-left: 6px;" title="Jeton de reprise appliqué">⭐</span>' : ''}
                                     ${item.evaluation.jetonDelaiApplique ? '<span style="color: #ff6f00; font-size: 1.2rem; margin-left: 6px;" title="Jeton de délai appliqué">⭐</span>' : ''}
                                 </td>
@@ -2423,7 +1901,7 @@ function genererDetailsEtudiant(etudiant) {
                                         </button>
                                     `}
                                 </td>
-                                <td class="u-text-center">
+                                <td style="text-align: center;">
                                     ${estRemplacee ? '' : `
                                         <span id="cadenas-${item.evaluation.id}"
                                               onclick="basculerVerrouillageEvaluation('${item.evaluation.id}')"
@@ -2438,7 +1916,7 @@ function genererDetailsEtudiant(etudiant) {
         } else {
             // Production non évaluée
             return `
-                            <tr class="u-opacity-07">
+                            <tr style="opacity: 0.7;">
                                 <td>${echapperHtml(item.production.titre || item.production.nom || '—')}</td>
                                 <td>—</td>
                                 <td>—</td>
@@ -3056,59 +2534,6 @@ function verifierEtChargerEvaluationExistante() {
             evaluationExistante.criteres.forEach(c => {
                 window.evaluationEnCours.criteres[c.critereId] = c.niveauSelectionne;
             });
-
-            // Restaurer les données algorithmiques (français écrit)
-            if (evaluationExistante.donneesAlgorithmiques && Object.keys(evaluationExistante.donneesAlgorithmiques).length > 0) {
-                console.log('📊 Restauration données algorithmiques');
-
-                // Sauvegarder dans evaluationEnCours
-                window.evaluationEnCours.donneesAlgorithmiques = evaluationExistante.donneesAlgorithmiques;
-
-                Object.keys(evaluationExistante.donneesAlgorithmiques).forEach(critereId => {
-                    const donnees = evaluationExistante.donneesAlgorithmiques[critereId];
-
-                    // Restaurer le champ des codes (si existant - catégories)
-                    if (donnees.codes && Array.isArray(donnees.codes)) {
-                        const inputCategories = document.getElementById(`eval_categories_${critereId}`);
-                        if (inputCategories) {
-                            inputCategories.value = donnees.codes.join(';');
-                            console.log(`  ✓ Codes restaurés pour ${critereId}: ${donnees.codes.join(';')}`);
-                        }
-                    }
-
-                    // Restaurer le champ du nombre de mots
-                    if (donnees.mots !== undefined) {
-                        const inputMots = document.getElementById(`eval_mots_${critereId}`);
-                        if (inputMots) {
-                            inputMots.value = donnees.mots;
-                            console.log(`  ✓ Mots restaurés pour ${critereId}: ${donnees.mots}`);
-                        }
-                    }
-
-                    // Restaurer le champ d'erreurs (si mode simple - sans catégorisation)
-                    if (donnees.erreurs !== undefined) {
-                        const inputErreurs = document.getElementById(`eval_erreurs_${critereId}`);
-                        if (inputErreurs) {
-                            inputErreurs.value = donnees.erreurs;
-                            console.log(`  ✓ Erreurs restaurées pour ${critereId}: ${donnees.erreurs}`);
-                        }
-                    }
-
-                    // Déclencher le recalcul pour afficher les résultats
-                    setTimeout(() => {
-                        const inputCategories = document.getElementById(`eval_categories_${critereId}`);
-                        const inputErreurs = document.getElementById(`eval_erreurs_${critereId}`);
-
-                        if (inputCategories) {
-                            inputCategories.dispatchEvent(new Event('input', { bubbles: true }));
-                        } else if (inputErreurs) {
-                            inputErreurs.dispatchEvent(new Event('input', { bubbles: true }));
-                        }
-                    }, 100);
-                });
-
-                console.log(`✅ ${Object.keys(evaluationExistante.donneesAlgorithmiques).length} critères algorithmiques restaurés`);
-            }
 
             // Note: Jetons de délai sont maintenant gérés par les badges cliquables
             // Plus besoin de restaurer une checkbox
@@ -3806,57 +3231,6 @@ function modifierEvaluation(evaluationId) {
 
                 console.log(`✅ ${criteresCharges}/${evaluation.criteres.length} critères chargés`);
 
-                // ÉTAPE 10.5: Restaurer les données algorithmiques (français écrit)
-                if (evaluation.donneesAlgorithmiques && Object.keys(evaluation.donneesAlgorithmiques).length > 0) {
-                    console.log('🔟.5️⃣ Restauration données algorithmiques');
-
-                    Object.keys(evaluation.donneesAlgorithmiques).forEach(critereId => {
-                        const donnees = evaluation.donneesAlgorithmiques[critereId];
-
-                        // Restaurer le champ des codes (si existant - catégories)
-                        if (donnees.codes && Array.isArray(donnees.codes)) {
-                            const inputCategories = document.getElementById(`eval_categories_${critereId}`);
-                            if (inputCategories) {
-                                inputCategories.value = donnees.codes.join(';');
-                                console.log(`  ✓ Codes restaurés pour ${critereId}: ${donnees.codes.join(';')}`);
-                            }
-                        }
-
-                        // Restaurer le champ du nombre de mots
-                        if (donnees.mots !== undefined) {
-                            const inputMots = document.getElementById(`eval_mots_${critereId}`);
-                            if (inputMots) {
-                                inputMots.value = donnees.mots;
-                                console.log(`  ✓ Mots restaurés pour ${critereId}: ${donnees.mots}`);
-                            }
-                        }
-
-                        // Restaurer le champ d'erreurs (si mode simple - sans catégorisation)
-                        if (donnees.erreurs !== undefined) {
-                            const inputErreurs = document.getElementById(`eval_erreurs_${critereId}`);
-                            if (inputErreurs) {
-                                inputErreurs.value = donnees.erreurs;
-                                console.log(`  ✓ Erreurs restaurées pour ${critereId}: ${donnees.erreurs}`);
-                            }
-                        }
-
-                        // Déclencher le recalcul pour afficher les résultats
-                        // Attendre que le DOM soit complètement prêt
-                        setTimeout(() => {
-                            const inputCategories = document.getElementById(`eval_categories_${critereId}`);
-                            const inputErreurs = document.getElementById(`eval_erreurs_${critereId}`);
-
-                            if (inputCategories) {
-                                inputCategories.dispatchEvent(new Event('input', { bubbles: true }));
-                            } else if (inputErreurs) {
-                                inputErreurs.dispatchEvent(new Event('input', { bubbles: true }));
-                            }
-                        }, 100);
-                    });
-
-                    console.log(`✅ ${Object.keys(evaluation.donneesAlgorithmiques).length} critères algorithmiques restaurés`);
-                }
-
                 // Forcer le recalcul de la note
                 setTimeout(() => {
                     if (typeof calculerNoteTotale === 'function') {
@@ -4009,7 +3383,6 @@ function sauvegarderEvaluationModifiee() {
             adresse: document.getElementById('afficherAdresse1').checked,
             contexte: document.getElementById('afficherContexte1').checked
         },
-        donneesAlgorithmiques: evaluationEnCours.donneesAlgorithmiques || {}, // Sauvegarder données du français écrit algorithmique
         verrouillee: true // Verrouiller automatiquement après la sauvegarde
     };
 
@@ -4138,7 +3511,7 @@ function afficherIndicateurModeModification(evaluation) {
     // Mettre à jour le contenu
     const dateEval = evaluation.dateEvaluation ? new Date(evaluation.dateEvaluation).toLocaleString('fr-CA') : 'Inconnue';
     indicateur.innerHTML = `
-        <div class="u-flex-1">
+        <div style="flex: 1;">
             <strong>MODE MODIFICATION</strong><br>
             <span style="font-size: 0.9rem; opacity: 0.95;">
                 Vous modifiez l'évaluation de <strong>${evaluation.etudiantNom}</strong>
@@ -4376,7 +3749,7 @@ function afficherListeBanqueEvaluations(evaluations) {
         return `
             <div class="carte" style="margin-bottom: 15px; ${estRemplacee ? 'opacity: 0.6; border-left: 3px solid #999;' : ''}">
                 <div style="display: flex; justify-content: space-between; align-items: start;">
-                    <div class="u-flex-1">
+                    <div style="flex: 1;">
                         <h4 style="margin: 0 0 10px 0;">
                             ${echapperHtml(evaluation.etudiantNom)}
                             ${evaluation.verrouillee ? '<span style="color: #ff9800; margin-left: 8px;">(Verrouillée)</span>' : ''}
@@ -4827,8 +4200,7 @@ function desactiverFormulaireEvaluation(desactiver) {
         'selectGrille1',
         'selectCartoucheEval',
         'selectEchelle1',
-        'remiseProduction1',
-        'statutIntegrite'  // Intégrité académique (recevabilité)
+        'remiseProduction1'
     ];
 
     selects.forEach(id => {
@@ -4844,13 +4216,6 @@ function desactiverFormulaireEvaluation(desactiver) {
     console.log(`  Trouvé ${selectsCriteres.length} selects de critères`);
     selectsCriteres.forEach(select => {
         select.disabled = desactiver;
-    });
-
-    // Désactiver tous les champs algorithmiques (codes d'erreurs, nombre de mots)
-    const inputsAlgorithmiques = document.querySelectorAll('#listeCriteresGrille1 input[type="text"], #listeCriteresGrille1 input[type="number"]');
-    console.log(`  Trouvé ${inputsAlgorithmiques.length} champs algorithmiques`);
-    inputsAlgorithmiques.forEach(input => {
-        input.disabled = desactiver;
     });
 
     // Désactiver la zone de rétroaction finale
@@ -4976,8 +4341,8 @@ function afficherJetonsPersonnalisesEvaluation() {
     // Générer un badge avec checkbox pour chaque jeton personnalisé
     conteneur.innerHTML = jetonsPersonnalises.map(jeton => `
         <div style="display: flex; align-items: flex-start; gap: 10px;">
-            <input type="checkbox" id="checkboxJetonPerso_${jeton.id}" class="u-mt-6">
-            <div class="u-flex-1">
+            <input type="checkbox" id="checkboxJetonPerso_${jeton.id}" style="margin-top: 6px;">
+            <div style="flex: 1;">
                 <span class="badge-jeton-personnalise-wrapper">
                     <span class="badge-jeton-titre">${echapperHtml(jeton.nom)}</span>
                 </span>
@@ -5092,5 +4457,3 @@ window.afficherJetonsPersonnalisesEvaluation = afficherJetonsPersonnalisesEvalua
 window.appliquerJetonPersonnalise = appliquerJetonPersonnalise;
 window.confirmerSuppressionEvaluationSidebar = confirmerSuppressionEvaluationSidebar;
 window.reinitialiserFormulaire = reinitialiserFormulaire;
-window.calculerNoteAlgorithmiqueAvecCategories = calculerNoteAlgorithmiqueAvecCategories;
-window.calculerNoteAlgorithmiqueSimple = calculerNoteAlgorithmiqueSimple;

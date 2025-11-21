@@ -1196,120 +1196,59 @@ input[type="number"].controle-form {
 
 /* === BADGES DE PATTERN D'APPRENTISSAGE === */
 /* Couleurs alignées sur le gradient de la barre patterns */
-/* Format uniformisé avec les autres badges */
 .badge-pattern-blocage-critique {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
     background: #dbeafe;
     color: #4f74f3;
 }
 
-.badge-pattern-blocage-critique .badge-analyse-count {
-    background: #4f74f3;
-}
-
 .badge-pattern-blocage-emergent {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
     background: #dbeafe;
     color: #2994ee;
 }
 
-.badge-pattern-blocage-emergent .badge-analyse-count {
-    background: #2994ee;
-}
-
 .badge-pattern-defi-specifique {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
     background: #cffafe;
     color: #11aec5;
 }
 
-.badge-pattern-defi-specifique .badge-analyse-count {
-    background: #11aec5;
-}
-
 .badge-pattern-stable {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
     background: #d1fae5;
     color: #1bbd7e;
-}
-
-.badge-pattern-stable .badge-analyse-count {
-    background: #1bbd7e;
 }
 
 .badge-pattern-progression {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
     background: #d1fae5;
     color: #1bbd7e;
-}
-
-.badge-pattern-progression .badge-analyse-count {
-    background: #1bbd7e;
 }
 
 /* === BADGES DE NIVEAU RÀI === */
 /* Couleurs alignées sur le gradient de la barre RàI */
-/* Format uniformisé avec les autres badges d'intervention */
 .badge-rai-1 {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
     background: #dbeafe;
     color: #2196f3;
 }
 
 .badge-rai-2 {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
     background: #e0e7ff;
     color: #6366f1;
 }
 
 .badge-rai-3 {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
     background: #ede9fe;
     color: #7c3aed;
 }
 
 /* === BADGES D'ANALYSE (Aperçu du sous-groupe) === */
-/* Style de base pour tous les badges d'analyse - style uniformisé avec tableau */
+/* Style de base pour tous les badges d'analyse avec bordure + fond pâle */
 .badge-analyse {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    border-radius: 4px;
-    padding: 4px 10px;
+    border-radius: 8px;
+    padding: 4px 6px;
+    border: 2px solid;
     font-weight: 600;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
 }
 
 /* Badge compteur interne (petit badge avec nombre) */
@@ -1322,38 +1261,40 @@ input[type="number"].controle-form {
 }
 
 /* === Badges RàI pour analyse === */
-/* Styles uniformisés avec les badges du tableau individuel */
 .badge-rai-analyse-1 {
-    background: #dbeafe;
-    color: #2196f3;
+    border-color: #17a2b8;
+    background: #d1ecf1;
+    color: #0c5460;
 }
 
 .badge-rai-analyse-1 .badge-analyse-count {
-    background: #2196f3;
+    background: #17a2b8;
 }
 
 .badge-rai-analyse-2 {
-    background: #e0e7ff;
-    color: #6366f1;
+    border-color: #ffc107;
+    background: #fff3cd;
+    color: #856404;
 }
 
 .badge-rai-analyse-2 .badge-analyse-count {
-    background: #6366f1;
+    background: #ffc107;
 }
 
 .badge-rai-analyse-3 {
-    background: #ede9fe;
-    color: #7c3aed;
+    border-color: #dc3545;
+    background: #f8d7da;
+    color: #721c24;
 }
 
 .badge-rai-analyse-3 .badge-analyse-count {
-    background: #7c3aed;
+    background: #dc3545;
 }
 
 /* === Badges de risque pour analyse === */
-/* Styles uniformisés - fonds pleins sans bordures */
 .badge-risque-analyse-minimal,
 .badge-risque-analyse-faible {
+    border-color: #28a745;
     background: #d4edda;
     color: #155724;
 }
@@ -1364,6 +1305,7 @@ input[type="number"].controle-form {
 }
 
 .badge-risque-analyse-modere {
+    border-color: #ffc107;
     background: #fff3cd;
     color: #856404;
 }
@@ -1373,6 +1315,7 @@ input[type="number"].controle-form {
 }
 
 .badge-risque-analyse-eleve {
+    border-color: #fd7e14;
     background: #ffe5d0;
     color: #fd7e14;
 }
@@ -1383,6 +1326,7 @@ input[type="number"].controle-form {
 
 .badge-risque-analyse-tres-eleve,
 .badge-risque-analyse-critique {
+    border-color: #dc3545;
     background: #f8d7da;
     color: #dc3545;
 }
@@ -1394,6 +1338,7 @@ input[type="number"].controle-form {
 
 /* Badge de risque par défaut (gris neutre) */
 .badge-risque-analyse-defaut {
+    border-color: #6c757d;
     background: #e2e3e5;
     color: #383d41;
 }
@@ -1404,54 +1349,13 @@ input[type="number"].controle-form {
 
 /* === Badge pattern d'apprentissage (neutre gris) === */
 .badge-pattern-analyse {
+    border-color: #6c757d;
     background: #e2e3e5;
     color: #383d41;
 }
 
 .badge-pattern-analyse .badge-analyse-count {
     background: #6c757d;
-}
-
-/* === Badge type d'intervention (Groupe/Individuel) === */
-.badge-type-intervention {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    background: var(--bleu-tres-pale);
-    color: var(--bleu-principal);
-}
-
-/* === Badges statut d'intervention (Planifiée/En cours/Complétée) === */
-.badge-statut-planifiee {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    background: #e3f2fd;
-    color: #1976d2;
-}
-
-.badge-statut-en-cours {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    background: #fff3e0;
-    color: #f57c00;
-}
-
-.badge-statut-completee {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    background: #e8f5e9;
-    color: #388e3c;
 }
 
 /* === Badge intervention RàI (vert uniforme) === */
@@ -3329,8 +3233,9 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     text-align: center;
 }
 
-/* 🆕 BETA 91: Légende du calendrier (intégrée dans la grille) */
+/* 🆕 BETA 91: Légende du calendrier */
 .calendrier-legende {
+    margin-top: 30px;
     padding: 20px;
     background: var(--bleu-tres-pale);
     border-radius: 8px;
@@ -3343,8 +3248,8 @@ body[data-mode="anonymisation"] .sidebar-navigation {
 }
 
 .calendrier-legende-grille {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 12px;
 }
 
@@ -3505,21 +3410,6 @@ body[data-mode="anonymisation"] .sidebar-navigation {
 .intervention-notes-individuelles h5 {
     margin: 0 0 8px 0;
     color: var(--bleu-principal);
-}
-
-/* Layout 2 colonnes pour interventions (Aperçu 40% + Notes 60%) */
-.intervention-layout-2col {
-    display: grid;
-    grid-template-columns: 40fr 60fr;
-    gap: 20px;
-}
-
-.intervention-col-gauche {
-    /* Colonne gauche: cartes d'analyse empilées (Patterns + Niveaux RàI) */
-}
-
-.intervention-col-droite {
-    /* Colonne droite: notes individuelles */
 }
 
 /* 🆕 BETA 91: Module portfolio (sélection artefacts) */
@@ -3938,9 +3828,21 @@ body[data-mode="anonymisation"] .sidebar-navigation {
 }
 
 /* Espacement utilitaires */
+.profil-mb-15 {
+    margin-bottom: 15px;
+}
 
+.profil-mt-10 {
+    margin-top: 10px;
+}
 
+.profil-mt-20 {
+    margin-top: 20px;
+}
 
+.profil-mt-25 {
+    margin-top: 25px;
+}
 
 /* Nouveaux patterns (Phase B Beta 91) */
 .profil-section-titre-large {
@@ -3961,6 +3863,9 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     font-weight: bold;
 }
 
+.profil-mt-20 {
+    margin-top: 20px;
+}
 
 .profil-carte-grise {
     background: #f8f9fa;
@@ -3980,6 +3885,9 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     color: var(--bleu-principal);
 }
 
+.profil-mb-10 {
+    margin-bottom: 10px;
+}
 
 .profil-flex-between-mb15 {
     display: flex;
@@ -4008,6 +3916,9 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     margin-bottom: 8px;
 }
 
+.profil-mb-20 {
+    margin-bottom: 20px;
+}
 
 .profil-texte-petit {
     font-size: 0.8rem;
@@ -4133,9 +4044,21 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     font-size: 0.85rem;
 }
 
+.profil-w-100 {
+    width: 100%;
+}
 
+.profil-mt-25 {
+    margin-top: 25px;
+}
 
+.profil-mb-8 {
+    margin-bottom: 8px;
+}
 
+.profil-hide {
+    display: none;
+}
 
 .profil-flex-between-mb20 {
     display: flex;
@@ -4172,6 +4095,9 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     margin-top: 20px;
 }
 
+.profil-texte-bleu {
+    color: var(--bleu-principal);
+}
 
 .profil-zone-centre-fond-bleu {
     text-align: center;
@@ -4197,7 +4123,13 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     margin-bottom: 20px;
 }
 
+.profil-texte-centre {
+    text-align: center;
+}
 
+.profil-texte-droite {
+    text-align: right;
+}
 
 .profil-texte-centre-gris {
     text-align: center;
@@ -4246,7 +4178,13 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     color: #666;
 }
 
+.tb-mb-20 {
+    margin-bottom: 20px;
+}
 
+.tb-mt-6 {
+    margin-top: 6px;
+}
 
 .tb-p-20 {
     padding: 20px;
@@ -4256,6 +4194,9 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     margin: 0 6px;
 }
 
+.tb-texte-gras {
+    font-weight: 600;
+}
 
 .tb-flex-center-around {
     display: flex;
@@ -4275,11 +4216,19 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     color: #666;
 }
 
+.tb-flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 .tb-texte-capitalize {
     text-transform: capitalize;
 }
 
+.tb-mb-15 {
+    margin-bottom: 15px;
+}
 
 /* Nouveaux patterns Phase B (suite - 18 nov 2025) */
 .tb-texte-mini-orange {
@@ -4364,7 +4313,13 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     margin-top: 10px;
 }
 
+.tb-mt-15 {
+    margin-top: 15px;
+}
 
+.tb-mb-8 {
+    margin-bottom: 8px;
+}
 
 .tb-valeur-tres-grande-bleu-pan {
     font-size: 1.8rem;
@@ -4393,8 +4348,17 @@ body[data-mode="anonymisation"] .sidebar-navigation {
 }
 
 /* 🆕 BETA 91: Module interventions (optimisations Phase B) */
+.intervention-m-0 {
+    margin: 0;
+}
 
+.intervention-text-center {
+    text-align: center;
+}
 
+.intervention-mb-15 {
+    margin-bottom: 15px;
+}
 
 .intervention-mt-0 {
     margin-top: 0;
@@ -4427,7 +4391,13 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     justify-content: flex-end;
 }
 
+.intervention-mt-15 {
+    margin-top: 15px;
+}
 
+.intervention-texte-09 {
+    font-size: 0.9rem;
+}
 
 /* 🆕 BETA 91: Module echelles (optimisations Phase B) */
 .echelle-texte-mini-bleu {
@@ -4435,11 +4405,17 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     color: var(--bleu-moyen);
 }
 
+.echelle-texte-09 {
+    font-size: 0.9rem;
+}
 
 .echelle-text-center {
     text-align: center;
 }
 
+.echelle-mb-15 {
+    margin-bottom: 15px;
+}
 
 .echelle-texte-detail {
     font-size: 0.85rem;
@@ -4548,7 +4524,13 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     font-style: italic;
 }
 
+.eval-texte-09 {
+    font-size: 0.9rem;
+}
 
+.eval-mt-15 {
+    margin-top: 15px;
+}
 
 .eval-grid-critere {
     display: grid;
@@ -4583,6 +4565,9 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     white-space: nowrap;
 }
 
+.grille-mt-10 {
+    margin-top: 10px;
+}
 
 .grille-mt-4 {
     margin-top: 4px;
@@ -4619,109 +4604,6 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     color: var(--risque-minimal);
 }
 
-/* 🆕 BETA 91: Sous-critères avec pondération différenciée */
-.sous-criteres-conteneur {
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid #e0e0e0;
-}
-
-.sous-criteres-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-}
-
-.sous-criteres-titre {
-    margin: 0;
-    font-size: 0.9rem;
-    color: #333;
-}
-
-.sous-criteres-compteur {
-    font-weight: normal;
-    color: #999;
-    font-size: 0.85rem;
-}
-
-.sous-criteres-liste-conteneur {
-    background: #f9f9f9;
-    padding: 10px;
-    border-radius: 4px;
-}
-
-.sous-critere-item {
-    background: white;
-    padding: 10px;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    margin-bottom: 8px;
-}
-
-.sous-critere-champs-grid {
-    display: grid;
-    grid-template-columns: 80px 1fr 100px auto;
-    gap: 10px;
-    align-items: center;
-}
-
-.sous-critere-label-petit {
-    font-size: 0.75rem;
-    color: #666;
-}
-
-.sous-critere-input-code {
-    font-size: 0.85rem;
-    text-align: center;
-    font-weight: 600;
-}
-
-.sous-critere-input-standard {
-    font-size: 0.85rem;
-}
-
-.sous-critere-textarea {
-    font-size: 0.8rem;
-    resize: vertical;
-}
-
-.sous-critere-description-groupe {
-    margin-top: 8px;
-}
-
-.sous-criteres-vide-message {
-    font-size: 0.8rem;
-    color: #999;
-    margin: 0 0 12px 0;
-    padding: 12px;
-    background: #f9f9f9;
-    border-radius: 4px;
-    text-align: center;
-}
-
-.sous-criteres-info {
-    font-size: 0.75rem;
-    color: #666;
-    margin: 10px 0 0 0;
-    font-style: italic;
-}
-
-.sous-criteres-btn-ajouter-liste {
-    font-size: 0.8rem;
-    width: 100%;
-    margin-top: 8px;
-}
-
-.sous-criteres-btn-ajouter-vide {
-    font-size: 0.8rem;
-    width: 100%;
-}
-
-.sous-criteres-btn-defaut {
-    font-size: 0.8rem;
-}
-
 /* 🆕 BETA 91: Module productions (optimisations Phase B) */
 .prod-p-15 {
     padding: 15px;
@@ -4733,7 +4615,13 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     opacity: 0.9;
 }
 
+.prod-mt-6 {
+    margin-top: 6px;
+}
 
+.prod-mt-10 {
+    margin-top: 10px;
+}
 
 .prod-italic {
     font-style: italic;
@@ -4743,6 +4631,9 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     flex: 1;
 }
 
+.prod-mr-10 {
+    margin-right: 10px;
+}
 
 .prod-texte-bleu-leger {
     color: var(--bleu-leger);
@@ -4758,6 +4649,9 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     text-align: center;
 }
 
+.etud-texte-bleu {
+    color: var(--bleu-principal);
+}
 
 .etud-texte-gris-mini {
     color: #999;
@@ -5604,11 +5498,17 @@ body[data-mode="anonymisation"] .sidebar-navigation {
     color: #856404;
 }
 
+.profil-texte-danger {
+    color: #721c24;
+}
 
 .profil-texte-info {
     color: #1976d2;
 }
 
+.profil-texte-succes {
+    color: #155724;
+}
 
 /* Carte principale de risque */
 .profil-carte-risque {
@@ -6712,8 +6612,19 @@ label:has(+ textarea:disabled) {
 }
 
 /* 🆕 BETA 91: Module cartouches (optimisations Phase B) */
+.cartouche-mr-10 {
+    margin-right: 10px;
+}
 
+.cartouche-flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
+.cartouche-texte-bleu {
+    color: var(--bleu-principal);
+}
 
 .cartouche-texte-bleu-leger {
     color: var(--bleu-leger);
@@ -6766,12 +6677,18 @@ label:has(+ textarea:disabled) {
     padding: 15px;
 }
 
+.cartouche-mb-15 {
+    margin-bottom: 15px;
+}
 
 .cartouche-mt5-mb0 {
     margin-top: 5px;
     margin-bottom: 0;
 }
 
+.cartouche-nowrap {
+    white-space: nowrap;
+}
 
 .cartouche-gradient-bleu {
     background: linear-gradient(135deg, #032e5c 0%, #2a4a8a 100%);
@@ -6788,6 +6705,11 @@ label:has(+ textarea:disabled) {
     color: #666;
 }
 
+.cal-flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
 .cal-carte-importante {
     background: var(--bleu-tres-pale);
@@ -6796,6 +6718,9 @@ label:has(+ textarea:disabled) {
     border: 2px solid var(--bleu-principal);
 }
 
+.cal-mb-20 {
+    margin-bottom: 20px;
+}
 
 .cal-texte-moyen {
     font-size: 0.95rem;
@@ -6826,14 +6751,26 @@ label:has(+ textarea:disabled) {
 }
 
 /* 🆕 BETA 91: Module portfolio (optimisations Phase B) */
+.portfolio-texte-grand {
+    font-size: 1.2rem;
+}
 
+.portfolio-texte-danger {
+    color: red;
+}
 
+.portfolio-texte-succes {
+    color: green;
+}
 
 .portfolio-texte-gris-fade {
     color: #999;
 }
 
 /* 🆕 BETA 91: Module saisie-presences (optimisations Phase B) */
+.presences-texte-gras {
+    font-weight: bold;
+}
 
 .presences-texte-gris {
     color: #666;
@@ -6843,13 +6780,22 @@ label:has(+ textarea:disabled) {
     font-size: 0.9rem;
 }
 
+.presences-w-80 {
+    width: 80px;
+}
 
+.presences-text-center {
+    text-align: center;
+}
 
 .presences-text-center-erreur {
     text-align: center;
     color: var(--rouge-erreur);
 }
 
+.presences-texte-medium {
+    font-weight: 500;
+}
 
 /* ===============================
    BARRES DE PROGRESSION - Beta 90
