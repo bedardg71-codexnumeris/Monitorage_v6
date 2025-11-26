@@ -1,0 +1,22 @@
+How to Decide If Work Meets a Standard
+Deciding whether a student has met a standard or specifications can be quite different from adding or deducting points. I's harder than it seems, and it's one of the places where new alternative graders can get hung up. On the other hand, deciding if student work has met a standard is something that, with practice and experience, will become much quicker and easier than allocating points.
+Here's one way to think about what "meeting a standard" means: A student has met a standard if they consistently demonstrate relevant evidence of learning without important errors. Let's analyze that sentence in reverse order:
+
+Important Errors Matter
+An "important" error is one that's central to the standard you're assessing. For example, in "I can explain the causes of the American Civil War," the causes and explanation are what's important. However, spelling and grammar are not important for meeting this standard, as long as the student's ideas are understandable, and so an error on those grounds shouldn't be seen as reason not to meet the standard. On the other hand, if you have specifications for writing a professional-quality essay about the causes of the American Civil War, then spelling, grammar, and attention to detail are absolutely important issues. Of course, those elements should be clearly stated in the specifications.
+"Important" is not the same as "big" or "small." Leaving off a negative sign in a calculation is "small" but may surface an important misunderstand-ing. Conversely, a student who copies a problem incorrectly (in a way that doesn't oversimplify the problem) and completes it correctly might have made a huge typographical mistake, but their understanding of the underlying ideas is still sound, and therefore they have met the standard.
+Most importantly, never require perfection. Perfection, by definition, makes everything into an important issue, down to the finest detail. Perfection turns students into perfectionists (if they weren't already) by making them focus on details that are not truly important, and they become unclear on what matters and what they need to do in order to learn. That's not growth.
+
+Evidence Must Be Relevant to the Standard
+The evidence a student provides on an assessment should not just be correct, but related to that specific standard. Students sometimes answer a question in a way that avoids the key issue, for example by applying a different method than asked for or using technology to automate a process that the standard asks the student to demonstrate. That work isn't relevant, even if the result is correct, so i's not a trustworthy source of information about what the student knows about that standard.
+
+Students Must Consistently Demonstrate Evidence of Learning 
+Students need to show consistent work relevant to a standard. If a student responds in a way that shows some agreement with the standard in one part of a question or assessment, but then displays an important error or omission on another, then they haven't shown consistent evidence of learning. They're clearly getting there, but not quite enough.
+Standards describe actions, so a student must positively demonstrate that they can do that action. For example, if you are assessing a process, and a student leaves out a critical step, then the work does not demonstrate enough to meet the standard (you could call this "thoroughness"). Similarly, if a student's work is so unclear or filled with small errors that you can't be sure what they actually did, then they haven't demonstrated evidence.
+If it looks like we're saying you should hold students to a high standard, we are! Not perfection, of course, but rather a high standard that is informed by a genuine inquiry into what a student has (or hasn't) learned.
+Another way to think about whether student work has met a standard is to ask: Will this student benefit from studying this topic again?' If the answer is "yes," then the student hasn't met the standard (yet). Other descriptions might also help:
+*   Correct in all fundamentals.
+*   Any remaining difficulties the student has with this topic won't seriously hinder them in future work.
+*   Demonstrates a solid enough understanding to reteach the idea to themselves when needed in the future.
+You may also want to see Linda Nilson's description of the level for
+"Satisfactory" in her book Specifications Grading? There are also many example rubrics in our case studies.

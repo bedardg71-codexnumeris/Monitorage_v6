@@ -3178,7 +3178,7 @@
                             </div>
 
                             <!-- Compteur présents/absents -->
-                            <div id="compteur-presences" style="background: var(--bleu-tres-pale); padding: 12px 16px; margin-bottom: 15px; display: flex; justify-content: center; gap: 30px; font-size: 0.95rem; font-weight: 500; border-left: 4px solid var(--bleu-principal); color: var(--bleu-moyen);">
+                            <div id="compteur-presences" style="background: var(--bleu-tres-pale); padding: 12px 16px; border-radius: 6px; margin-bottom: 15px; display: flex; justify-content: center; gap: 30px; font-size: 0.95rem; font-weight: 500; border-left: 4px solid var(--bleu-principal); color: var(--bleu-moyen);">
                                 <span>
                                     Présents : <span id="nb-presents">0</span>
                                 </span>
@@ -5958,7 +5958,7 @@ Exemple :
                                             </div>
 
                                             <!-- Message explicatif -->
-                                            <div style="margin: 20px 0; padding: 15px; background: #f8f9fa; border-left: 4px solid var(--bleu-principal);">
+                                            <div style="margin: 20px 0; padding: 15px; background: #f8f9fa; border-left: 4px solid var(--bleu-principal); border-radius: 4px;">
                                                 <h4 style="margin: 0 0 10px 0; font-size: 0.95rem; color: var(--bleu-principal);">
                                                     À quoi servent ces valeurs ?
                                                 </h4>
@@ -5979,7 +5979,7 @@ Exemple :
                                             </div>
 
                                             <!-- Prévisualisation de l'échelle sélectionnée -->
-                                            <div id="wizard-preview-echelle" style="display: none; margin-top: 20px; padding: 15px; background: var(--bleu-tres-pale); border-left: 4px solid var(--bleu-principal);">
+                                            <div id="wizard-preview-echelle" style="display: none; margin-top: 20px; padding: 15px; background: var(--bleu-tres-pale); border-radius: 6px; border-left: 4px solid var(--bleu-principal);">
                                                 <h4 style="margin: 0 0 12px 0; font-size: 0.95rem; color: var(--bleu-principal);">
                                                     Aperçu de l'échelle
                                                 </h4>
@@ -6012,7 +6012,7 @@ Exemple :
 
                                             <!-- Configuration Standards -->
                                             <div id="wizard-config-standards" style="display: none;">
-                                                <div style="margin-bottom: 20px; padding: 12px; background: #f8f9fa; border-left: 4px solid var(--bleu-principal);">
+                                                <div style="margin-bottom: 20px; padding: 12px; background: #f8f9fa; border-left: 4px solid var(--bleu-principal); border-radius: 4px;">
                                                     <p style="margin: 0; line-height: 1.6; font-size: 0.9rem; color: var(--gris-fonce);">
                                                         <strong>Notation par maîtrise (Standards-Based Grading)</strong> :
                                                         Les étudiants progressent à travers des standards numérotés qui représentent
@@ -6033,7 +6033,7 @@ Exemple :
 
                                             <!-- Configuration Portfolio -->
                                             <div id="wizard-config-portfolio" style="display: none;">
-                                                <div style="margin-bottom: 20px; padding: 12px; background: #f8f9fa; border-left: 4px solid var(--bleu-principal);">
+                                                <div style="margin-bottom: 20px; padding: 12px; background: #f8f9fa; border-left: 4px solid var(--bleu-principal); border-radius: 4px;">
                                                     <p style="margin: 0; line-height: 1.6; font-size: 0.9rem; color: var(--gris-fonce);">
                                                         <strong>Portfolio</strong> :
                                                         Approche fréquente en littérature avec ELLAC (Écrire, Lire, Littérature, Art, Culture).
@@ -6061,7 +6061,7 @@ Exemple :
 
                                             <!-- Configuration Évaluations discrètes -->
                                             <div id="wizard-config-evaluations" style="display: none;">
-                                                <div style="margin-bottom: 20px; padding: 12px; background: #f8f9fa; border-left: 4px solid var(--bleu-principal);">
+                                                <div style="margin-bottom: 20px; padding: 12px; background: #f8f9fa; border-left: 4px solid var(--bleu-principal); border-radius: 4px;">
                                                     <p style="margin: 0; line-height: 1.6; font-size: 0.9rem; color: var(--gris-fonce);">
                                                         <strong>Évaluations traditionnelles</strong> :
                                                         Approche traditionnelle avec examens, travaux, présentations, etc.
@@ -6079,7 +6079,7 @@ Exemple :
 
                                             <!-- Configuration Spécifications -->
                                             <div id="wizard-config-specifications" style="display: none;">
-                                                <div style="margin-bottom: 20px; padding: 12px; background: #f8f9fa; border-left: 4px solid var(--bleu-principal);">
+                                                <div style="margin-bottom: 20px; padding: 12px; background: #f8f9fa; border-left: 4px solid var(--bleu-principal); border-radius: 4px;">
                                                     <p style="margin: 0 0 10px 0; line-height: 1.6; font-size: 0.9rem; color: var(--gris-fonce);">
                                                         <strong>Notation par contrat (Specification Grading)</strong> :
                                                         Les étudiants atteignent des paliers de notes fixes (ex: 60%, 80%, 100%) en réussissant
@@ -6093,7 +6093,7 @@ Exemple :
                                                     </p>
                                                 </div>
 
-                                                <div style="margin-bottom: 15px; padding: 12px; background: #fffbf0; border-left: 4px solid #f0ad4e;">
+                                                <div style="margin-bottom: 15px; padding: 12px; background: #fffbf0; border-left: 4px solid #f0ad4e; border-radius: 4px;">
                                                     <p style="margin: 0; line-height: 1.6; font-size: 0.85rem; color: var(--gris-fonce);">
                                                         <strong>Recommandation de Primo</strong> :
                                                         Cette pratique nécessite une configuration avancée après la création initiale.
@@ -6200,7 +6200,7 @@ Exemple :
                                                 </div>
 
                                                 <!-- Résumé de la configuration des jetons -->
-                                                <div id="wizard-resume-jetons" style="display: none; margin-top: 15px; padding: 15px; background: var(--bleu-tres-pale); border-left: 4px solid var(--bleu-principal);">
+                                                <div id="wizard-resume-jetons" style="display: none; margin-top: 15px; padding: 15px; background: var(--bleu-tres-pale); border-radius: 6px; border-left: 4px solid var(--bleu-principal);">
                                                     <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: var(--bleu-principal);">Configuration actuelle des jetons</h4>
                                                     <div id="wizard-resume-jetons-contenu">
                                                         <!-- Chargé dynamiquement -->
@@ -6225,7 +6225,7 @@ Exemple :
                                             </div>
 
                                             <!-- Message important sur les patterns -->
-                                            <div style="margin-bottom: 20px; padding: 15px; background: #fff3cd; border-left: 4px solid #ffc107;">
+                                            <div style="margin-bottom: 20px; padding: 15px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px;">
                                                 <h4 style="margin: 0 0 10px 0; font-size: 0.95rem; color: #856404;">
                                                     Recommandation de Primo
                                                 </h4>
@@ -6269,7 +6269,7 @@ Exemple :
                                                 </div>
 
                                                 <!-- Prévisualisation de la grille -->
-                                                <div id="wizard-preview-grille" style="display: none; margin-top: 20px; padding: 15px; background: var(--bleu-tres-pale); border-left: 4px solid var(--bleu-principal);">
+                                                <div id="wizard-preview-grille" style="display: none; margin-top: 20px; padding: 15px; background: var(--bleu-tres-pale); border-radius: 6px; border-left: 4px solid var(--bleu-principal);">
                                                     <h4 style="margin: 0 0 12px 0; font-size: 0.95rem; color: var(--bleu-principal);">
                                                         Aperçu de la grille
                                                     </h4>
@@ -6305,7 +6305,7 @@ Exemple :
                                             </div>
 
                                             <!-- Affichage des seuils configurés -->
-                                            <div style="margin-top: 20px; padding: 15px; background: var(--bleu-tres-pale); border-left: 4px solid var(--bleu-principal);">
+                                            <div style="margin-top: 20px; padding: 15px; background: var(--bleu-tres-pale); border-radius: 6px; border-left: 4px solid var(--bleu-principal);">
                                                 <h4 style="margin: 0 0 12px 0; font-size: 0.95rem; color: var(--bleu-principal);">
                                                     Seuils configurés
                                                 </h4>
@@ -6765,7 +6765,7 @@ Exemple :
                     </p>
 
                     <!-- RAPPEL PATTERNS -->
-                    <div style="margin-bottom: 20px; padding: 15px; background: var(--alerte-fond-attention); border-left: 4px solid #ffc107;">
+                    <div style="margin-bottom: 20px; padding: 15px; background: var(--alerte-fond-attention); border-radius: 6px; border-left: 4px solid #ffc107;">
                         <p style="margin: 0 0 8px 0; font-size: 0.9rem; font-weight: 600; color: #333;">
                             💡 Rappel : Conditions pour la détection des patterns
                         </p>
