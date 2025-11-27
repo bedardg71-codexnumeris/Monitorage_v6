@@ -1,0 +1,222 @@
+{
+  "id": "pan-jugement-global-isabelle",
+  "nom": "PAN-Jugement global (Isabelle Ménard)",
+  "auteur": "Isabelle Ménard",
+  "discipline": "Biologie - Anatomie et physiologie 3",
+  "description": "Pratique PAN-Standards basée sur le jugement professionnel avec évaluation qualitative de la progression. Le calcul mathématique soutient la décision mais ne la remplace pas.",
+
+  "echelle": {
+    "type": "IDME",
+    "niveaux": [
+      {
+        "code": "I",
+        "nom": "Insuffisant",
+        "min": 0,
+        "max": 0.64,
+        "valeur": 0.50,
+        "description": "Compréhension insuffisante ou incompréhension majeure"
+      },
+      {
+        "code": "D",
+        "nom": "Développement",
+        "min": 0.65,
+        "max": 0.74,
+        "valeur": 0.70,
+        "description": "En développement, maîtrise partielle avec lacunes"
+      },
+      {
+        "code": "M",
+        "nom": "Maîtrisé",
+        "min": 0.75,
+        "max": 0.84,
+        "valeur": 0.80,
+        "description": "Maîtrise satisfaisante des concepts et techniques"
+      },
+      {
+        "code": "E",
+        "nom": "Étendu",
+        "min": 0.85,
+        "max": 1.00,
+        "valeur": 0.90,
+        "description": "Maîtrise approfondie avec capacité de transfert"
+      }
+    ]
+  },
+
+  "structure_evaluations": {
+    "type": "portfolio-integral",
+    "description": "Tous les artefacts sont considérés dans l'évaluation globale, pas de sélection des N meilleurs. L'enseignante observe la trajectoire complète de l'étudiant.",
+    "nombre_total_evaluations": 11,
+    "types_evaluations": [
+      {
+        "type": "examens-ecrits",
+        "description": "Examens écrits testant connaissances anatomiques et physiologiques",
+        "criteres": "Aucun critère formel - évaluation holistique de la compréhension"
+      },
+      {
+        "type": "projets-posters",
+        "description": "Posters d'anatomie avec présentation visuelle et explication",
+        "criteres": "Précision anatomique, clarté visuelle, capacité d'explication"
+      }
+    ],
+    "note": "Pas de pondération formelle - le jugement global tient compte de toutes les évaluations de façon qualitative"
+  },
+
+  "calcul_note": {
+    "type": "mode-statistique-avec-jugement",
+    "description": "Le système calcule le mode (niveau le plus fréquent) des derniers artefacts, mais l'enseignante conserve la prérogative de jugement professionnel final.",
+    "algorithme_suggestion": [
+      "1. Identifier les N derniers artefacts (fenêtre temporelle récente)",
+      "2. Calculer le mode statistique (niveau le plus fréquent)",
+      "3. En cas d'égalité, favoriser le niveau supérieur si progression visible",
+      "4. Présenter le mode calculé comme SUGGESTION à l'enseignante",
+      "5. L'enseignante confirme ou ajuste selon son jugement professionnel"
+    ],
+    "nombre_artefacts_total": 11,
+    "fenetre_recente": 4,
+    "fenetre_description": "Les 4 derniers artefacts sont prioritaires pour déterminer le niveau actuel",
+    "regles_mode": {
+      "si_egalite": "niveau_superieur",
+      "justification_egalite": "En cas d'égalité entre deux niveaux, privilégier le niveau supérieur si les artefacts récents montrent une progression",
+      "poids_progression": "favorise_niveaux_recents",
+      "justification_progression": "Les artefacts les plus récents ont plus d'importance dans la détermination du niveau actuel"
+    },
+    "exemple_calcul": {
+      "scenario": "11 évaluations, calculer le mode des 4 dernières",
+      "historique_complet": ["I", "I", "D", "D", "D", "M", "M", "D", "M", "M", "M"],
+      "fenetre_recente": ["D", "M", "M", "M"],
+      "frequences": {
+        "I": 0,
+        "D": 1,
+        "M": 3,
+        "E": 0
+      },
+      "mode_calcule": "M",
+      "suggestion_systeme": "Maîtrisé (M) - 3 occurrences sur 4 dernières évaluations",
+      "observation_enseignante": "Progression visible de I → D → M, maintien récent en M",
+      "decision_finale": "M confirmé par l'enseignante"
+    },
+    "avertissement_important": "⚠️ IMPORTANT: Ce système calcule une SUGGESTION basée sur le mode statistique. L'enseignante doit TOUJOURS exercer son jugement professionnel pour la décision finale. Le calcul mathématique SOUTIENT la décision mais ne la REMPLACE PAS."
+  },
+
+  "systeme_reprises": {
+    "type": "aucune-formelle",
+    "description": "Pas de système de reprises formelles. L'approche par jugement global permet naturellement de tenir compte de la progression dans le temps.",
+    "philosophie": "Chaque nouvelle évaluation est une opportunité de démontrer sa compréhension. Les performances antérieures ne pénalisent pas de façon définitive."
+  },
+
+  "detection_defis": {
+    "type": "comportementale-et-academique",
+    "description": "Détection basée sur des indicateurs comportementaux observables ET sur les performances académiques.",
+    "indicateurs_comportementaux": [
+      "Désengagement visible en classe (passivité, distraction)",
+      "Refus ou réticence à rencontrer l'enseignante",
+      "Absences répétées ou non motivées",
+      "Manque de participation aux activités pratiques",
+      "Isolation sociale (ne travaille pas avec les pairs)"
+    ],
+    "indicateurs_academiques": [
+      "Absence de progression visible sur plusieurs évaluations",
+      "Maintien prolongé au niveau Insuffisant (I)",
+      "Régression après amélioration initiale",
+      "Écart important entre examens (faibles) et projets (acceptables)"
+    ],
+    "seuils": {
+      "note": "Isabelle n'utilise PAS de seuils chiffrés rigides (pas de '75% = Maîtrisé'). Le jugement est contextuel et qualitatif.",
+      "fragile": "Majoritairement niveau D avec peu de signes d'amélioration",
+      "critique": "Maintien en niveau I ou régression vers I après amélioration",
+      "blocage": "Absence totale de progression malgré plusieurs évaluations"
+    },
+    "regles_alertes": [
+      "Alerte modérée: 3 évaluations consécutives en D sans progression",
+      "Alerte élevée: 2+ évaluations en I dans la fenêtre récente",
+      "Alerte critique: Combinaison indicateurs comportementaux + maintien en I",
+      "Alerte relationnelle: Refus de rencontre + désengagement visible"
+    ]
+  },
+
+  "jugement_professionnel": {
+    "description": "Le jugement professionnel d'Isabelle repose sur une observation longitudinale et holistique de l'étudiant, pas uniquement sur des chiffres.",
+    "facteurs_consideres": [
+      "Trajectoire complète de l'apprentissage (pas seulement le résultat final)",
+      "Contexte personnel et circonstances (santé, vie personnelle, conciliation)",
+      "Effort visible et engagement malgré les difficultés",
+      "Qualité des interactions lors des rencontres individuelles",
+      "Capacité à corriger erreurs et intégrer rétroactions",
+      "Progression qualitative difficile à quantifier mathématiquement"
+    ],
+    "limites_automatisation": [
+      "Le calcul du mode statistique ne capture PAS les nuances qualitatives",
+      "Les indicateurs comportementaux ne sont PAS automatiquement détectables",
+      "Le contexte personnel nécessite connaissance approfondie de l'étudiant",
+      "La 'progression' peut être invisible dans les notes mais visible dans l'engagement"
+    ],
+    "role_du_systeme": {
+      "ce_que_le_systeme_peut_faire": [
+        "Calculer le mode statistique comme SUGGESTION",
+        "Identifier tendances mathématiques (progression, stagnation, régression)",
+        "Alerter sur maintien prolongé en niveaux faibles",
+        "Fournir visualisations de trajectoire (graphiques)"
+      ],
+      "ce_que_le_systeme_ne_peut_pas_faire": [
+        "Remplacer l'observation directe en classe",
+        "Détecter le désengagement comportemental",
+        "Comprendre le contexte personnel de l'étudiant",
+        "Prendre la décision finale (reste prérogative de l'enseignante)"
+      ]
+    }
+  },
+
+  "recommandations_pedagogiques": {
+    "avantages_approche": [
+      "Respecte la complexité de l'évaluation humaine",
+      "Permet flexibilité contextuelle (circonstances atténuantes)",
+      "Valorise la relation pédagogique (enseignante connaît ses étudiants)",
+      "Réduit la pression du 'chiffre parfait' (évaluation plus humaine)"
+    ],
+    "defis_approche": [
+      "Difficilement automatisable (nécessite présence humaine)",
+      "Peut être perçue comme subjective (manque de transparence)",
+      "Requiert forte charge de travail relationnel de l'enseignante",
+      "Difficile à expliquer/justifier en cas de contestation"
+    ],
+    "bonnes_pratiques": [
+      "Documenter les observations comportementales régulièrement",
+      "Tenir un journal de bord des rencontres individuelles",
+      "Utiliser le système de calcul comme OUTIL DE SOUTIEN, pas comme vérité absolue",
+      "Communiquer clairement aux étudiants que la note reflète un jugement global",
+      "Rencontrer régulièrement les étudiants à risque pour comprendre leur situation"
+    ],
+    "affichage_profil_etudiant": {
+      "mode_suggestion": "Afficher 'Mode calculé: M (suggestion système)' avec avertissement",
+      "avertissement_affiche": "⚠️ Cette pratique nécessite un jugement professionnel final. Le mode calculé est une SUGGESTION basée sur les données, pas une décision automatique.",
+      "trajectoire_visuelle": "Graphique montrant évolution complète (tous les artefacts)",
+      "indicateurs_qualitatifs": "Section pour notes qualitatives de l'enseignante (observations comportementales, contexte)"
+    },
+    "interventions": {
+      "niveau_1": "Observation attentive en classe, encouragements verbaux",
+      "niveau_2": "Rencontre individuelle pour comprendre difficultés et contexte",
+      "niveau_3": "Plan d'accompagnement personnalisé avec suivi rapproché"
+    }
+  },
+
+  "notes_implementation": {
+    "complexite": "Modérée - Calcul mode statistique + interface jugement professionnel",
+    "fichiers_a_modifier": [
+      "js/pratiques/pratique-configurable.js - Support calcul mode statistique",
+      "js/profil-etudiant.js - Affichage suggestion + zone notes qualitatives enseignante",
+      "js/portfolio.js - Calcul mode avec fenêtre temporelle configurable"
+    ],
+    "estimation_developpement": "2-3 jours",
+    "benefice": "Moyen - Cas d'usage spécifique, limite d'automatisation reconnue",
+    "priorite": "MOYENNE",
+    "avertissement_developpeurs": "Cette pratique NÉCESSITE une interface permettant à l'enseignante de CONFIRMER ou AJUSTER la suggestion du système. Ne PAS implémenter comme calcul automatique final."
+  },
+
+  "references": {
+    "source": "Cartographie Isabelle Ménard Biologie.pdf",
+    "date_creation": "2025-11-26",
+    "enseignante_contact": "Isabelle Ménard",
+    "cours_reference": "Anatomie et physiologie 3 (Biologie)"
+  }
+}

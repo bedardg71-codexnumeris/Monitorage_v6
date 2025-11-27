@@ -1,0 +1,567 @@
+# Consignes de développement : Système d'import/export pour Beta 91
+
+## Contexte pour Claude Code
+
+Tu travailles sur une application de monitorage pédagogique appelée Codex Numeris. L'application utilise IndexedDB pour stocker les données. Les utilisateurs peuvent créer des grilles de critères, des échelles de performance, des cartouches de rétroaction et des productions étudiantes. 
+
+**Objectif**: Permettre aux utilisateurs de partager et d'importer ces ressources pédagogiques avec un système robuste qui gère les dépendances et respecte les licences Creative Commons.
+
+---
+
+## PHASE 1 : Enrichir les métadonnées d'export existantes
+
+### Tâche 1.1 : Ajouter champs métadonnées aux exports individuels
+
+**Fichiers à modifier** : Le module qui gère actuellement les exports JSON (probablement `export.js` ou similaire)
+
+**Modification requise** : 
+
+Pour chaque type d'export (grille, échelle, cartouche, production), enrichir l'objet `metadata` avec ces 3 nouveaux champs :
+
+```javascript
+metadata: {
+  // ... champs existants (licence, auteur, date, etc.) ...
+  
+  // NOUVEAUX CHAMPS À AJOUTER :
+  "discipline": [],  // Array de strings - ex: ["Littérature", "Philosophie"]
+  "niveau": "",      // String - ex: "Collégial", "Universitaire", "Secondaire"
+  "description_courte": ""  // String max 200 caractères
+}
+```
+
+**Interface utilisateur nécessaire** :
+
+Lors de l'export, afficher un modal avec 3 champs à remplir :
+- Discipline(s) : champ texte avec possibilité d'ajouter plusieurs tags
+- Niveau : dropdown (Collégial / Universitaire / Secondaire)
+- Description courte : textarea (max 200 caractères, compteur affiché)
+
+**Validation** :
+- `discipline` peut être vide mais si rempli, doit être array
+- `niveau` peut être vide
+- `description_courte` doit faire max 200 caractères
+
+---
+
+## PHASE 2 : Créer le système d'export "Configuration complète"
+
+### Tâche 2.1 : Nouvelle fonction d'export bundlé
+
+**Nouveau fichier suggéré** : `exportConfigComplete.js`
+
+**Spécifications fonctionnelles** :
+
+Cette fonction doit :
+1. Rassembler TOUTES les ressources du cours actif :
+   - Échelles de performance utilisées
+   - Grilles de critères utilisées
+   - Cartouches de rétroaction utilisés
+   - Productions définies
+   - Paramètres du cours (système de jetons, reprises autorisées, etc.)
+
+2. Créer un seul objet JSON avec cette structure :
+
+```javascript
+{
+  "metadata": {
+    "type": "configuration-complete",
+    "nom": "",  // À remplir par l'utilisateur
+    "auteur": "",  // Récupéré des settings utilisateur ou à remplir
+    "discipline": [],  // À remplir
+    "niveau": "",  // À remplir
+    "description": "",  // Textarea longue (500 caractères max)
+    "licence": "CC BY-NC-SA 4.0",
+    "licence_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "version": "1.0",
+    "date_creation": "YYYY-MM-DD",  // Date du jour
+    "date_export": "YYYY-MM-DD",
+    "application_version": "Beta 91",  // Version de l'app
+    "email_auteur": "",  // Optionnel
+    "site_auteur": ""  // Optionnel
+  },
+  "contenu": {
+    "echelles": [ /* array de toutes les échelles */ ],
+    "grilles": [ /* array de toutes les grilles */ ],
+    "productions": [ /* array de toutes les productions */ ],
+    "cartouches": [ /* array de tous les cartouches */ ],
+    "parametres": {
+      "systeme_jetons": true/false,
+      "reprises_autorisees": true/false,
+      "nombre_artefacts": 0,
+      // autres paramètres pertinents du cours
+    }
+  }
+}
+```
+
+**Interface utilisateur** :
+
+Nouveau bouton dans le menu principal : **"Partager ma pratique complète"**
+
+Au clic, ouvrir un modal avec formulaire :
+- Nom de votre pratique* (requis)
+- Votre nom* (requis)
+- Discipline(s)* (tags multiples, requis)
+- Niveau* (dropdown, requis)
+- Description de votre pratique* (textarea 500 caractères max, requis)
+- Votre courriel (optionnel)
+- Votre site web (optionnel)
+
+Checkbox : "J'accepte de partager cette configuration sous licence CC BY-NC-SA 4.0" (requis pour continuer)
+
+Boutons : [Annuler] [Exporter]
+
+**Nom du fichier généré** :
+`PRATIQUE-COMPLETE-[NomAuteur-simplifié]-[Date].json`
+
+Exemple : `PRATIQUE-COMPLETE-Gregoire-Bedard-2025-11-27.json`
+
+---
+
+### Tâche 2.2 : Générer automatiquement un fichier LISEZMOI.txt
+
+**Spécifications** :
+
+Quand l'utilisateur exporte une configuration complète, générer automatiquement un deuxième fichier texte avec ce template :
+
+```
+===========================================
+PRATIQUE PÉDAGOGIQUE : [Nom de la pratique]
+===========================================
+
+Auteur : [Nom]
+Discipline : [Discipline(s)]
+Niveau : [Niveau]
+Date de création : [Date]
+Licence : CC BY-NC-SA 4.0
+
+-------------------------------------------
+DESCRIPTION
+-------------------------------------------
+
+[Description fournie par l'utilisateur]
+
+-------------------------------------------
+CONTENU DE CETTE CONFIGURATION
+-------------------------------------------
+
+Échelles de performance : [X]
+Grilles de critères : [X]
+Productions définies : [X]
+Cartouches de rétroaction : [X]
+
+-------------------------------------------
+COMMENT UTILISER CETTE CONFIGURATION
+-------------------------------------------
+
+1. Téléchargez le fichier PRATIQUE-COMPLETE-xxx.json
+2. Dans Codex Numeris, allez dans Paramètres > Importer > Configuration complète
+3. Sélectionnez le fichier téléchargé
+4. L'application importera automatiquement toutes les ressources
+5. Vous pourrez ensuite modifier la configuration selon vos besoins
+
+-------------------------------------------
+BESOIN D'AIDE ?
+-------------------------------------------
+
+Labo Codex : https://codexnumeris.org/labocodex/
+Courriel : labo@codexnumeris.org
+
+-------------------------------------------
+ATTRIBUTION
+-------------------------------------------
+
+Si vous utilisez ou adaptez cette pratique, veuillez mentionner :
+"Basé sur la pratique de [Nom auteur] - [Nom pratique]"
+```
+
+**Nom du fichier** : `LISEZMOI-[NomAuteur-simplifié]-[Date].txt`
+
+**Important** : Les deux fichiers (JSON + TXT) doivent être téléchargés ensemble, idéalement dans un ZIP pour faciliter le partage.
+
+---
+
+## PHASE 3 : Système d'import avec gestion des dépendances
+
+### Tâche 3.1 : Import de configuration complète (simple)
+
+**Nouveau fichier suggéré** : `importConfigComplete.js`
+
+**Spécifications** :
+
+Fonction qui :
+1. Lit le fichier JSON de configuration complète
+2. Valide la structure (vérifie que `metadata.type === "configuration-complete"`)
+3. Importe TOUT le contenu dans l'IndexedDB du cours actif
+4. Gère les conflits d'ID (voir Tâche 3.2)
+
+**Interface utilisateur** :
+
+Nouveau bouton dans Paramètres : **"Importer une configuration complète"**
+
+Flux :
+1. Sélectionner fichier JSON
+2. Afficher prévisualisation :
+   ```
+   Configuration : [Nom]
+   Auteur : [Nom]
+   Discipline : [X]
+   
+   Cette configuration contient :
+   - X échelles de performance
+   - X grilles de critères
+   - X productions
+   - X cartouches
+   
+   [Annuler] [Importer tout]
+   ```
+
+3. Si import réussi :
+   ```
+   ✓ Configuration importée avec succès !
+   
+   Vous pouvez maintenant la modifier dans vos paramètres.
+   ```
+
+---
+
+### Tâche 3.2 : Gestion des conflits d'ID
+
+**Problème** : Les ID sont générés avec timestamps. Deux utilisateurs peuvent avoir des ressources avec le même ID.
+
+**Solution pour Beta 91 (simple)** :
+
+Lors de l'import d'une configuration complète :
+
+1. Vérifier si des ID existent déjà dans la base
+2. Si collision détectée, **TOUJOURS régénérer un nouvel ID** pour la ressource importée
+3. Mettre à jour toutes les références croisées dans le bundle importé
+
+**Algorithme** :
+
+```javascript
+function importAvecRemappingIDs(configComplete) {
+  const mapAncienVersNouveauID = {};
+  
+  // 1. Échelles : régénérer IDs si nécessaire
+  for (let echelle of configComplete.contenu.echelles) {
+    const ancienID = echelle.id;
+    const idExiste = await verifierIDExiste('echelles', ancienID);
+    
+    if (idExiste) {
+      const nouvelID = genererNouvelID();
+      echelle.id = nouvelID;
+      mapAncienVersNouveauID[ancienID] = nouvelID;
+    }
+    
+    await sauvegarderEchelle(echelle);
+  }
+  
+  // 2. Grilles : régénérer IDs + mettre à jour références aux échelles
+  for (let grille of configComplete.contenu.grilles) {
+    const ancienID = grille.id;
+    const idExiste = await verifierIDExiste('grilles', ancienID);
+    
+    if (idExiste) {
+      const nouvelID = genererNouvelID();
+      grille.id = nouvelID;
+      mapAncienVersNouveauID[ancienID] = nouvelID;
+    }
+    
+    // Mettre à jour références aux critères si nécessaire
+    // ...
+    
+    await sauvegarderGrille(grille);
+  }
+  
+  // 3. Productions : mettre à jour grilleId
+  for (let production of configComplete.contenu.productions) {
+    const ancienID = production.id;
+    const idExiste = await verifierIDExiste('productions', ancienID);
+    
+    if (idExiste) {
+      const nouvelID = genererNouvelID();
+      production.id = nouvelID;
+    }
+    
+    // Si production référence une grille qui a été remappée
+    if (production.grilleId && mapAncienVersNouveauID[production.grilleId]) {
+      production.grilleId = mapAncienVersNouveauID[production.grilleId];
+    }
+    
+    await sauvegarderProduction(production);
+  }
+  
+  // 4. Cartouches : mettre à jour grilleId et références critères
+  // ... même logique
+}
+```
+
+---
+
+### Tâche 3.3 : Import de composants individuels avec détection de dépendances
+
+**Fichier à modifier** : Module d'import existant pour grilles, productions, etc.
+
+**Ajout de logique de validation** :
+
+Avant d'importer un composant individuel, vérifier les dépendances :
+
+**Exemple : Import d'une production**
+
+```javascript
+async function importerProduction(productionJSON) {
+  const production = JSON.parse(productionJSON);
+  
+  // Vérifier si la grille référencée existe
+  if (production.contenu.grilleId) {
+    const grilleExiste = await verifierIDExiste('grilles', production.contenu.grilleId);
+    
+    if (!grilleExiste) {
+      // Afficher modal d'erreur
+      afficherModalDependanceManquante({
+        type: 'production',
+        nom: production.metadata.nom,
+        dependance: {
+          type: 'grille',
+          id: production.contenu.grilleId,
+          nom: 'Grille de critères requise'  // Peut être enrichi si métadonnées disponibles
+        }
+      });
+      
+      return false;  // Import annulé
+    }
+  }
+  
+  // Si OK, procéder à l'import
+  await sauvegarderProduction(production.contenu);
+  return true;
+}
+```
+
+**Modal de dépendance manquante** :
+
+```
+⚠️ Import impossible
+
+Cette production nécessite la grille de critères suivante qui n'est pas dans votre système :
+ID : GRILLE1759529438501
+Nom : [si disponible dans métadonnées]
+
+Options :
+[Annuler l'import]
+[Ouvrir le catalogue Teams]  // Ouvre l'URL du canal Teams #bibliothèque
+
+Conseil : Importez d'abord la grille requise, puis réessayez d'importer cette production.
+```
+
+---
+
+## PHASE 4 : Interface utilisateur - Menu Import/Export centralisé
+
+### Tâche 4.1 : Créer section "Bibliothèque" dans les paramètres
+
+**Emplacement** : Menu Paramètres ou nouveau menu "Bibliothèque"
+
+**Structure suggérée** :
+
+```
+======================
+BIBLIOTHÈQUE
+======================
+
+┌─────────────────────────────────────┐
+│ PARTAGER                            │
+├─────────────────────────────────────┤
+│                                     │
+│ 📦 Exporter ma pratique complète    │
+│    Partagez votre configuration     │
+│    pédagogique complète (grilles,   │
+│    productions, échelles, etc.)     │
+│                                     │
+│    [Exporter la pratique complète]  │
+│                                     │
+├─────────────────────────────────────┤
+│                                     │
+│ 📄 Exporter des composants          │
+│    Partagez des éléments            │
+│    individuels                      │
+│                                     │
+│    [Exporter une grille]            │
+│    [Exporter une échelle]           │
+│    [Exporter une production]        │
+│    [Exporter un cartouche]          │
+│                                     │
+└─────────────────────────────────────┘
+
+┌─────────────────────────────────────┐
+│ IMPORTER                            │
+├─────────────────────────────────────┤
+│                                     │
+│ 📥 Importer une pratique complète   │
+│    Importer une configuration       │
+│    partagée par un collègue         │
+│                                     │
+│    [Choisir un fichier]             │
+│                                     │
+├─────────────────────────────────────┤
+│                                     │
+│ 📥 Importer des composants          │
+│    Importer des éléments            │
+│    individuels                      │
+│                                     │
+│    [Importer grille/échelle/etc.]   │
+│                                     │
+├─────────────────────────────────────┤
+│                                     │
+│ 🔗 Accéder au catalogue             │
+│    Consulter les ressources         │
+│    partagées sur Teams              │
+│                                     │
+│    [Ouvrir le catalogue Teams]      │
+│                                     │
+└─────────────────────────────────────┘
+```
+
+---
+
+## PHASE 5 : Tests et validation
+
+### Tâche 5.1 : Checklist de tests
+
+Avant de livrer Beta 91, tester ces scénarios :
+
+**Scénario 1 : Export configuration complète**
+- [ ] Créer un cours avec 2 grilles, 1 échelle, 3 productions, 1 cartouche
+- [ ] Exporter la configuration complète
+- [ ] Vérifier que le JSON contient tout
+- [ ] Vérifier que le LISEZMOI.txt est généré
+- [ ] Vérifier que les métadonnées CC sont présentes
+
+**Scénario 2 : Import configuration complète (sans conflits)**
+- [ ] Créer nouveau cours vide
+- [ ] Importer la config du scénario 1
+- [ ] Vérifier que tout est importé correctement
+- [ ] Vérifier que les références croisées fonctionnent (production → grille)
+
+**Scénario 3 : Import configuration complète (avec conflits d'ID)**
+- [ ] Importer une config dans un cours qui a déjà des ressources
+- [ ] Vérifier que les nouveaux ID sont générés
+- [ ] Vérifier que les références internes restent cohérentes
+
+**Scénario 4 : Import composant individuel avec dépendance manquante**
+- [ ] Essayer d'importer une production qui référence une grille absente
+- [ ] Vérifier que le modal d'erreur s'affiche correctement
+- [ ] Vérifier que l'import est annulé
+
+**Scénario 5 : Import composant individuel avec dépendance présente**
+- [ ] Importer d'abord la grille requise
+- [ ] Puis importer la production
+- [ ] Vérifier que ça fonctionne
+
+---
+
+## CONTRAINTES TECHNIQUES IMPORTANTES
+
+### Architecture de fichiers
+
+Respecte l'architecture existante. Si l'application utilise déjà des modules pour l'import/export, étends-les plutôt que de tout réécrire.
+
+### Gestion des erreurs
+
+Toutes les fonctions d'import/export doivent avoir une gestion d'erreur robuste avec messages clairs pour l'utilisateur :
+
+```javascript
+try {
+  await importerConfiguration(fichier);
+  afficherMessage('success', 'Configuration importée avec succès');
+} catch (erreur) {
+  console.error('Erreur import:', erreur);
+  afficherMessage('error', `Impossible d'importer : ${erreur.message}`);
+}
+```
+
+### Validation des fichiers JSON
+
+Avant d'importer, valider la structure :
+
+```javascript
+function validerConfigComplete(json) {
+  if (!json.metadata || json.metadata.type !== 'configuration-complete') {
+    throw new Error('Ce fichier n\'est pas une configuration complète valide');
+  }
+  
+  if (!json.contenu) {
+    throw new Error('Le contenu de la configuration est manquant');
+  }
+  
+  // Autres validations...
+  return true;
+}
+```
+
+### Performance
+
+Pour les grosses configurations (50+ ressources), afficher un indicateur de progression pendant l'import :
+
+```
+Importation en cours...
+━━━━━━━━━━━━━━━━━━━━ 45%
+Échelles : ✓
+Grilles : ✓
+Productions : en cours...
+```
+
+---
+
+## ORDRE D'IMPLÉMENTATION RECOMMANDÉ
+
+1. **Jour 1 matin** : Tâche 1.1 (enrichir métadonnées exports existants)
+2. **Jour 1 après-midi** : Tâche 2.1 (export config complète)
+3. **Jour 2 matin** : Tâche 2.2 (génération LISEZMOI) + Tâche 4.1 (interface)
+4. **Jour 2 après-midi** : Tâche 3.1 (import config complète simple)
+5. **Jour 3 matin** : Tâche 3.2 (gestion conflits ID)
+6. **Jour 3 après-midi** : Tâche 3.3 (détection dépendances composants individuels)
+7. **Tests** : Tâche 5.1
+
+---
+
+## NOTES POUR LE DÉPLOIEMENT BETA 91
+
+### Migration des données existantes
+
+Les utilisateurs actuels ont déjà des exports sans les nouveaux champs métadonnées. L'import doit gérer :
+
+```javascript
+// Rétrocompatibilité
+if (!importedData.metadata.discipline) {
+  importedData.metadata.discipline = [];  // Valeur par défaut
+}
+if (!importedData.metadata.niveau) {
+  importedData.metadata.niveau = "";
+}
+// etc.
+```
+
+### Documentation utilisateur à créer (Grégoire s'en occupe)
+
+- Guide "Comment partager ma pratique" (avec captures d'écran)
+- Guide "Comment importer une pratique"
+- FAQ sur licences Creative Commons
+
+---
+
+## QUESTIONS À CLARIFIER SI NÉCESSAIRE
+
+1. **Format de téléchargement** : Un seul fichier JSON ou un ZIP contenant JSON + LISEZMOI.txt ?
+   - Recommandation : ZIP pour faciliter le partage
+
+2. **Bouton "Ouvrir catalogue Teams"** : URL du canal Teams #bibliothèque à hardcoder ou paramètre configurable ?
+   - Recommandation : Paramètre configurable dans settings
+
+3. **Anonymisation des données** : Si la config complète inclut des noms d'étudiants dans des exemples, faut-il une fonction d'anonymisation ?
+   - Recommandation : Pour Beta 91, avertir l'utilisateur de vérifier manuellement
+
+---
+
+Voilà ! Ces consignes devraient permettre à Claude Code de développer le système complet. Pendant ce temps, structure ton Teams et prépare le catalogue Excel. On se synchronise demain ?

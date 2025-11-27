@@ -1,0 +1,243 @@
+{
+  "id": "sommative-remplacement-jordan",
+  "nom": "Sommative avec remplacement (Jordan Raymond)",
+  "auteur": "Jordan Raymond",
+  "discipline": "Philosophie 101",
+  "description": "Pratique sommative traditionnelle avec mécanisme de remplacement: l'évaluation finale peut remplacer l'évaluation mi-session si la note est supérieure. Valorise la progression et permet de racheter un échec initial.",
+
+  "echelle": {
+    "type": "pourcentages",
+    "min": 0,
+    "max": 100,
+    "description": "Échelle de pourcentages classique (0-100%)"
+  },
+
+  "structure_evaluations": {
+    "type": "sommative-progressive",
+    "description": "Système de paires d'évaluations (mi-session et finale) avec mécanisme de remplacement automatique basé sur la meilleure note.",
+    "paires_remplacement": [
+      {
+        "id": "paire_examens",
+        "nom": "Examens",
+        "evaluation_initiale": {
+          "nom": "Examen mi-session",
+          "id": "examen-mi-session",
+          "poids": 10,
+          "type": "examen",
+          "description": "Examen écrit testant la précision des connaissances"
+        },
+        "evaluation_finale": {
+          "nom": "Examen final",
+          "id": "examen-final",
+          "poids": 20,
+          "type": "examen",
+          "description": "Examen écrit cumulatif testant la précision des connaissances"
+        },
+        "regle_remplacement": "max",
+        "description_regle": "Si note examen final > note examen mi-session, alors examen final remplace examen mi-session"
+      },
+      {
+        "id": "paire_textes",
+        "nom": "Textes argumentatifs",
+        "evaluation_initiale": {
+          "nom": "Texte mi-session",
+          "id": "texte-mi-session",
+          "poids": 20,
+          "type": "dissertation",
+          "description": "Dissertation/analyse testant l'argumentation et la conceptualisation"
+        },
+        "evaluation_finale": {
+          "nom": "Texte final",
+          "id": "texte-final",
+          "poids": 40,
+          "type": "dissertation",
+          "description": "Dissertation/analyse cumulative testant l'argumentation et la conceptualisation"
+        },
+        "regle_remplacement": "max",
+        "description_regle": "Si note texte final > note texte mi-session, alors texte final remplace texte mi-session"
+      }
+    ],
+    "autres_evaluations": [
+      {
+        "nom": "Activités en classe",
+        "id": "activites-classe",
+        "poids": 10,
+        "type": "completion",
+        "description": "Notes de lecture, activités de classe, textes réflexifs avec points de complétion",
+        "modalite": "Points de participation et de complétion (sans remplacement)"
+      }
+    ],
+    "poids_total": 100,
+    "note": "Total: Paire examens (10%+20%) + Paire textes (20%+40%) + Activités (10%) = 100%"
+  },
+
+  "calcul_note": {
+    "type": "remplacement-progression",
+    "description": "Pour chaque paire d'évaluations, le système compare les notes et utilise la meilleure note avec le poids correspondant.",
+    "algorithme": [
+      "1. Pour chaque paire, comparer note_initiale et note_finale",
+      "2. Si note_finale > note_initiale: utiliser note_finale × (poids_initial + poids_final)",
+      "3. Si note_finale ≤ note_initiale: utiliser (note_initiale × poids_initial) + (note_finale × poids_final)",
+      "4. Ajouter les notes des autres évaluations (non-paires)",
+      "5. Calculer la moyenne pondérée finale"
+    ],
+    "formule_detaillee": {
+      "cas_remplacement": "Si note_finale > note_initiale: Note_paire = note_finale × (poids_initial + poids_final)",
+      "cas_normal": "Sinon: Note_paire = (note_initiale × poids_initial) + (note_finale × poids_final)",
+      "note_finale": "Note_cours = Σ(Notes_paires) + Σ(Notes_autres) / 100"
+    },
+    "exemple_calcul": {
+      "scenario_avec_progression": {
+        "description": "Étudiant progresse entre mi-session et finale",
+        "examen_mi_session": 55,
+        "examen_final": 75,
+        "texte_mi_session": 60,
+        "texte_final": 80,
+        "activites_classe": 85,
+        "calcul": {
+          "paire_examens": {
+            "condition": "75 > 55 → Remplacement",
+            "note_retenue": 75,
+            "poids_applique": 30,
+            "contribution": 22.5
+          },
+          "paire_textes": {
+            "condition": "80 > 60 → Remplacement",
+            "note_retenue": 80,
+            "poids_applique": 60,
+            "contribution": 48
+          },
+          "activites": {
+            "note": 85,
+            "poids": 10,
+            "contribution": 8.5
+          },
+          "note_finale": 79
+        }
+      },
+      "scenario_sans_progression": {
+        "description": "Étudiant ne progresse pas (ou régresse)",
+        "examen_mi_session": 75,
+        "examen_final": 70,
+        "texte_mi_session": 80,
+        "texte_final": 75,
+        "activites_classe": 85,
+        "calcul": {
+          "paire_examens": {
+            "condition": "70 ≤ 75 → Pas de remplacement",
+            "note_mi_session": 75,
+            "poids_mi_session": 10,
+            "contribution_mi": 7.5,
+            "note_final": 70,
+            "poids_final": 20,
+            "contribution_final": 14,
+            "contribution_totale": 21.5
+          },
+          "paire_textes": {
+            "condition": "75 ≤ 80 → Pas de remplacement",
+            "note_mi_session": 80,
+            "poids_mi_session": 20,
+            "contribution_mi": 16,
+            "note_final": 75,
+            "poids_final": 40,
+            "contribution_final": 30,
+            "contribution_totale": 46
+          },
+          "activites": {
+            "note": 85,
+            "poids": 10,
+            "contribution": 8.5
+          },
+          "note_finale": 76
+        }
+      }
+    }
+  },
+
+  "systeme_reprises": {
+    "type": "automatique-progressif",
+    "description": "Le mécanisme de remplacement constitue un système de reprise automatique intégré. L'évaluation finale agit comme une opportunité de reprise pour l'évaluation mi-session.",
+    "philosophie": "Valorise l'apprentissage progressif et permet de racheter un échec initial sans procédure formelle de reprise",
+    "regles": [
+      "Pas de reprises explicites demandées - le mécanisme est automatique",
+      "L'étudiant sait qu'en performant bien à la finale, il peut compenser la mi-session",
+      "Encourage la persévérance et valorise la progression dans le temps"
+    ]
+  },
+
+  "detection_defis": {
+    "type": "progression-bloquee",
+    "description": "Détection basée sur l'absence de progression entre mi-session et finale, signe potentiel de difficultés d'apprentissage persistantes.",
+    "seuils": {
+      "alerte_critique": "Note finale ≤ note mi-session pour LES DEUX paires (aucune progression)",
+      "alerte_moderee": "Note finale ≤ note mi-session pour UNE paire",
+      "alerte_generale": "Note finale < 60% malgré mécanisme de remplacement",
+      "note_seuils_configurables": {
+        "va_bien": 80,
+        "difficulte": 60,
+        "grande_difficulte": 50
+      }
+    },
+    "regles": [
+      "Si aucune progression sur les deux paires → Intervention niveau 3 (blocage d'apprentissage)",
+      "Si note finale < note mi-session → Possibles difficultés (stress, fatigue, santé)",
+      "Si progression sur une paire mais pas l'autre → Défis spécifiques à identifier (ex: écriture vs connaissance)"
+    ],
+    "indicateurs_positifs": [
+      "Progression visible sur au moins une paire",
+      "Note finale > 70% sur au moins une évaluation finale",
+      "Participation soutenue (activités classe > 75%)"
+    ]
+  },
+
+  "recommandations_pedagogiques": {
+    "avantages": [
+      "Réduit le stress lié à une mauvaise performance ponctuelle",
+      "Encourage la persévérance et le travail continu",
+      "Valorise l'apprentissage progressif et la croissance",
+      "Permet de 'racheter' un échec initial sans stigmatisation",
+      "Évite les reprises formelles complexes à gérer"
+    ],
+    "limites": [
+      "Peut encourager certains étudiants à négliger la mi-session",
+      "Nécessite communication claire des règles dès le début",
+      "Peut créer confusion si mal expliqué (certains étudiants pensent que la finale remplace TOUJOURS)"
+    ],
+    "bonnes_pratiques": [
+      "Expliquer clairement le mécanisme dans le plan de cours",
+      "Montrer des exemples de calcul (avec et sans remplacement)",
+      "Encourager les étudiants à prendre la mi-session au sérieux (elle reste importante)",
+      "Utiliser les résultats de mi-session pour identifier les étudiants à risque"
+    ],
+    "affichage_profil_etudiant": {
+      "indiquer_remplacement": "Afficher clairement quelle note a été retenue (ex: 'Texte final 80% → remplace texte mi-session 60%')",
+      "calcul_transparent": "Montrer le calcul complet avec et sans remplacement pour comparaison",
+      "progression_visuelle": "Graphique montrant évolution mi-session → finale pour chaque paire"
+    },
+    "interventions": {
+      "niveau_1": "Rappel en classe de l'importance de la mi-session comme diagnostic",
+      "niveau_2": "Rencontre individuelle après mi-session si < 60% sur les deux évaluations",
+      "niveau_3": "Plan d'intervention si pas de progression entre mi-session et finale"
+    }
+  },
+
+  "notes_implementation": {
+    "complexite": "Modérée - Logique conditionnelle dans calcul de note",
+    "fichiers_a_modifier": [
+      "js/portfolio.js - Fonction calculerNoteSommativeAvecRemplacement()",
+      "js/profil-etudiant.js - Affichage notes retenues avec indication remplacement",
+      "js/productions.js - Interface pour marquer paires d'évaluations liées",
+      "js/pratiques/pratique-configurable.js - Support type 'remplacement-progression'"
+    ],
+    "estimation_developpement": "2-3 jours",
+    "benefice": "Moyen - Cas d'usage spécifique mais pédagogiquement intéressant",
+    "priorite": "MOYENNE"
+  },
+
+  "references": {
+    "source": "Cartographie Jordan Raymond Philo.pdf",
+    "date_creation": "2025-11-26",
+    "enseignant_contact": "Jordan Raymond",
+    "cours_reference": "Philosophie 101"
+  }
+}

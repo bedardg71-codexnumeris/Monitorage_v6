@@ -1604,6 +1604,352 @@ class WizardCreationPratique {
 
 ---
 
+## 🆕 Structures de pratiques étendues (novembre 2025)
+
+**Date d'ajout :** 26 novembre 2025
+**Source :** Analyse des 6 cartographies d'enseignant·es (voir `ANALYSE_CARTOGRAPHIES.md`)
+
+Suite à l'analyse des pratiques d'enseignant·es identifiées dans les cartographies, trois nouvelles structures de calcul ont été identifiées et documentées ci-dessous.
+
+### 1. Pratique par objectifs pondérés (`pan-objectifs-ponderes`)
+
+**Cas d'usage :** Michel Baillargeon (Mathématiques - Calcul différentiel)
+
+**Principe :** Chaque objectif d'apprentissage est évalué indépendamment en mode PAN (moyenne des N meilleurs artefacts). La note finale est une moyenne pondérée de tous les objectifs, avec des poids variables selon l'importance (objectifs intégrateurs > objectifs fondamentaux).
+
+**Structure JSON spécifique :**
+
+```javascript
+{
+  "structure_evaluations": {
+    "type": "objectifs-multiples",
+    "description": "Système multi-objectifs avec pondérations variables",
+    "objectifs": [
+      {
+        "id": "obj1",
+        "nom": "Limites et continuité",
+        "poids": 8,
+        "type": "fondamental",  // "fondamental", "integrateur", "transversal"
+        "description": "Calculer des limites et déterminer la continuité"
+      },
+      {
+        "id": "obj5",
+        "nom": "Optimisation",
+        "poids": 15,
+        "type": "integrateur",
+        "description": "Modéliser et résoudre des problèmes d'optimisation"
+      }
+      // ... autres objectifs (13 au total dans l'exemple de Michel)
+    ],
+    "poids_total": 100,
+    "note": "La somme des poids doit égaler 100%"
+  },
+
+  "calcul_note": {
+    "type": "pan-par-objectif",
+    "description": "Mode PAN appliqué à chaque objectif, puis combinaison pondérée",
+    "nombre_artefacts_par_objectif": 3,  // N meilleurs artefacts par objectif
+    "mode_selection": "N_meilleurs",
+    "mode_combinaison": "moyenne_ponderee_objectifs",
+    "normalisation": "poids_total_100",
+    "formule": "Note_finale = Σ (Note_objectif_i × Poids_i) / 100"
+  },
+
+  "detection_defis": {
+    "type": "par-objectif",
+    "description": "Alertes au niveau de chaque objectif avec priorités",
+    "priorite_alertes": {
+      "critique": "Objectifs intégrateurs (poids ≥ 10) avec note < 0.70",
+      "elevee": "Objectifs fondamentaux avec note < 0.70",
+      "generale": "3+ objectifs sous seuil acceptable"
+    }
+  }
+}
+```
+
+**Exemple de calcul :**
+
+```
+Étudiant avec 2 objectifs:
+  Objectif 1 (poids 8%):
+    - Artefacts: [0.75, 0.80, 0.70, 0.85]
+    - N=3 meilleurs: [0.85, 0.80, 0.75]
+    - Moyenne: 0.80 → Contribution: 0.80 × 8 = 6.4%
+
+  Objectif 2 (poids 15%):
+    - Artefacts: [0.65, 0.70, 0.75, 0.80]
+    - N=3 meilleurs: [0.80, 0.75, 0.70]
+    - Moyenne: 0.75 → Contribution: 0.75 × 15 = 11.25%
+
+  Note finale = (6.4 + 11.25 + ... tous objectifs) / 100
+```
+
+**Complexité d'implémentation :** Élevée
+**Priorité :** ÉLEVÉE (applicable math, chimie, physique, biologie)
+**Bénéfice :** Très élevé (cas d'usage fréquent en sciences)
+
+**Fichiers JSON :** `pan-objectifs-ponderes-michel.json`
+
+---
+
+### 2. Sommative avec remplacement (`sommative-remplacement-progression`)
+
+**Cas d'usage :** Jordan Raymond (Philosophie 101)
+
+**Principe :** Pratique sommative traditionnelle avec mécanisme de remplacement automatique : l'évaluation finale peut remplacer l'évaluation mi-session si la note est supérieure. Valorise la progression et permet de "racheter" un échec initial.
+
+**Structure JSON spécifique :**
+
+```javascript
+{
+  "structure_evaluations": {
+    "type": "sommative-progressive",
+    "description": "Paires d'évaluations avec remplacement automatique",
+    "paires_remplacement": [
+      {
+        "id": "paire_examens",
+        "nom": "Examens",
+        "evaluation_initiale": {
+          "nom": "Examen mi-session",
+          "id": "examen-mi-session",
+          "poids": 10,
+          "type": "examen"
+        },
+        "evaluation_finale": {
+          "nom": "Examen final",
+          "id": "examen-final",
+          "poids": 20,
+          "type": "examen"
+        },
+        "regle_remplacement": "max",
+        "description_regle": "Si note finale > note mi-session, alors finale remplace mi-session"
+      },
+      {
+        "id": "paire_textes",
+        "nom": "Textes argumentatifs",
+        "evaluation_initiale": {
+          "nom": "Texte mi-session",
+          "poids": 20
+        },
+        "evaluation_finale": {
+          "nom": "Texte final",
+          "poids": 40
+        },
+        "regle_remplacement": "max"
+      }
+    ],
+    "autres_evaluations": [
+      {
+        "nom": "Activités en classe",
+        "poids": 10,
+        "type": "completion"
+      }
+    ]
+  },
+
+  "calcul_note": {
+    "type": "remplacement-progression",
+    "description": "Comparaison paire par paire avec remplacement conditionnel",
+    "algorithme": [
+      "1. Pour chaque paire, comparer note_initiale et note_finale",
+      "2. Si note_finale > note_initiale: utiliser note_finale × (poids_initial + poids_final)",
+      "3. Sinon: utiliser (note_initiale × poids_initial) + (note_finale × poids_final)",
+      "4. Ajouter notes des autres évaluations",
+      "5. Calculer moyenne pondérée finale"
+    ]
+  },
+
+  "systeme_reprises": {
+    "type": "automatique-progressif",
+    "description": "Le mécanisme de remplacement est un système de reprise intégré",
+    "philosophie": "Valorise l'apprentissage progressif sans reprise formelle"
+  },
+
+  "detection_defis": {
+    "type": "progression-bloquee",
+    "seuils": {
+      "alerte_critique": "Note finale ≤ note mi-session pour LES DEUX paires",
+      "alerte_moderee": "Note finale ≤ note mi-session pour UNE paire"
+    }
+  }
+}
+```
+
+**Exemple de calcul :**
+
+```
+Scénario avec progression:
+  Examen mi-session: 55% (poids 10%)
+  Examen final: 75% (poids 20%)
+  → 75 > 55 → Remplacement
+  → Contribution: 75% × (10% + 20%) = 22.5%
+
+  Texte mi-session: 60% (poids 20%)
+  Texte final: 80% (poids 40%)
+  → 80 > 60 → Remplacement
+  → Contribution: 80% × (20% + 40%) = 48%
+
+  Activités: 85% (poids 10%)
+  → Contribution: 8.5%
+
+  Note finale = 22.5 + 48 + 8.5 = 79%
+
+Scénario sans progression:
+  Examen mi-session: 75% (poids 10%) → 7.5%
+  Examen final: 70% (poids 20%) → 14%
+  → 70 ≤ 75 → PAS de remplacement
+  → Contribution: 7.5 + 14 = 21.5%
+
+  (Calcul similaire pour textes et activités)
+```
+
+**Complexité d'implémentation :** Modérée (logique conditionnelle)
+**Priorité :** Moyenne
+**Bénéfice :** Moyen (cas d'usage spécifique mais pédagogiquement intéressant)
+
+**Fichiers JSON :** `sommative-remplacement-jordan.json`
+
+---
+
+### 3. PAN-Jugement global (`pan-jugement-global`)
+
+**Cas d'usage :** Isabelle Ménard (Biologie - Anatomie et physiologie)
+
+**Principe :** Pratique PAN-Standards où le système calcule une **suggestion** basée sur le mode statistique (niveau le plus fréquent), mais l'enseignante conserve la prérogative du jugement professionnel final. Le calcul mathématique **soutient** la décision mais ne la **remplace pas**.
+
+**Structure JSON spécifique :**
+
+```javascript
+{
+  "structure_evaluations": {
+    "type": "portfolio-integral",
+    "description": "Tous les artefacts sont considérés (pas de sélection N meilleurs)",
+    "nombre_total_evaluations": 11,
+    "types_evaluations": [
+      {"type": "examens-ecrits", "description": "Évaluation holistique de la compréhension"},
+      {"type": "projets-posters", "description": "Précision anatomique et clarté"}
+    ]
+  },
+
+  "calcul_note": {
+    "type": "mode-statistique-avec-jugement",
+    "description": "Le mode (niveau le plus fréquent) est calculé comme SUGGESTION",
+    "algorithme_suggestion": [
+      "1. Identifier les N derniers artefacts (fenêtre temporelle)",
+      "2. Calculer le mode statistique (niveau le plus fréquent)",
+      "3. En cas d'égalité, favoriser niveau supérieur si progression visible",
+      "4. Présenter le mode comme SUGGESTION à l'enseignante",
+      "5. L'enseignante confirme ou ajuste selon jugement professionnel"
+    ],
+    "fenetre_recente": 4,
+    "fenetre_description": "Les 4 derniers artefacts prioritaires pour niveau actuel",
+    "regles_mode": {
+      "si_egalite": "niveau_superieur",
+      "poids_progression": "favorise_niveaux_recents"
+    },
+    "avertissement_important": "⚠️ Ce système calcule une SUGGESTION. L'enseignante DOIT exercer son jugement professionnel pour la décision finale."
+  },
+
+  "detection_defis": {
+    "type": "comportementale-et-academique",
+    "description": "Combinaison indicateurs comportementaux ET académiques",
+    "indicateurs_comportementaux": [
+      "Désengagement visible en classe",
+      "Refus de rencontrer l'enseignante",
+      "Absences répétées",
+      "Isolation sociale"
+    ],
+    "indicateurs_academiques": [
+      "Absence de progression sur plusieurs évaluations",
+      "Maintien prolongé en Insuffisant",
+      "Régression après amélioration"
+    ],
+    "seuils": {
+      "note": "Pas de seuils chiffrés rigides - jugement contextuel",
+      "fragile": "Majoritairement niveau D sans amélioration",
+      "critique": "Maintien en I ou régression vers I"
+    }
+  },
+
+  "jugement_professionnel": {
+    "description": "Observation longitudinale et holistique de l'étudiant",
+    "facteurs_consideres": [
+      "Trajectoire complète (pas seulement résultat final)",
+      "Contexte personnel et circonstances",
+      "Effort visible malgré difficultés",
+      "Qualité interactions individuelles",
+      "Capacité à corriger erreurs"
+    ],
+    "limites_automatisation": [
+      "Mode statistique ne capture PAS nuances qualitatives",
+      "Indicateurs comportementaux non automatiquement détectables",
+      "Contexte personnel nécessite connaissance approfondie",
+      "Progression peut être invisible dans notes"
+    ],
+    "role_du_systeme": {
+      "ce_que_le_systeme_peut_faire": [
+        "Calculer mode statistique comme SUGGESTION",
+        "Identifier tendances mathématiques",
+        "Alerter sur maintien prolongé en niveaux faibles",
+        "Fournir visualisations de trajectoire"
+      ],
+      "ce_que_le_systeme_ne_peut_pas_faire": [
+        "Remplacer observation directe en classe",
+        "Détecter désengagement comportemental",
+        "Comprendre contexte personnel",
+        "Prendre décision finale (prérogative enseignante)"
+      ]
+    }
+  }
+}
+```
+
+**Exemple de calcul :**
+
+```
+Historique complet (11 évaluations): [I, I, D, D, D, M, M, D, M, M, M]
+Fenêtre récente (4 dernières): [D, M, M, M]
+
+Fréquences dans fenêtre récente:
+  I: 0 occurrences
+  D: 1 occurrence
+  M: 3 occurrences
+  E: 0 occurrences
+
+Mode calculé: M (Maîtrisé)
+Suggestion système: "Maîtrisé (M) - 3 occurrences sur 4 dernières évaluations"
+Observation enseignante: "Progression visible I → D → M, maintien récent en M"
+Décision finale: M confirmé par l'enseignante
+```
+
+**Complexité d'implémentation :** Modérée
+**Priorité :** Moyenne
+**Bénéfice :** Moyen (limite d'automatisation reconnue, nécessite interface jugement)
+
+**Fichiers JSON :** `pan-jugement-global-isabelle.json`
+
+**Note importante :** Cette pratique NÉCESSITE une interface permettant à l'enseignante de CONFIRMER ou AJUSTER la suggestion du système. Ne PAS implémenter comme calcul automatique final.
+
+---
+
+### Résumé des 3 nouvelles structures
+
+| Structure | Cas d'usage | Priorité | Complexité | Fichier JSON |
+|-----------|-------------|----------|------------|--------------|
+| **Objectifs pondérés** | Michel (Math) | ÉLEVÉE | Élevée | `pan-objectifs-ponderes-michel.json` |
+| **Remplacement progression** | Jordan (Philo) | Moyenne | Modérée | `sommative-remplacement-jordan.json` |
+| **Jugement global** | Isabelle (Bio) | Moyenne | Modérée | `pan-jugement-global-isabelle.json` |
+
+**Prochaines étapes d'implémentation :**
+1. Étendre `js/pratiques/pratique-configurable.js` pour supporter ces 3 types de calcul
+2. Modifier `js/portfolio.js` pour logique multi-objectifs et remplacement conditionnel
+3. Créer interfaces spécifiques (tableau objectifs, confirmation jugement)
+4. Tests avec les 3 enseignant·es sources
+
+**Documentation complète :** Voir `ANALYSE_CARTOGRAPHIES.md` pour analyse détaillée et plan d'intégration.
+
+---
+
 ## 🎯 Vision à long terme
 
 Cette architecture de pratiques ouvre la voie à :
@@ -1618,5 +1964,6 @@ L'objectif est que **Codex Numeris devienne l'outil de référence pour TOUTES l
 
 *Document créé le 24 novembre 2025*
 *Mis à jour le 25 novembre 2025 (terminologie "pratique" vs "profil")*
+*Mis à jour le 26 novembre 2025 (ajout structures étendues: objectifs pondérés, remplacement, jugement global)*
 *Auteur : Grégoire Bédard*
-*Version : 1.1*
+*Version : 1.2*
