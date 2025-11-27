@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Système de suivi Beta 91.5b - Correctif ordre chargement scripts</title>
+    <title>Système de suivi Beta 91.5c - Correctifs compatibilité navigateurs</title>
+
+    <!-- CSS externe requis pour styles complets -->
+    <link rel="stylesheet" href="styles.css?v=2025112700">
 
     <style>
         /* Les styles embarqués restent ici */
@@ -2702,7 +2705,7 @@
                 <!-- Titre et description centrés -->
                 <div class="titre-section">
                     <h1>Système de suivi des apprentissages</h1>
-                    <p class="meta">Beta 91.5b par Grégoire Bédard (27 novembre 2025 - Correctif)</p>
+                    <p class="meta">Beta 91.5c par Grégoire Bédard (27 novembre 2025 - Correctifs compatibilité)</p>
 
                     <!-- Sélecteur de mode au centre (sera généré par 17-modes.js) -->
                     <div id="selecteur-mode" class="selecteur-mode-centre" style="margin-top: 10px;">
@@ -10216,6 +10219,9 @@ Exemple :
     <!-- PRIORITÉ 7: Utilitaires -->
     <script src="js/evaluation-jetons.js?v=2025111435"></script>
     <script src="js/evaluation.js?v=2025112522"></script>
+
+    <!-- PRIMO ACCUEIL - Assistant de démarrage (Beta 91.5c) -->
+    <script src="js/primo-accueil.js?v=2025112700"></script>
 
     <!-- PRIORITÉ 8: Initialisation finale (TOUJOURS EN DERNIER) -->
     <script src="js/main.js?v=2025111400"></script>

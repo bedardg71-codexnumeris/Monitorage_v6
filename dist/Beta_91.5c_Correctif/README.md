@@ -1,20 +1,26 @@
-# Système de monitorage pédagogique - Beta 91.5b
+# Système de monitorage pédagogique - Beta 91.5c
 
-**Version** : Beta 91.5b - Correctif ordre chargement scripts
+**Version** : Beta 91.5c - Correctifs compatibilité navigateurs
 **Date** : 27 novembre 2025
 **Auteur** : Grégoire Bédard
 **Licence** : Creative Commons BY-NC-SA 4.0
 
 ---
 
-## ⚠️ **IMPORTANT : Correctif critique**
+## ⚠️ **IMPORTANT : Correctifs critiques**
 
-Cette version **Beta 91.5b** corrige un bug bloquant de la version Beta 91.5 initiale :
+Cette version **Beta 91.5c** corrige **deux bugs bloquants** des versions Beta 91.5 et 91.5b :
 
-**Bug corrigé** : `PratiqueConfigurable is not defined`
+**Bug #1 corrigé** : `PratiqueConfigurable is not defined`
 - Erreur JavaScript empêchant le chargement de l'application
 - Ordre de chargement des scripts pratiques corrigé
-- **Tous les utilisateurs de Beta 91.5 doivent mettre à jour vers 91.5b**
+
+**Bug #2 corrigé** : Page blanche dans Microsoft Edge
+- CSS externe manquant dans le package
+- **Solution** : Fichier `styles.css` maintenant inclus dans le package
+- **Compatible tous navigateurs** : Safari, Chrome, Firefox, Edge
+
+**→ Tous les utilisateurs de Beta 91.5 et 91.5b doivent mettre à jour vers 91.5c**
 
 ---
 
@@ -22,9 +28,11 @@ Cette version **Beta 91.5b** corrige un bug bloquant de la version Beta 91.5 ini
 
 ### Étape 1: Ouvrir l'application
 ```bash
-# Double-cliquer sur "index 91.5b.html" ou
-open "index 91.5b.html"  # macOS
+# Double-cliquer sur "index 91.5c.html" ou
+open "index 91.5c.html"  # macOS
 ```
+
+**Compatible tous navigateurs** : Safari, Chrome, Firefox, Microsoft Edge
 
 ### Étape 2: Configurer la grille de référence (IMPORTANT)
 1. Allez dans **Réglages → Pratique de notation**
@@ -36,13 +44,13 @@ open "index 91.5b.html"  # macOS
 
 ---
 
-## 🔧 Migration depuis Beta 91.5
+## 🔧 Migration depuis Beta 91.5 ou 91.5b
 
-Si vous utilisez déjà Beta 91.5 :
+Si vous utilisez déjà Beta 91.5 ou 91.5b :
 
 1. **Vos données sont conservées** (stockées dans IndexedDB)
-2. Remplacez simplement `index 91.5.html` par `index 91.5b.html`
-3. Rafraîchissez votre navigateur (Cmd+Shift+R ou Ctrl+Shift+R)
+2. Téléchargez Beta 91.5c
+3. Ouvrez `index 91.5c.html` directement
 4. **Aucune perte de données**
 
 ---
@@ -57,9 +65,9 @@ Si vous utilisez déjà Beta 91.5 :
 5. ✅ Sélecteur de grille de référence vide
 6. ✅ Erreur SyntaxError dans pratique-configurable.js
 
-### Bugs corrigés (Beta 91.5b)
+### Bugs corrigés (Beta 91.5c)
 7. ✅ Ordre chargement scripts (PratiqueConfigurable is not defined)
-8. ✅ Page blanche dans Microsoft Edge (CSS externe manquant)
+8. ✅ Page blanche Microsoft Edge (CSS externe manquant)
 
 ### Nouvelles fonctionnalités
 - ✅ Wizard Primo : Création de pratiques personnalisées en 8 étapes
@@ -73,33 +81,37 @@ Si vous utilisez déjà Beta 91.5 :
 ## 📁 Structure du package
 
 ```
-Beta_91.5b_Correctif/
-├── index 91.5b.html         # Point d'entrée de l'application (CORRIGÉ)
+Beta_91.5c_Correctif/
+├── index 91.5c.html         # Point d'entrée
+├── styles.css               # Feuille de style complète (142 KB)
 ├── logo-codex-numeris.png   # Logo Codex Numeris
 ├── js/                      # Code JavaScript (41 modules)
 │   ├── pratiques/           # Système de pratiques configurables
 │   │   ├── pratique-configurable.js
-│   │   ├── pratique-registre.js  (ordre chargement corrigé)
+│   │   ├── pratique-registre.js
 │   │   ├── pratiques-predefines.js
 │   │   └── ...
 │   └── ...
-├── css/                     # Feuilles de style (si présentes)
-├── BETA_91.5b_CHANGELOG.md  # Notes de version avec détails bug
+├── donnees-demo.json        # Données de démonstration
+├── BETA_91.5c_CHANGELOG.md  # Notes de version détaillées
 ├── LICENSE.md               # Licence CC BY-NC-SA 4.0
 └── README.md                # Ce fichier
 ```
+
+**Note** : Le fichier `styles.css` est maintenant **inclus** dans le package.
 
 ---
 
 ## 🔍 Vérification du correctif
 
 ### Tests rapides
-1. Ouvrir `index 91.5b.html` dans **Safari, Chrome, Firefox ou Edge**
-2. Ouvrir la console JavaScript (Cmd+Option+C)
+1. Ouvrir `index 91.5c.html` dans **Safari, Chrome, Firefox ou Edge**
+2. Ouvrir la console JavaScript (Cmd+Option+C ou F12)
 3. **Vérifier** : Aucune erreur "PratiqueConfigurable is not defined"
-4. **Vérifier** : Messages de chargement pratiques affichés
-5. Naviguer vers **Réglages → Pratique de notation → Pratiques configurables**
-6. **Vérifier** : Liste des pratiques s'affiche correctement
+4. **Vérifier** : Aucune erreur de chargement CSS
+5. **Vérifier** : Interface complète affichée avec boutons visibles
+6. Naviguer vers **Réglages → Pratique de notation → Pratiques configurables**
+7. **Vérifier** : Liste des pratiques s'affiche correctement
 
 ### Console attendue
 ```
@@ -115,7 +127,10 @@ Beta_91.5b_Correctif/
 ## 🆘 Problèmes connus
 
 ### L'erreur "PratiqueConfigurable is not defined" persiste
-**Solution** : Assurez-vous d'utiliser `index 91.5b.html` et pas `index 91.5.html`.
+**Solution** : Assurez-vous d'utiliser `index 91.5c.html` et pas les versions antérieures.
+
+### Page blanche ou boutons blancs
+**Solution** : Utilisez Beta 91.5c (CSS inline complet). Versions 91.5 et 91.5b ont ce bug.
 
 ### Le sélecteur de grille est vide
 **Solution** : Créez d'abord des grilles de critères dans **Matériel → Critères d'évaluation**.
@@ -152,7 +167,9 @@ Voir **LICENSE.md** pour le texte complet.
 
 ## 🙏 Remerciements
 
-Merci à **Bruno Voisard** (Cégep Laurendeau) pour avoir signalé le bug permettant cette correction rapide.
+Merci à :
+- **Bruno Voisard** (Cégep Laurendeau) pour avoir signalé les deux bugs
+- **Testeurs demo Valleyfield** (27 novembre 2025) pour avoir confirmé le bug Edge
 
 ---
 
