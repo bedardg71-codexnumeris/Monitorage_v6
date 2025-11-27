@@ -1,4 +1,4 @@
-# Guide pour testeurs - Système de Monitorage Pédagogique Beta 90.5
+# Guide pour testeurs - Système de Monitorage Pédagogique Beta 91.1
 
 **Merci de participer aux tests de cette application !**
 
@@ -10,11 +10,12 @@ Vos retours sont essentiels pour améliorer l'outil et le rendre plus utile pour
 
 1. [Vue d'ensemble](#vue-densemble)
 2. [Installation et premiers pas](#installation-et-premiers-pas)
-3. [Scénarios de test](#scénarios-de-test)
-4. [Comment faire vos retours](#comment-faire-vos-retours)
-5. [Problèmes connus](#problèmes-connus)
-6. [FAQ](#faq)
-7. [Contact](#contact)
+3. [Charger votre pratique prédéfinie](#charger-votre-pratique-prédéfinie)
+4. [Scénarios de test](#scénarios-de-test)
+5. [Comment faire vos retours](#comment-faire-vos-retours)
+6. [Problèmes connus](#problèmes-connus)
+7. [FAQ](#faq)
+8. [Contact](#contact)
 
 ---
 
@@ -25,13 +26,40 @@ Vos retours sont essentiels pour améliorer l'outil et le rendre plus utile pour
 Une application web de **monitorage pédagogique** qui aide les enseignants à :
 - ✅ Identifier précocement les étudiants à risque d'échec
 - ✅ Calculer automatiquement des indices prédictifs (A-C-P-E : Assiduité, Complétion, Performance, Engagement)
-- ✅ Comparer deux pratiques de notation (Sommative vs PAN-Maîtrise)
+- ✅ **Utiliser votre propre pratique de notation** (7 pratiques prédéfinies disponibles)
+- ✅ **Créer des pratiques personnalisées** avec le wizard interactif en 8 étapes
 - ✅ Générer des recommandations d'intervention (RàI)
 
 ### Version testée
 
-**Beta 90.5** (16 novembre 2025) - Fonctionnalités principales :
-- **Architecture modulaire** : Système de pratiques de notation (Sommative, PAN-Maîtrise)
+**Beta 91.1** (26 novembre 2025) - Fonctionnalités principales :
+
+**🆕 NOUVEAUTÉS BETA 91.1**
+- **7 pratiques prédéfinies** : Chargement en 2 clics de votre pratique de notation
+  - PAN-Standards 5 niveaux (Bruno Voisard - Chimie)
+  - Sommative traditionnelle (Marie-Hélène Leduc - Littérature)
+  - PAN-Spécifications (François Arseneault-Hubert - Chimie)
+  - PAN-Maîtrise IDME (Grégoire Bédard - Littérature)
+  - PAN-Objectifs pondérés (Michel Baillargeon - Mathématiques)
+  - Sommative avec remplacement (Jordan Raymond - Philosophie)
+  - PAN-Jugement global (Isabelle Ménard - Biologie)
+
+- **Wizard de création de pratiques** : Interface en 8 étapes pour créer votre propre pratique
+  - Informations de base, Échelle, Structure, Calcul de note, Reprises, Critères, Seuils, Terminologie
+  - Validation à chaque étape, prévisualisation des choix
+  - Export/Import JSON pour partage entre collègues
+
+- **Système multi-objectifs** : Pour pratiques par objectifs d'apprentissage (comme Michel Baillargeon)
+  - Tableau des objectifs avec type (fondamental, intégrateur, transversal)
+  - Performance par objectif avec niveau IDME
+  - Détection automatique des défis par type d'objectif
+
+- **Architecture IndexedDB** : Capacité de stockage améliorée (5-10 MB → plusieurs GB)
+  - Supporte plusieurs groupes simultanés (à venir Beta 92+)
+  - Fallback automatique si IndexedDB indisponible
+
+**Fonctionnalités existantes**
+- **Architecture modulaire** : Système de pratiques de notation (Sommative, PAN-Maîtrise, Configurable)
 - **Système de jetons personnalisés** : Délai, reprise, aide, bonus configurables
 - **Visualisation avancée** : Barres de distribution avec nuages de points, gradients lumineux
 - **Engagement vs Risque** : Reformulation positive (Engagement = A × C × P)
@@ -48,9 +76,9 @@ Mais même **1 semaine d'exploration** est utile !
 
 ### Ce qu'on attend de vous
 
-
 **Vos objectifs de test :**
 - ✅ Installer et démarrer l'application
+- ✅ **Charger votre pratique prédéfinie** (si elle est disponible)
 - ✅ Explorer les fonctionnalités principales
 - ✅ Identifier les bugs ou comportements inattendus
 - ✅ Évaluer la facilité d'utilisation
@@ -76,7 +104,7 @@ Mais même **1 semaine d'exploration** est utile !
 ### Installation (2 minutes)
 
 1. **Décompresser** le fichier ZIP dans un dossier
-2. **Ouvrir** le fichier `index 90 (architecture).html`
+2. **Ouvrir** le fichier `index 91.html`
 3. **Importer** les données de démonstration :
    - Réglages → Import/Export
    - Sélectionner `donnees-demo.json`
@@ -112,6 +140,48 @@ Mais même **1 semaine d'exploration** est utile !
 
 ---
 
+## Charger votre pratique prédéfinie
+
+### 🆕 NOUVEAU : Pratiques prédéfinies (Beta 91.1)
+
+Si votre pratique de notation est dans la liste ci-dessous, vous pouvez la charger en **2 clics** !
+
+#### Pratiques disponibles
+
+| Enseignant·e | Pratique | Description courte |
+|--------------|----------|-------------------|
+| **Bruno Voisard** | PAN-Standards (5 niveaux) | 10 standards, 5 niveaux (0-4), reprises illimitées, niveau non rétrogradable |
+| **Marie-Hélène Leduc** | Sommative traditionnelle | Moyenne pondérée, double verrou sur analyse finale (≥60%) |
+| **François Arseneault-Hubert** | PAN-Spécifications | Notes fixes selon objectifs atteints (50, 60, 80, 100) |
+| **Grégoire Bédard** | PAN-Maîtrise (IDME) | Échelle IDME (I, D, M, E), critères SRPNF, N derniers artefacts |
+| **Michel Baillargeon** | PAN-Objectifs pondérés | 13 objectifs avec poids variables, moyenne pondérée par objectif |
+| **Jordan Raymond** | Sommative + remplacement | Examens peuvent remplacer travaux/quiz selon performance |
+| **Isabelle Ménard** | PAN-Jugement global | Mode statistique + jugement professionnel pour cas limites |
+
+#### Étapes de chargement
+
+1. **Aller dans Réglages → Pratique de notation**
+2. **Cliquer sur le bouton vert "Exemples de pratiques"**
+3. **Sélectionner votre pratique** dans la liste (cocher la case)
+4. **Cliquer sur "Charger les pratiques sélectionnées"**
+5. **Fermer le modal**
+6. **Sélectionner votre pratique** dans le menu déroulant "Pratique active"
+7. **Cliquer sur "Sauvegarder"**
+
+**✅ Votre pratique est maintenant active !** Vous pouvez commencer à créer vos évaluations et saisir vos données.
+
+#### Personnalisation après chargement
+
+Les pratiques prédéfinies sont des **modèles de départ**. Vous pouvez les personnaliser :
+- Modifier les seuils d'interprétation
+- Ajuster le nombre de standards/objectifs
+- Changer la terminologie
+- Adapter les critères d'évaluation
+
+**⚠️ Note** : Si vous personnalisez une pratique, pensez à l'exporter en JSON (bouton "Exporter JSON") pour la sauvegarder.
+
+---
+
 ## Scénarios de test
 
 ### 🟢 Test de base (15 minutes)
@@ -124,13 +194,21 @@ Mais même **1 semaine d'exploration** est utile !
 - [ ] Utiliser Précédent/Suivant dans les profils
 - [ ] Changer de mode (Normal/Anonymisation/Simulation)
 
-**Scénario 2 : Visualisations**
+**Scénario 2 : Charger une pratique prédéfinie** 🆕
+- [ ] Aller dans Réglages → Pratique de notation
+- [ ] Cliquer sur "Exemples de pratiques"
+- [ ] Observer la liste des 7 pratiques disponibles
+- [ ] Charger une pratique (la vôtre si disponible)
+- [ ] Vérifier que la pratique apparaît dans le menu déroulant
+- [ ] Sélectionner et sauvegarder
+
+**Scénario 3 : Visualisations**
 - [ ] Observer les nuages de points dans le tableau de bord
 - [ ] Survoler des points (animation et grossissement)
 - [ ] Comparer les gradients de couleur (Patterns, RàI)
 - [ ] Activer/désactiver le mode comparatif (Réglages → Pratique)
 
-**Scénario 3 : Lecture des données**
+**Scénario 4 : Lecture des données**
 - [ ] Comprendre l'indice A (Assiduité)
 - [ ] Comprendre l'indice C (Complétion)
 - [ ] Comprendre l'indice P (Performance)
@@ -140,6 +218,7 @@ Mais même **1 semaine d'exploration** est utile !
 - Est-ce que tout s'affiche correctement ?
 - Y a-t-il des bugs visuels ?
 - La navigation est-elle fluide ?
+- Le chargement d'une pratique prédéfinie est-il intuitif ?
 
 ---
 
@@ -147,21 +226,29 @@ Mais même **1 semaine d'exploration** est utile !
 
 **Objectif :** Tester les fonctionnalités de saisie.
 
-**Scénario 4 : Modifier des données**
+**Scénario 5 : Modifier des données**
 - [ ] Aller dans Évaluations → Liste des évaluations
 - [ ] Cliquer sur une évaluation
 - [ ] Modifier quelques notes
 - [ ] Retourner au tableau de bord
 - [ ] Vérifier que les indices ont changé
 
-**Scénario 5 : Saisir des présences**
+**Scénario 6 : Saisir des présences**
 - [ ] Aller dans Présences → Saisie
 - [ ] Saisir une nouvelle séance
 - [ ] Cocher/décocher des présences
 - [ ] Enregistrer
 - [ ] Vérifier l'impact sur l'indice A
 
-**Scénario 6 : Export/Import**
+**Scénario 7 : Wizard de création de pratiques** 🆕
+- [ ] Aller dans Réglages → Pratique de notation
+- [ ] Cliquer sur "Créer une pratique"
+- [ ] Parcourir les 8 étapes du wizard
+- [ ] Observer les formulaires dynamiques selon les choix
+- [ ] Créer une pratique simple de test
+- [ ] Vérifier qu'elle apparaît dans la liste des pratiques
+
+**Scénario 8 : Export/Import**
 - [ ] Réglages → Import/Export
 - [ ] Exporter les données (choisir quelques clés)
 - [ ] Télécharger le fichier JSON
@@ -173,6 +260,7 @@ Mais même **1 semaine d'exploration** est utile !
 - La saisie est-elle intuitive ?
 - Les calculs se font-ils automatiquement ?
 - Y a-t-il des messages d'erreur ?
+- Le wizard de création est-il facile à comprendre ?
 
 ---
 
@@ -180,31 +268,40 @@ Mais même **1 semaine d'exploration** est utile !
 
 **Objectif :** Utiliser avec un vrai groupe (ou créer vos propres données).
 
-**Scénario 7 : Configuration complète**
+**Scénario 9 : Configuration complète**
 - [ ] Effacer les données de démo
 - [ ] Configurer votre cours
 - [ ] Définir votre trimestre
 - [ ] Créer votre groupe d'étudiants
 - [ ] Paramétrer votre horaire
-- [ ] Choisir votre pratique (SOM ou PAN)
+- [ ] Charger votre pratique prédéfinie (ou créer la vôtre avec le wizard)
 
-**Scénario 8 : Utilisation réelle**
-- [ ] Créer vos évaluations
+**Scénario 10 : Utilisation réelle**
+- [ ] Créer vos évaluations (ou productions)
 - [ ] Saisir les notes sur 2-3 semaines
 - [ ] Saisir les présences régulièrement
 - [ ] Consulter le tableau de bord chaque semaine
 - [ ] Utiliser les profils pour identifier les élèves à risque
 
-**Scénario 9 : Mode comparatif**
+**Scénario 11 : Mode comparatif** (si applicable)
 - [ ] Activer le mode comparatif dans Réglages → Pratique de notation
 - [ ] Créer des évaluations sommatives ET des artefacts portfolio
-- [ ] Comparer les indices Sommative (orange) vs PAN-Maîtrise (bleu)
+- [ ] Comparer les indices Sommative (orange) vs PAN (bleu)
 - [ ] Observer les différences de patterns et recommandations RàI
+
+**Scénario 12 : Système multi-objectifs** 🆕 (Michel Baillargeon uniquement)
+- [ ] Charger la pratique "PAN-Objectifs pondérés Michel"
+- [ ] Créer des productions liées aux objectifs (champ "objectif")
+- [ ] Évaluer plusieurs étudiants
+- [ ] Consulter le profil d'un étudiant
+- [ ] Observer le tableau des 13 objectifs avec type, poids, performance, niveau, statut
+- [ ] Vérifier la détection automatique des défis par type d'objectif
 
 **Questions à vous poser :**
 - L'outil vous aide-t-il vraiment à détecter les élèves à risque ?
 - Les recommandations RàI sont-elles pertinentes ?
 - Gagnez-vous du temps par rapport à vos méthodes actuelles ?
+- Votre pratique prédéfinie correspond-elle bien à votre approche réelle ?
 - Recommanderiez-vous l'outil à un collègue ?
 
 ---
@@ -213,7 +310,7 @@ Mais même **1 semaine d'exploration** est utile !
 
 ### Formulaire de feedback (RECOMMANDÉ)
 
-**Lien du formulaire :** [https://forms.office.com/r/c2MBEzES32]
+**Lien du formulaire :** [À ajouter selon vos besoins]
 
 - ⏱️ Durée : 5-10 minutes
 - 🔒 Anonyme si vous le souhaitez
@@ -225,13 +322,13 @@ Si vous préférez un retour plus personnel ou détaillé :
 
 **📧 labo@codexnumeris.org**
 
-**Objet :** [Test Monitorage Beta 90.5] Vos retours
+**Objet :** [Test Monitorage Beta 91.1] Vos retours
 
 **Informations utiles à inclure :**
 - Navigateur utilisé (ex: Chrome 131, Safari 18)
 - Système d'exploitation (ex: macOS 15.1, Windows 11)
-- Version testée (Beta 90.5)
-- Mode de notation testé (Sommative, PAN-Maîtrise, ou comparatif)
+- Version testée (Beta 91.1)
+- Pratique utilisée (ex: PAN-Standards Bruno, Sommative traditionnelle)
 - Durée du test (1 semaine, 1 mois, etc.)
 
 ### Ce qui nous intéresse particulièrement
@@ -257,6 +354,11 @@ Si vous préférez un retour plus personnel ou détaillé :
 - Améliorations possibles
 - Idées pour simplifier l'utilisation
 
+**🆕 Pratiques prédéfinies**
+- Votre pratique correspond-elle bien à votre approche réelle ?
+- Quelles modifications avez-vous dû faire après chargement ?
+- Le wizard de création est-il utile pour créer une pratique personnalisée ?
+
 ### Comment documenter un bug
 
 **Format idéal :**
@@ -269,10 +371,10 @@ Si vous préférez un retour plus personnel ou détaillé :
 
 **Exemple :**
 ```
-1. Ce que j'ai fait : Cliqué sur "Sauvegarder" après avoir saisi les présences
-2. Ce que j'attendais : Message "Présences enregistrées"
-3. Ce que j'ai obtenu : Message d'erreur "undefined"
-4. Capture d'écran : bug-presences.png
+1. Ce que j'ai fait : Cliqué sur "Charger les pratiques sélectionnées"
+2. Ce que j'attendais : Ma pratique apparaît dans le menu déroulant
+3. Ce que j'ai obtenu : Rien ne s'est passé, pas de message
+4. Capture d'écran : bug-chargement-pratique.png
 ```
 
 ---
@@ -281,8 +383,8 @@ Si vous préférez un retour plus personnel ou détaillé :
 
 ### Limitations actuelles
 
-**Stockage local uniquement**
-- Les données sont dans le navigateur (localStorage)
+**Stockage local** (IndexedDB + localStorage)
+- Les données sont dans le navigateur
 - Si vous effacez le cache, vous perdez vos données
 - **Solution :** Exportez régulièrement en JSON
 
@@ -293,6 +395,10 @@ Si vous préférez un retour plus personnel ou détaillé :
 **Pas de synchronisation**
 - Pas de synchronisation entre appareils
 - **Solution :** Exportez/importez le JSON
+
+**Support multi-groupes**
+- Version Beta 91.1 : Un seul groupe à la fois
+- **À venir Beta 92+** : Support de plusieurs groupes simultanés
 
 ### Bugs connus (en cours de correction)
 
@@ -308,7 +414,7 @@ Aucun bug majeur connu pour l'instant.
 R : Oui, mais faites attention à la confidentialité. Exportez régulièrement et ne partagez pas le fichier JSON.
 
 **Q : Combien de temps faut-il pour configurer l'application ?**
-R : Avec les données de démo : 2 minutes. Avec vos propres données : 10-15 minutes.
+R : Avec les données de démo : 2 minutes. Avec vos propres données : 10-15 minutes. Avec une pratique prédéfinie : 5 minutes (chargement + configuration de base).
 
 **Q : Les calculs des indices sont-ils fiables ?**
 R : Oui, les formules sont basées sur des recherches publiées. Mais l'outil est en beta, donc validez avec vos propres observations.
@@ -317,7 +423,7 @@ R : Oui, les formules sont basées sur des recherches publiées. Mais l'outil es
 R : Oui, Safari sur iPad fonctionne bien. L'interface s'adapte à l'écran.
 
 **Q : Est-ce que je perds mes données si je ferme le navigateur ?**
-R : Non, les données restent dans localStorage. Mais exportez régulièrement par sécurité.
+R : Non, les données restent dans IndexedDB et localStorage. Mais exportez régulièrement par sécurité.
 
 **Q : Comment supprimer complètement mes données ?**
 R : Réglages → Import/Export → "Effacer toutes les données"
@@ -335,10 +441,19 @@ R :
 **Q : Pourquoi "Engagement" au lieu de "Risque d'échec" ?**
 R : Reformulation positive pour favoriser la motivation. Un engagement élevé (85%+) indique un bon engagement, un engagement faible (<65%) nécessite une intervention.
 
-**Q : C'est quoi la différence entre Sommative et PAN-Maîtrise ?**
+**Q : Comment fonctionne le système multi-objectifs ?** 🆕
+R : Pour chaque objectif d'apprentissage, l'application calcule une performance moyenne (P) en sélectionnant les N meilleurs artefacts. La note finale est une moyenne pondérée selon l'importance de chaque objectif. Les défis sont détectés par type d'objectif (intégrateur, fondamental, transversal).
+
+**Q : Puis-je créer ma propre pratique si elle n'est pas dans les exemples ?** 🆕
+R : Oui ! Utilisez le wizard de création (bouton "Créer une pratique") qui vous guide en 8 étapes. Vous pouvez aussi partir d'une pratique prédéfinie et la personnaliser.
+
+**Q : Comment partager ma pratique avec un collègue ?** 🆕
+R : Après avoir créé ou personnalisé votre pratique, cliquez sur "Exporter JSON" dans la liste des pratiques. Envoyez le fichier JSON à votre collègue, qui pourra l'importer avec le bouton "Importer JSON".
+
+**Q : C'est quoi la différence entre les pratiques Sommative et PAN ?**
 R :
-- **Sommative** : Pratique traditionnelle (examens, travaux notés, moyenne pondérée)
-- **PAN-Maîtrise** : Pratique alternative (sélection des N meilleurs artefacts, échelle IDME)
+- **Sommative** : Pratique traditionnelle (examens, travaux notés, moyenne pondérée de toutes les évaluations)
+- **PAN (Pratique alternative de notation)** : Sélection des N meilleurs artefacts, reprises illimitées, échelle de niveaux (IDME, 0-1-2-3-4, etc.)
 
 **Q : Le mode comparatif, c'est pour quoi ?**
 R : Pour comparer les deux pratiques (Sommative vs PAN-Maîtrise) avec les mêmes étudiants et voir les différences dans les diagnostics et recommandations.
@@ -351,7 +466,7 @@ R : Pour comparer les deux pratiques (Sommative vs PAN-Maîtrise) avec les même
 **Email :** labo@codexnumeris.org
 **Site web :** https://codexnumeris.org
 
-**Formulaire de feedback :** [À ajouter]
+**Formulaire de feedback :** [À ajouter selon vos besoins]
 
 ---
 
@@ -368,6 +483,6 @@ Bons tests ! 🎓
 ---
 
 **Fichier créé le :** 27 octobre 2025
-**Dernière mise à jour :** 16 novembre 2025
-**Version du guide :** 2.0
-**Version de l'app testée :** Beta 90.5
+**Dernière mise à jour :** 26 novembre 2025
+**Version du guide :** 3.0
+**Version de l'app testée :** Beta 91.1
