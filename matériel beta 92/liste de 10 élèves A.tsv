@@ -1,0 +1,30 @@
+DA	Nom	Programme
+1234567	Beaulieu Emma	180.B0
+1234570	Bélanger Jacob	300.M0
+1234573	Bergeron Rosalie	300.M1
+1234576	Bouchard Thomas	200.B1
+1234579	Boucher Charles	506.A0
+1234582	Cissé Fatou	410.B0
+1234585	Côté Florence	200.B1
+1234588	Diallo Olivier	300.M1
+1234591	Dubé Samuel	410.D0
+1234594	Fortin Nathan	410.D0
+
+
+ 1. Créer une production :
+    - Va dans Matériel → Productions
+    - Crée une production test (ex: "Artefact 1 - Test")
+    - Lie-la à la Grille SRPNF
+    - Type : Artefact portfolio
+    - Pondération : 10%
+  2. Créer une évaluation :
+    - Va dans Évaluations
+    - Choisis un étudiant
+    - Sélectionne ta production test
+    - Vérifie que :
+        - L'échelle IDME apparaît
+      - Les critères SRPNF sont là
+      - Les cartouches de rétroaction sont disponibles
+
+18 erreurs sur 540 mots → 18.4/30 (62%) | Niveau: I
+Catégorie dominante: Orthographe d'usage (10/18)
