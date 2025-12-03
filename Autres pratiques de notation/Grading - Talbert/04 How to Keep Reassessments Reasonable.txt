@@ -1,0 +1,25 @@
+How to Keep Reassessments Reasonable
+Reassessments without penalty are one of the pillars of alternative grading and key for engaging in feedback loops. Throughout the case studies, we've seen two main approaches to reassessments:
+*   New attempts. Students complete new questions that address the same standards. This can be done on a regular schedule (e.g., on the next exam) or by request (e.g., during an office hour). New attempts typically fit best with SBG and are used with quizzes, exams, or problem sets.
+*   Revisions. Students revise and resubmit previous work for a new mark. Revisions fit well with assignments that are graded holistically using specifications or ungraded using only feedback, such as projects or essays.
+This is not an either/or choice: Many systems use revisions for minor errors and new assessments for major issues, or use different types of reassessments on different assignments.
+Instructors need to consider the workload that reassessments will impose both on students and on themselves. Small changes in reassessment policies can be the difference between a successful semester and being buried under an avalanche of work.
+
+Workload for Students
+In every course, it's important for instructors to estimate the total workload on students. Reassessments are part of this workload. Avoid adding reassessments on top of an already full workload, which can overwhelm students. Instead, cut back on the regular workload to make room for reassessments. A good rule of thumb is that students will need half as much time to complete reassessments as on the original assessment.
+This advice applies to in-class assessments too, where the combination of new attempts at "old" standards in addition to "new" standards effectively makes more work for students who didn't succeed on their first attempt.
+Again, adding reassessments on top of an already full exam or quiz is a recipe for demotivating and overwhelming students. Consider having more frequent (and therefore smaller) exams of quizzes, or offering a special one-question quiz covering an especially difficult standard.
+
+Limit Reassessment Opportunities (With Flexibility)
+Resements can asone you with grading. Is important for your pam sake to put reasonable but flexible limits on the amount of reassesment. For example:
+*   Allow reassessments only on a predetermined schedule. This works best with new attempts: Students may only reassess on a subsequent quiz (or exam) that contains new questions on previously assessed standards. Or set aside dedicated "reassessment days" dedicated to new attempts. This guarantees that you can predict when reattempts will need to be graded. This approach is a key part of SBT, described in chapter 10.
+*   Limit the frequency of reassessments. For example, students may only submit one reassessment per week, or three reassessments between exams.
+*   Use tokens. Tokens can limit the total number of reassessments but give students the power to choose what and when they reassess.
+
+Help Students Engage the Feedback Loop Effectively
+Reassessments work best when students take time to understand previous issues and work to correct them. If you don't encourage metacognition and careful study, some students may reassess with abandon, throwing ideas at the wall to see what sticks. This isn't helpful either for you or for the student. Here are some ways to help engage that feedback loop effectively:
+*   "Unlock" new attempts via practice. Before attempting a new problem, require students to show evidence of completing some concrete practice that will help improve their understanding. This could be done during office hours, via autograded online homework, with posted practice problems, or in a tutoring center. If a student is still struggling, an office hour reassessment can seamlessly turn into a discussion of the student's questions.
+*   Have students fill out a reflective cover sheet. The cover sheer is then attached to a submitted reassessment. Some example prompts: What did you do to improve your understanding before this revision? What resources did you use to study and prepare for this revision? What important mistakes were in the original, and how did you fix them?
+
+Plan for Changing Reassessment Loads Throughout the Semester
+It's likely that you will have few reassessments early in the semester, bur You will probably see a significant uptick when the need for reassessments becomes more obvious. This often happens around the middle of the term, after a major assignment is returned, and especially near the end. Budget extra time during those periods for grading and office hours.
