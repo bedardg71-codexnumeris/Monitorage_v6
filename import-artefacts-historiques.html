@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import Artefacts Historiques - Beta 93</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #2196F3;
+            border-bottom: 3px solid #2196F3;
+            padding-bottom: 10px;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        textarea {
+            width: 100%;
+            height: 300px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px 10px 0;
+        }
+        button:hover {
+            background: #1976D2;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            background: #f0f8ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+        .error {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        .info {
+            background: #fff3cd;
+            border-left: 4px solid #ff9800;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #2196F3;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        input[type="date"] {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+        input[type="date"]:focus {
+            outline: 2px solid #2196F3;
+        }
+        .date-manquante {
+            background-color: #fff3cd !important;
+        }
+        .btn-secondary {
+            background: #757575;
+        }
+        .btn-secondary:hover {
+            background: #616161;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔄 Import Artefacts Historiques</h1>
+
+    <div class="info">
+        <strong>Instructions :</strong>
+        <ol>
+            <li>Ouvrez <code>index 93.html</code> dans un autre onglet (pour que db.js soit chargé)</li>
+            <li>Collez la liste des noms de fichiers ci-dessous</li>
+            <li>Cliquez sur "Parser les noms de fichiers"</li>
+            <li>Vérifiez les données extraites</li>
+            <li>Cliquez sur "Importer dans l'application"</li>
+            <li>Retournez dans l'application et relancez la reconstruction des snapshots</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>Étape 1 : Coller la liste des fichiers</h2>
+        <textarea id="inputFiles" placeholder="Collez ici la liste des noms de fichiers (un par ligne)...">Houle_2544883_Artefact_1_-_Strateg_Remis_le_2025-09-21_15h53m54s.pdf
+Bermudez_ 6345433_Artefact_1_ok.pdf
+Bienvenue_2484602_Artefact_1_-_Strateg_Remis_le_2025-09-21_20h12m37s.pdf
+Binette_2545079_Artefact_1_-_Strateg_Remis_le_2025-09-22_12h12m43s.pdf
+Boisvert_2544963_Artefact_1_-_Strateg_Remis_le_2025-09-19_12h37m03s.pdf
+Bourque_2548270_Artefact_1_-_Strateg_Remis_le_2025-09-20_12h44m13s.pdf
+Bouthillette_6374822_Artefact_1_-_Strateg_Remis_le_2025-09-22_09h44m43s.pdf
+CORRIVEAU_2544707_ Maïka artefact 1 12h00.pdf
+Desfosses_2544831_Artefact_1_-_Strateg_Remis_le_2025-09-21_09h31m13s.pdf
+Dionne_2544979_Artefact_1_-_Strateg_Remis_le_2025-09-19_10h36m01s.pdf
+Fortier_2537055_Artefact_1_-_Strateg_Remis_le_2025-09-21_22h51m40s.pdf
+Frechette_2564910_Artefact_1_-_Strateg_Remis_le_2025-09-21_12h31m13s.pdf
+Funk_2538242_Artefact_1_-_Strateg_Remis_le_2025-09-17_11h01m10s.pdf
+Gallant_ 2385627_Artefact_1a.pdf
+Giguere_2537057_Artefact_1_-_Strateg_Remis_le_2025-09-19_16h17m04s.pdf
+Giguere_2543959_Artefact_1_-_Strateg_Remis_le_2025-09-21_11h21m51s.pdf
+Hurtubise_2551601_Artefact_1_-_Strateg_Remis_le_2025-09-22_09h04m40s.pdf
+Jeanneau_2537051_Artefact_1_-_Strateg_Remis_le_2025-09-21_14h11m16s.pdf
+Lafleur_2544578_Artefact_1_-_Strateg_Remis_le_2025-09-22_08h57m22s.pdf
+Lampron_2544906_Artefact_1_-_Strateg_Remis_le_2025-09-21_18h03m50s.pdf
+Langlois_2538843_Artefact_1_-_Strateg_Remis_le_2025-09-18_21h04m45s.pdf
+Lavoie_2545736_Artefact_1_-_Strateg_Remis_le_2025-09-21_17h29m38s.pdf
+Lefebvre_2544537_Artefact_1_-_Strateg_Remis_le_2025-09-21_22h01m15s.pdf
+Marquis_6306386_Artefact_1_-_Strateg_Remis_le_2025-09-22_00h33m08s.pdf
+Njeumeni_Tchegue_2479737_Artefact_1_-_Strateg_Remis_le_2025-09-22_12h43m41s.pdf
+Plouffe_2588397_Artefact_1_-_Strateg_Remis_le_2025-09-22_12h10m56s.pdf
+Plouffe_2588397_Artefact_1_-_Strateg_Remis_le_2025-09-22_12h11m07s.pdf
+Richard_2544599_Artefact_1_-_Strateg_Remis_le_2025-09-22_12h50m59s.pdf
+Tessier_2544569_Artefact_1_-_Strateg_Remis_le_2025-09-21_12h25m13s.pdf
+Thiffault_2476199_Artefact_1_-_Strateg_Remis_le_2025-09-16_18h46m56s.pdf
+Trudel_2581353_Artefact_1_-_Strateg_Remis_le_2025-09-22_11h48m15s.pdf</textarea>
+        <button onclick="parserFichiers()">Parser les noms de fichiers</button>
+    </div>
+
+    <div id="resultats"></div>
+
+    <script>
+        let donneesExtaites = [];
+
+        /**
+         * Parse les noms de fichiers pour extraire DA, numéro artefact, date remise
+         */
+        function parserFichiers() {
+            const input = document.getElementById('inputFiles').value;
+            const lignes = input.split('\n').filter(l => l.trim());
+
+            donneesExtaites = [];
+            const resultats = document.getElementById('resultats');
+            resultats.innerHTML = '<div class="section"><h2>Étape 2 : Résultats du parsing</h2></div>';
+
+            lignes.forEach(ligne => {
+                const parsed = parserNomFichier(ligne.trim());
+                if (parsed) {
+                    donneesExtaites.push(parsed);
+                }
+            });
+
+            // Afficher tableau des résultats avec édition
+            if (donneesExtaites.length > 0) {
+                const nbSansDate = donneesExtaites.filter(d => !d.dateRemise).length;
+
+                let html = `
+                    <div class="section">
+                        <div class="success">
+                            ✅ <strong>${donneesExtaites.length} fichiers parsés avec succès</strong>
+                        </div>
+                `;
+
+                if (nbSansDate > 0) {
+                    html += `
+                        <div class="info" style="margin: 15px 0;">
+                            ⚠️ <strong>${nbSansDate} fichier(s) sans date détectée</strong> (surligné en jaune ci-dessous).<br>
+                            Vous pouvez modifier les dates directement dans le tableau avant l'import.
+                        </div>
+                    `;
+                }
+
+                html += `
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nom</th>
+                                    <th>DA</th>
+                                    <th>Artefact</th>
+                                    <th>Date remise (éditable)</th>
+                                    <th>Fichier</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+
+                donneesExtaites.forEach((d, index) => {
+                    const dateValue = d.dateRemise || '';
+                    const rowClass = d.dateRemise ? '' : 'date-manquante';
+
+                    html += `
+                        <tr class="${rowClass}">
+                            <td>${index + 1}</td>
+                            <td>${d.nom}</td>
+                            <td>${d.da}</td>
+                            <td>Artefact ${d.numeroArtefact}</td>
+                            <td>
+                                <input type="date"
+                                       id="date-${index}"
+                                       value="${dateValue}"
+                                       onchange="mettreAJourDate(${index}, this.value)"
+                                       ${!d.dateRemise ? 'required' : ''}>
+                            </td>
+                            <td style="font-size: 11px;">${d.nomFichier}</td>
+                        </tr>
+                    `;
+                });
+
+                html += `
+                            </tbody>
+                        </table>
+                        <div style="margin-top: 20px;">
+                            <button onclick="validerDates()">
+                                ✓ Valider les dates
+                            </button>
+                            <button onclick="remplirDatesManquantes()" class="btn-secondary">
+                                Remplir les dates manquantes avec aujourd'hui
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                resultats.innerHTML += html;
+            } else {
+                resultats.innerHTML += '<div class="error">❌ Aucun fichier n\'a pu être parsé. Vérifiez le format.</div>';
+            }
+        }
+
+        /**
+         * Parse un nom de fichier individuel
+         */
+        function parserNomFichier(nomFichier) {
+            // Pattern 1: Nom_DA_Artefact_X_..._Remis_le_YYYY-MM-DD_...
+            const pattern1 = /^([^_]+)_\s*(\d{7})_Artefact[_\s]*(\d+).*?Remis_le_(\d{4})-(\d{2})-(\d{2})/i;
+            const match1 = nomFichier.match(pattern1);
+
+            if (match1) {
+                return {
+                    nom: match1[1].trim(),
+                    da: match1[2],
+                    numeroArtefact: parseInt(match1[3]),
+                    dateRemise: `${match1[4]}-${match1[5]}-${match1[6]}`,
+                    nomFichier: nomFichier
+                };
+            }
+
+            // Pattern 2: Nom_DA_Artefact_X_ok.pdf (sans date, on prend la date par défaut)
+            const pattern2 = /^([^_]+)_\s*(\d{7})_Artefact[_\s]*(\d+)/i;
+            const match2 = nomFichier.match(pattern2);
+
+            if (match2) {
+                return {
+                    nom: match2[1].trim(),
+                    da: match2[2],
+                    numeroArtefact: parseInt(match2[3]),
+                    dateRemise: null, // Pas de date spécifiée
+                    nomFichier: nomFichier
+                };
+            }
+
+            // Pattern 3: NOM_DA_ description.pdf (format alternatif)
+            const pattern3 = /^([^_]+)_(\d{7})[_\s]+.*artefact[_\s]*(\d+)/i;
+            const match3 = nomFichier.match(pattern3);
+
+            if (match3) {
+                return {
+                    nom: match3[1].trim(),
+                    da: match3[2],
+                    numeroArtefact: parseInt(match3[3]),
+                    dateRemise: null,
+                    nomFichier: nomFichier
+                };
+            }
+
+            console.warn('Impossible de parser:', nomFichier);
+            return null;
+        }
+
+        /**
+         * Met à jour la date d'une ligne
+         */
+        function mettreAJourDate(index, nouvelleDate) {
+            if (donneesExtaites[index]) {
+                donneesExtaites[index].dateRemise = nouvelleDate;
+                console.log(`Date mise à jour pour ${donneesExtaites[index].nom}: ${nouvelleDate}`);
+            }
+        }
+
+        /**
+         * Remplit automatiquement toutes les dates manquantes avec aujourd'hui
+         */
+        function remplirDatesManquantes() {
+            const aujourdhui = new Date().toISOString().split('T')[0];
+            let nbRemplies = 0;
+
+            donneesExtaites.forEach((d, index) => {
+                if (!d.dateRemise) {
+                    d.dateRemise = aujourdhui;
+                    const inputDate = document.getElementById(`date-${index}`);
+                    if (inputDate) {
+                        inputDate.value = aujourdhui;
+                    }
+                    nbRemplies++;
+                }
+            });
+
+            if (nbRemplies > 0) {
+                alert(`✓ ${nbRemplies} date(s) remplie(s) avec la date d'aujourd'hui: ${aujourdhui}`);
+            } else {
+                alert('Toutes les dates sont déjà renseignées.');
+            }
+        }
+
+        /**
+         * Valide que toutes les dates sont remplies avant de permettre l'import
+         */
+        function validerDates() {
+            const datesManquantes = [];
+
+            donneesExtaites.forEach((d, index) => {
+                if (!d.dateRemise) {
+                    datesManquantes.push(`Ligne ${index + 1}: ${d.nom} (DA ${d.da})`);
+                }
+            });
+
+            if (datesManquantes.length > 0) {
+                alert('⚠️ Les dates suivantes sont manquantes:\n\n' + datesManquantes.join('\n') + '\n\nVeuillez remplir toutes les dates avant de continuer.');
+                return;
+            }
+
+            // Toutes les dates sont OK, afficher bouton import
+            const resultats = document.getElementById('resultats');
+            resultats.innerHTML += `
+                <div class="section">
+                    <div class="success">
+                        ✅ <strong>Toutes les dates sont validées !</strong><br><br>
+                        Vous pouvez maintenant importer les données dans l'application.
+                    </div>
+                    <button onclick="importerDansApplication()" style="margin-top: 15px;">
+                        📥 Importer dans l'application
+                    </button>
+                </div>
+            `;
+
+            // Scroller vers le bas
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+
+        /**
+         * Importe les données dans l'application via localStorage
+         */
+        function importerDansApplication() {
+            try {
+                // Sauvegarder dans localStorage pour transfert
+                localStorage.setItem('importArtefactsEnAttente', JSON.stringify(donneesExtaites));
+                localStorage.setItem('importArtefactsTimestamp', Date.now().toString());
+
+                const resultats = document.getElementById('resultats');
+                resultats.innerHTML += `
+                    <div class="section">
+                        <div class="success">
+                            ✅ <strong>Données préparées pour l'import !</strong><br><br>
+                            <strong>Prochaines étapes :</strong><br>
+                            1. Retournez dans l'onglet <code>index 93.html</code><br>
+                            2. Ouvrez la console (Cmd+Option+C)<br>
+                            3. Collez et exécutez le code ci-dessous :<br><br>
+                            <textarea readonly style="width: 100%; height: 200px; font-family: monospace; padding: 10px; background: #f5f5f5;">
+// Récupérer les données préparées
+const donneesImport = JSON.parse(localStorage.getItem('importArtefactsEnAttente'));
+
+// Obtenir les productions
+const productions = db.getSync('productions', []);
+const artefact1 = productions.find(p => p.titre === 'Artefact 1');
+
+if (!artefact1) {
+    alert('ERREUR: Artefact 1 introuvable dans les productions.');
+} else {
+    let evaluations = db.getSync('evaluationsEtudiants', []);
+    let nbAjoutes = 0, nbMisAJour = 0, nbIgnores = 0;
+
+    donneesImport.forEach(d => {
+        const evalExistante = evaluations.find(e => e.da === d.da && e.productionId === artefact1.id);
+
+        if (evalExistante) {
+            // ⚠️ SÉCURITÉ: Ne mettre à jour QUE si l'évaluation n'a PAS encore été corrigée
+            if (evalExistante.statut === 'non-evalue' || evalExistante.note === null) {
+                // Mise à jour seulement de la date de remise
+                if (!evalExistante.dateEvaluation || evalExistante.dateEvaluation === '') {
+                    evalExistante.dateEvaluation = d.dateRemise;
+                }
+                if (evalExistante.statutRemise !== 'remis') {
+                    evalExistante.statutRemise = 'remis';
+                }
+                nbMisAJour++;
+            } else {
+                // Évaluation déjà corrigée: on ne touche à RIEN
+                nbIgnores++;
+                console.log('Ignoré (déjà évalué):', d.nom, d.da);
+            }
+        } else {
+            // Création nouvelle évaluation (uniquement si elle n'existe pas)
+            evaluations.push({
+                id: 'eval-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+                da: d.da,
+                productionId: artefact1.id,
+                productionTitre: artefact1.titre,
+                productionType: artefact1.type,
+                statut: 'non-evalue',
+                statutRemise: 'remis',
+                dateEvaluation: d.dateRemise,
+                note: null,
+                niveauFinal: null,
+                criteres: {}
+            });
+            nbAjoutes++;
+        }
+    });
+
+    db.setSync('evaluationsEtudiants', evaluations);
+    console.log('✅ Import terminé:', nbAjoutes, 'ajoutées,', nbMisAJour, 'mises à jour,', nbIgnores, 'ignorées (déjà évaluées)');
+    alert('✅ Import terminé!\\n' + nbAjoutes + ' évaluations ajoutées\\n' + nbMisAJour + ' mises à jour\\n' + nbIgnores + ' ignorées (déjà corrigées)');
+
+    // Nettoyer
+    localStorage.removeItem('importArtefactsEnAttente');
+    localStorage.removeItem('importArtefactsTimestamp');
+}</textarea>
+                            <br>
+                            4. Allez dans <code>Réglages → Captures de progression → Reconstruire rétroactivement</code>
+                        </div>
+                    </div>
+                `;
+
+                // Scroller vers le bas
+                window.scrollTo(0, document.body.scrollHeight);
+
+            } catch (error) {
+                alert('ERREUR lors de la préparation:\n\n' + error.message);
+                console.error('Erreur:', error);
+            }
+        }
+    </script>
+</body>
+</html>
