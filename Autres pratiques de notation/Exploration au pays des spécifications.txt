@@ -1,0 +1,122 @@
+PRATIQUES ALTERNATIVES DE NOTATION
+Exploration au pays des spécifications
+Un exemple de notation par spécifications dans un cours d’exploration et d’orientation
+FRANÇOIS ARSENEAULT-HUBERT
+DEC 08, 2025
+Une image contenant écriture manuscrite, fournitures de bureau, Article de bureau, texte
+
+Le contenu généré par l’IA peut être incorrect.
+
+
+Photo de Glenn Carstens-Peters sur Unsplash
+
+Nous avons eu plusieurs occasions de présenter nos exemples de notation basée sur les standards. Au fil des sessions, l’approche se précise et se raffine, et fonctionne à notre satisfaction pour la plupart des cours de chimie du programme de sciences de la nature que nous offrons.
+
+Nous avons moins eu l’occasion de vous présenter nos exemples de notation par spécifications. Dans ce billet, j’illustrerai cette approche différente à l’aide d’un exemple d’implantation dans un cours d’Exploration en sciences et en santé au collégial, un cours porteur du cheminement Tremplin-DEC, Profil Orientation scolaire.
+
+Population étudiante du cours
+
+Les personnes suivant ce cheminement le font pour l’une des deux ou les deux raisons suivantes : prendre un moment pour s’orienter avant de choisir leur programme ou obtenir les préalables nécessaires pour intégrer un programme.
+
+Pour le cours d’Exploration, trois options existent : une en sciences de la nature, que j’ai enseignée, une en sciences humaines et une en arts et communication. Malheureusement, je l’ai découvert au début de la session, plus de la moitié des personnes présentes avait choisi une autre option, et ne se l’étaient pas vu accorder.
+
+Aussi, comme les raisons qui mènent au cheminement Tremplin-DEC sont variées, les ressources scolaires des personnes inscrites au cours sont également variées. Autrement dit, la population étudiante du cours est particulièrement hétérogène.
+
+Buts du cours et choix de l’approche
+
+Ce cours présentait selon moi une tension non résolue entre trois buts pédagogiques. D’abord, le but d’explorer ou d’orienter est exprimée dans son titre ainsi que dans les buts généraux du programme. Le but d’enseigner explicitement des habiletés de travail intellectuel se retrouve inscrit dans le plan-cadre. Enfin, le devis de compétence choisi pour le cours, Expliquer la nature générale et quelques-uns des enjeux actuels de la science et de la technologie (000X), impose un troisième but de taille qui n’inclut pas, a priori, les deux premiers.
+
+Il m’est rapidement apparut que, de ces trois buts, c’est le premier, explorer, qui était au cœur de ma motivation à donner ce cours1. Le choix de la notation par spécifications, plutôt que basée sur les standards, découle de cette préférence. En effet, l’exploration étant personnelle, elle me semblait mal se prêter à un ou à plusieurs standards. La notation par spécifications, dans laquelle la note finale repose surtout sur le nombre de travaux acceptables remis, me semblait en meilleure adéquation avec ce but : plus la personne travaillait, plus elle remettait de travaux, plus elle explorait. La note finale devenait un symbole de mon appréciation de l’étendue de cette exploration.
+
+De plus, selon mes collègues qui avaient déjà donné le cours, il présentait des défis. D’abord, l’engagement étudiant et le taux de réussite étaient généralement faibles. Ensuite, peut-être à cause du flou quant aux contenus à enseigner (nature de la science, enjeux scientifiques, méthodes de travail intellectuels, etc.), certaines personnes pouvaient passer le cours sans donner l’impression d’avoir réalisé des apprentissages significatifs. J’espérais, en implantant la notation par spécifications, trouver des solutions à ces défis. Je vous fournirai mon verdict en conclusion.
+
+Avant cela, dans les sections ci-dessous, j’utilise l’exemple de ce cours pour donner un aperçu du processus en quatre étapes pour implanter la notation par spécifications dans un cours.
+
+Objectifs d’apprentissage
+
+Dans la notation par spécifications, définir les objectifs demeure essentiel. Même si, comme vous le verrez plus bas, la note finale n’est pas connectée directement aux objectifs, définir les objectifs apporte de la clarté et constitue la base de l’alignement pédagogique.
+
+Dans le cas du cours d’exploration, formuler l’objectif central fut justement l’occasion de résoudre la tension, et d’établir un alignement, entre les trois buts du cours mentionnés plus haut.
+
+Voici l’énoncé de cet objectif : « Prendre position de façon éclairée par rapport à un enjeu scientifique ou technologique qui traverse un métier qui m’intéresse ».
+
+D’abord, la prise de position répondait au devis. Ensuite, la « façon éclairée » m’invitait à enseigner explicitement la recherche documentaire, que je considère comme une méthode de travail intellectuel éprouvée. Surtout, le « métier qui m’intéresse » permettait de cadrer le tout dans une exploration porteuse de sens pour chaque personne.
+
+Pour plus de détails sur l’ensemble des objectifs, l’arbre des objectifs du cours peut être consulté dans le plan de cours.
+
+Travaux et spécifications, pour témoigner de l’atteinte des objectifs
+
+Dans la notation par spécifications, c’est la réalisation de travaux acceptables qui témoignent de l’atteinte des objectifs. Les travaux imposés doivent donc permettre d’atteindre les objectifs, en plus d’être accompagnés de grilles qui précisent ce que doit présenter un travail qui témoigne de l’atteinte de ces objectifs. Typiquement, ces grilles sont les listes de spécifications. Ces listes sont idéalement transmises aux personnes étudiantes en même temps que les consignes.
+
+Une spécification est une caractéristique observable d’un travail acceptable, rédigée de manière à pouvoir être comprise autant par la personne qui réalise le travail que par la personne qui l’évalue. Une spécification permet de poser un jugement dichotomique avec une marge d’erreur minimale : soit le travail la respecte, soit il ne la respecte pas. Dans l’approche suggérée par Linda B. Nilson, le jugement sur le travail entier est également dichotomique : un travail est acceptable s’il respecte toutes les spécifications énoncées. Formuler des spécifications, c’est donc indiquer le minimum suffisant.
+
+Je donne ici en exemple quelques spécifications des prises de position, les travaux centraux du cours.
+
+□ La prise de position est équivalente en ampleur à un texte d’environ 750 mots, hors bibliographie et annexes.
+
+□ Au moins deux sources fiables sont convenablement citées.
+
+□ Des faits établis sont tirés des sources fiables et servent à étayer les arguments principaux.
+
+Ainsi, pour ces prises de position, je pouvais accepter des textes, mais aussi des enregistrements audio ou audiovisuels d’environ 750 mots. J’ai même accepté une carte conceptuelle particulièrement évocatrice. Si par exemple les sources n’étaient pas citées, ou si des sources étaient citées sans être employées pour en tirer des faits, je pouvais au contraire déclarer le travail non-acceptable, et révisable, en fonction de l’une des deux autres spécifications.
+
+Les consignes et les spécifications complètes de ce travail et des autres, soit un portfolio des activités couronné par une entrevue, une explication orale d’une découverte et deux tests, peuvent être consultées ailleurs.
+
+Occasions multiples
+
+La notation par spécifications se prête particulièrement bien à des travaux pouvant être révisés. En effet, les spécifications qui permettent de juger si un travail est acceptable ou non servent aussi de complément aux consignes pour réaliser le travail et de guides pour le réviser dans le cas où il ne serait pas acceptable, comme dans l’exemple avec les sources ci-dessus. Cela dit, elle accommode l’ensemble des trois stratégies pour offrir des occasions multiples.
+
+Par exemple, dans le cours d’Exploration, dans le cas des deux tests et de la présentation d’une découverte, une reprise était prévue. Dans le cas des prises de position, une révision était permise et encouragée.
+
+Enfin, pour le portfolio, je permettais aux personnes de me soumettre leurs entrées au fur et à mesure de la session, comme des travaux individuels. Ces entrées pouvaient être révisées sans limite, mais sur demande au-delà de la première, jusqu’à l’entrevue. De plus, le portfolio se prêtait bien à une évaluation holistique dans laquelle les entrées les plus représentatives permettaient de témoigner de l’atteinte des objectifs, même si, par exemple, certaines autres entrées prises isolément ne l’auraient pas permis.
+
+Le calendrier du cours, présent dans le plan de cours, permet de constater l’étalement des occasions sur la session.
+
+La notation par spécifications permet aussi l’utilisation de jetons, pour accorder des occasions supplémentaires. J’en ai accordé deux. Chacun permettait d’obtenir une reprise ou révision supplémentaire, ou une extension de date de remise pour un travail, sans aucune question de ma part. De plus, un des jetons arrivait à échéance à mi-session. J’évitais ainsi une potentielle surenchère de correction en fin de session, et j’espérais encourager les personnes étudiantes à s’engager le plus vite possible dans les travaux et leurs révisions.
+
+Construction de la note finale
+
+Dans la notation par spécifications, le plus souvent, une correspondance est établie entre des ensembles2 de travaux acceptables et la note finale. Dans le cours d’Exploration, J’ai utilisé une table de correspondance liant la note aux travaux acceptables. Vous remarquez peut-être qu’il ne s’agit pas d’une correspondance directe entre la note et les objectifs du cours. La supposition sous-jacente à la composition de la note finale dans la notation par spécifications, c’est que la réalisation des travaux permet d’atteindre les objectifs et d’en témoigner. Un certain nombre de travaux acceptables témoigne d’un certain degré d’atteinte des objectifs, qui se reflète dans la note finale, comme illustré ci-dessous.
+
+Tableau 1. Correspondance travaux-note finale dans le cours d’exploration
+
+
+
+
+Les personnes qui n’avaient pas remis suffisamment de travaux acceptables pour obtenir un C se voyaient attribuer la note finale de 50%. Cette façon générale de construire comporte quelques avantages : la simplicité3 et la possibilité pour une personne étudiante de « viser » une note en fonction du temps et des efforts qu’elle est prête à investir dans le cours. J’ai d’ailleurs annoncé d’emblée cet aspect en rencontrant les personnes étudiantes, pour susciter leur adhésion à cette approche.
+
+Dans un autre ordre d’idée, pour définir le seuil de passage du cours (qui correspond à la note C – 60%), j’ai hésité. En effet, dans les exemples de notations par spécifications impliquant un portfolio que j’avais consultés, c’est le portfolio qui forme la preuve centrale du succès, ou du degré de succès, au cours. Conséquemment, j’aurais pu choisir qu’une contribution minimale au portfolio et à l’entrevue soient requises pour obtenir la note de passage.
+
+Or, lors des échanges avec les membres de la direction pendant l’élaboration du plan de cours, j’ai compris que la prépondérance d’une évaluation impliquant étroitement l’énoncé de compétence était une de leurs priorités. J’ai donc accepté cette condition, en échange de leur aval pour l’implantation de la notation par spécifications dans le cours.
+
+Un verdict, une leçon et une piste
+
+D’abord, la notation par spécifications est adaptable à une variété de cours et de contextes. En vous présentant l’exemple du cours d’Exploration, c’est ce que je souhaitais illustrer. Si ça fonctionne dans le contexte de ce cours si particulier, alors il est plausible que cela fonctionne dans une grande variété de contextes, avec une relative simplicité.4
+
+Maintenant, voici justement ce qui a fonctionné dans le cours d’Exploration. D’abord, la tension entre les trois buts du cours m’apparaissait résolue. L’alignement, entre ma motivation principale à donner ce cours, les objectifs annoncés, les travaux à réaliser et les spécifications utilisées pour évaluer ces travaux, m’a satisfait. J’affirme que les personnes qui l’ont réussi ont considérablement progressé dans leur capacité à prendre position sur des enjeux scientifiques et dans leur exploration-orientation scolaire et professionnelle. Je vous rappelle qu’au dire de mes collègues qui avaient donné ce cours précédemment, rien n’était moins sûr.
+
+De plus, la liberté, de choisir la quantité de travaux à remettre en fonction d’une note visée, a été bien accueillie par des personnes aux parcours et aux ressources scolaires très variés. Certaines ont réalisé le plus de travaux possibles, alors que d’autres ont réussi le cours en s’en tenant au seuil de réussite. Ces dernières personnes auraient peut-être été découragées, par la somme de tous les travaux demandés dans une approche habituelle5, au point d’abandonner le cours.
+
+Ensuite et hélas, l’engagement et la réussite de la majorité n’ont pas été au rendez-vous, malgré tous mes efforts en ce sens. Rien de tout ce que j’ai mis en place n’a pu pallier le problème plus fondamental annoncé au début de ce billet : la motivation était plombée dès le départ parce que plus de la moitié des personnes présentes avaient choisi une autre option du cours d’exploration. J’en retiens une leçon : les PAN libèrent le potentiel de bien des approches pédagogiques, mais ne sont pas en soi un remède aux maux organisationnels de l’école.6
+
+Enfin, je n’ai pas eu l’occasion de donner ce cours une deuxième fois. Si je l’avais, je poursuivrais le dialogue avec les parties prenantes de l’adoption du plan de cours pour proposer l’utilisation du portfolio comme seuil de réussite, plutôt que la prise de position, comme cela est le plus souvent le cas dans les cours en notation par spécifications impliquant un portfolio des apprentissages.
+
+Vous aimeriez en savoir davantage au sujet de certains aspects de la notation de ce cours ou de la notation par spécifications en général? Vous avez des idées pour l’améliorer? Laissez un commentaire ici, ou encore mieux, joignez-vous à la communauté de pratique sur les pratiques alternatives de notation de l’Association québécoise de pédagogie collégiale!
+
+1
+Pour en savoir plus, vous pouvez consulter l’introduction du plan de cours, dans les documents en ligne de la CoP-PAN de l’AQPC
+
+2
+En anglais, on parle de « bundles ».
+
+3
+En effet, même si des auteurs reconnus recommandent de relier explicitement les notes aux objectifs plutôt qu’aux travaux (voir Criterion 1), la notation par spécifications simplifie la composition de la note finale en même temps que l’évaluation des travaux en les reliant directement. Elle accomplit cela sans renoncer au pilier primordial des PAN, soit d’offrir des occasions multiples sans pénalité.
+
+4
+Si vous ne me croyez pas, vous pouvez croire Linda B. Nilson, qui compile dans son livre sur le sujet des exemples de cours variés ayant adopté la notation par spécifications.
+
+5
+Cette somme correspondait habituellement, dans les versions précédentes du cours, à un point milieu entre ce qui était demandé pour un B et pour un A dans cette version. Pour obtenir un C, c’est donc nettement moins.
+
+6
+Cette leçon fait partie d’un des trois principes que j’aurais voulu connaitre avant de me lancer dans les PAN. Ces principes seront peut-être le sujet d’un prochain billet.
