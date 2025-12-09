@@ -60,8 +60,12 @@ MODULE SOURCE (génère/stocke)     MODULE LECTEUR (lit/affiche)
 - **Séparation** : portfolio.js orchestre, pratiques calculent (Single Source of Truth)
 
 **Pratiques implémentées** :
-- PAN-Maîtrise (Grégoire) : Échelle IDME, critères configurables, N derniers artefacts
+- PAN-Maîtrise (Grégoire Bédard) : Échelle IDME, critères configurables, N derniers artefacts
 - Sommative : Moyenne pondérée, toutes évaluations, défis génériques
+- **PAN-Objectifs (Xavier Chamberland-Thibeault)** : 6 objectifs avec calcul non-linéaire par seuils critiques
+  * Tous objectifs niveau 3 → 80% | Bonus niveau 4 → +3.33% par objectif
+  * Un objectif niveau 2 → 55% | Deux niveau 2 OU un niveau 1 → 50%
+  * Informatique (Interfaces et BD) | Cégep de Jonquière
 
 **✅ SYSTÈME 100% UNIVERSEL (3 décembre 2025)** : Critères d'évaluation configurables
 - **Avant** : Critères SRPNF codés en dur dans le code
@@ -84,12 +88,13 @@ js/pratiques/
 ├── pratique-interface.js        # Documentation du contrat IPratique
 ├── pratique-registre.js         # Registre central (détection auto)
 ├── pratique-pan-maitrise.js     # PAN-Maîtrise (IDME + SRPNF)
-└── pratique-sommative.js        # Sommative traditionnelle
+├── pratique-sommative.js        # Sommative traditionnelle
+└── pratique-pan-objectifs.js    # 🆕 PAN-Objectifs (Xavier - Informatique)
 
 Flux de données (Phase 2) :
 portfolio.js
     ↓ appelle
-obtenirPratiqueParId('sommative' | 'pan-maitrise')
+obtenirPratiqueParId('sommative' | 'pan-maitrise' | 'pan-objectifs')
     ↓ retourne instance
 pratique.calculerPerformance(da)
 pratique.calculerCompletion(da)
