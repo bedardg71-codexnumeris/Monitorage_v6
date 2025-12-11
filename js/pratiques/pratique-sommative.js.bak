@@ -20,8 +20,7 @@
 class PratiqueSommative {
 
     constructor() {
-        // ✅ DÉSACTIVÉ (7 déc 2025): Pour performance Safari
-        // console.log('📊 Initialisation de la pratique Sommative');
+        console.log('📊 Initialisation de la pratique Sommative');
     }
 
     // ========================================================================
@@ -55,7 +54,7 @@ class PratiqueSommative {
      */
     calculerPerformance(da) {
         if (!da || da.length !== 7) {
-            // console.warn('[SOM] DA invalide:', da);
+            console.warn('[SOM] DA invalide:', da);
             return null;
         }
 
@@ -72,7 +71,7 @@ class PratiqueSommative {
         );
 
         if (evaluationsEleve.length === 0) {
-            // console.log('[SOM] Aucune évaluation pour DA', da);
+            console.log('[SOM] Aucune évaluation pour DA', da);
             return null;
         }
 
@@ -93,8 +92,7 @@ class PratiqueSommative {
         const moyennePonderee = pondTotal > 0 ? scoreTotal / pondTotal : 0;
         const indiceP = moyennePonderee / 100;
 
-        // ✅ DÉSACTIVÉ (7 déc 2025): Pour performance Safari
-        // console.log(`[SOM] Performance DA ${da}: ${moyennePonderee.toFixed(1)}% (${evaluationsEleve.length} évaluations)`);
+        console.log(`[SOM] Performance DA ${da}: ${moyennePonderee.toFixed(1)}% (${evaluationsEleve.length} évaluations)`);
 
         return indiceP;
     }
@@ -122,34 +120,17 @@ class PratiqueSommative {
 
         const productions = this._lireProductions();
 
-        // ✅ NOUVEAU (Beta 94 - 10 déc 2025): Fonction helper pour obtenir dateEcheance
-        // Les jetons servent uniquement à comptabiliser, pas à modifier l'échéance
-        const obtenirDateEcheance = (evaluation) => {
-            const production = productions.find(p => p.id === evaluation.productionId);
-            if (!production || !production.dateEcheance) {
-                // Fallback: utiliser dateEvaluation si pas de dateEcheance configurée
-                return evaluation.dateEvaluation;
-            }
-            return production.dateEcheance;
-        };
-
         // Filtrer évaluations de cet étudiant jusqu'à dateLimite
-        // ✅ NOUVEAU (Beta 94): Utiliser dateEcheance de la production (jetons = compteur seulement)
-        const evaluationsEleve = evaluationsCache.filter(e => {
-            if (e.da !== da) return false;
-            if (e.statutRemise === 'non-remis') return false;
-            if (e.note === null || e.note === undefined) return false;
-
-            // ✅ NOUVEAU (Beta 94): Filtrer par dateEcheance de la production
-            const dateEcheance = obtenirDateEcheance(e);
-            if (!dateEcheance) return false;
-
-            return dateEcheance <= dateLimite;
-        });
+        const evaluationsEleve = evaluationsCache.filter(e =>
+            e.da === da &&
+            e.dateEvaluation && e.dateEvaluation <= dateLimite && // ✅ Filtrage temporel
+            e.statutRemise !== 'non-remis' && // ✅ Exclure non-remis
+            e.note !== null &&
+            e.note !== undefined
+        );
 
         if (evaluationsEleve.length === 0) {
-            // ✅ DÉSACTIVÉ (7 déc 2025): Pour performance Safari
-            // console.log(`[SOM-Historique] Aucune évaluation pour DA ${da} jusqu'à ${dateLimite}`);
+            console.log(`[SOM-Historique] Aucune évaluation pour DA ${da} jusqu'à ${dateLimite}`);
             return null;
         }
 
@@ -170,8 +151,7 @@ class PratiqueSommative {
         const moyennePonderee = pondTotal > 0 ? scoreTotal / pondTotal : 0;
         const indiceP = moyennePonderee / 100;
 
-        // ✅ DÉSACTIVÉ (7 déc 2025): Pour performance Safari
-        // console.log(`[SOM-Historique] DA ${da}: ${moyennePonderee.toFixed(1)}% (${evaluationsEleve.length} évaluations)`);
+        console.log(`[SOM-Historique] DA ${da}: ${moyennePonderee.toFixed(1)}% (${evaluationsEleve.length} évaluations)`);
 
         return indiceP;
     }
@@ -188,7 +168,7 @@ class PratiqueSommative {
      */
     calculerCompletion(da) {
         if (!da || da.length !== 7) {
-            // console.warn('[SOM] DA invalide:', da);
+            console.warn('[SOM] DA invalide:', da);
             return null;
         }
 
@@ -210,7 +190,7 @@ class PratiqueSommative {
         });
 
         if (productionsEvaluees.length === 0) {
-            // console.log('[SOM] Aucune production évaluée pour DA', da);
+            console.log('[SOM] Aucune production évaluée pour DA', da);
             return null;
         }
 
@@ -226,8 +206,7 @@ class PratiqueSommative {
 
         const indiceC = productionsRemises.length / productionsEvaluees.length;
 
-        // ✅ DÉSACTIVÉ (7 déc 2025): Pour performance Safari
-        // console.log(`[SOM] Complétion DA ${da}: ${(indiceC * 100).toFixed(1)}% (${productionsRemises.length}/${productionsEvaluees.length} évaluées)`);
+        console.log(`[SOM] Complétion DA ${da}: ${(indiceC * 100).toFixed(1)}% (${productionsRemises.length}/${productionsEvaluees.length} évaluées)`);
 
         return indiceC;
     }
@@ -249,7 +228,7 @@ class PratiqueSommative {
      */
     detecterDefis(da) {
         if (!da || da.length !== 7) {
-            // console.warn('[SOM] DA invalide:', da);
+            console.warn('[SOM] DA invalide:', da);
             return { type: 'generique', defis: [], tendance: {} };
         }
 
@@ -345,7 +324,7 @@ class PratiqueSommative {
      */
     identifierPattern(da) {
         if (!da || da.length !== 7) {
-            // console.warn('[SOM] DA invalide:', da);
+            console.warn('[SOM] DA invalide:', da);
             return {
                 type: 'inconnu',
                 description: 'DA invalide',
@@ -373,7 +352,7 @@ class PratiqueSommative {
                 indiceA = indicesAssiduite[da].actuel.A / 100;
             }
         } catch (error) {
-            // console.warn('[SOM] Erreur lecture assiduité:', error);
+            console.warn('[SOM] Erreur lecture assiduité:', error);
         }
 
         // Calculer engagement E = (A × C × P)^(1/3)
@@ -444,18 +423,17 @@ class PratiqueSommative {
      */
     genererCibleIntervention(da) {
         if (!da || da.length !== 7) {
-            // console.warn('[SOM] DA invalide:', da);
+            console.warn('[SOM] DA invalide:', da);
             return null;
         }
 
         const pattern = this.identifierPattern(da);
         const defis = this.detecterDefis(da);
 
-        // ✅ DÉSACTIVÉ (7 déc 2025): Pour performance Safari
-        // console.log('[SOM] Génération cible RàI pour DA', da, {
-        //     pattern: pattern.type,
-        //     nbDefis: defis.defis.length
-        // });
+        console.log('[SOM] Génération cible RàI pour DA', da, {
+            pattern: pattern.type,
+            nbDefis: defis.defis.length
+        });
 
         // Identifier la production la plus faible
         const productionFaible = defis.defis.find(d => d.type === 'note-faible');
@@ -715,8 +693,7 @@ class PratiqueSommative {
 
     try {
         window.enregistrerPratique('sommative', instance);
-        // ✅ DÉSACTIVÉ (7 déc 2025): Pour performance Safari
-        // console.log('✅ [SOM] Pratique Sommative enregistrée avec succès');
+        console.log('✅ [SOM] Pratique Sommative enregistrée avec succès');
     } catch (error) {
         console.error('[SOM] Erreur lors de l\'enregistrement:', error);
     }
@@ -725,5 +702,4 @@ class PratiqueSommative {
 // Export pour utilisation directe
 window.PratiqueSommative = PratiqueSommative;
 
-// ✅ DÉSACTIVÉ (7 déc 2025): Pour performance Safari
-// console.log('✅ Module pratique-sommative.js chargé');
+console.log('✅ Module pratique-sommative.js chargé');
