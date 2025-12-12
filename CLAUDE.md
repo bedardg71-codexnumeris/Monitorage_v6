@@ -1312,6 +1312,347 @@ if (statutRemise === 'non-remis' || statutRemise === 'retard') {
 
 ---
 
+**Fichier intermédiaire: Beta 93.5 (Architecture multi-cours et groupe démo)**
+
+**Nom**: Non applicable (changements intégrés progressivement)
+**Date de développement**: 11 décembre 2025
+**Version**: Beta 93.5
+**Statut**: ✅ Complété et intégré dans Beta 94
+
+**Objectif**: Préparer l'architecture pour supporter plusieurs cours-groupes simultanément et intégrer un groupe démo préchargé.
+
+### Architecture Trimestre → Cours → Groupe → Étudiants
+
+**Hiérarchie pédagogique réelle** :
+
+```
+TRIMESTRE (période temporelle unique : H2026, A2025, etc.)
+    ↓
+COURS (un ou plusieurs : 601-101, 601-102, 601-103)
+    ↓
+GROUPE (un ou plusieurs par cours : 01, 02, 03, 9999)
+    ↓
+ÉTUDIANTS + DONNÉES (évaluations, présences)
+```
+
+**Exemple concret - Hiver 2026** :
+- **1 trimestre actif** : H2026
+- **3 cours** : 601-101, 601-102, 601-103
+- **5 groupes** :
+  * 601-101 Groupe 01 (30 étudiants)
+  * 601-101 Groupe 02 (28 étudiants)
+  * 601-102 Groupe 01 (32 étudiants)
+  * 601-102 Groupe 03 (25 étudiants)
+  * 601-103 Groupe 01 (29 étudiants)
+
+### Modifications des structures de données
+
+**1. Cours - Ajout `trimestreId`** :
+```javascript
+{
+    id: "601-101-h2026-01",
+    sigle: "601-101",
+    titre: "Écriture et littérature",
+    session: "H",
+    annee: "2026",
+    trimestreId: "h2026",         // 🆕 Lien vers trimestre
+    groupe: "01",
+    actif: true
+}
+```
+
+**2. Étudiants - Ajout `coursId`** :
+```javascript
+{
+    da: "2234567",
+    prenom: "Émilie",
+    nom: "Tremblay",
+    groupe: "01",                 // ⚠️ Ambigu seul
+    coursId: "601-101-h2026-01"  // 🆕 Lien précis vers cours-groupe
+}
+```
+
+**3. Productions - Ajout `coursId`** :
+```javascript
+{
+    id: "PROD1234567890",
+    nom: "Analyse littéraire",
+    coursId: "601-101-h2026-01"  // 🆕 Lien vers cours
+}
+```
+
+**4. Présences - Structure par date** :
+```javascript
+[
+    {
+        date: "2026-01-15",
+        da: "2234567",
+        heures: 2.0,
+        coursId: "601-101-h2026-01"  // 🆕 Lien vers cours (via migration)
+    }
+]
+```
+
+### Système de migrations automatiques
+
+**Nouveau module** : `js/migrations.js` (189 lignes)
+
+**4 migrations Beta 93.5** :
+1. **Étudiants → coursId** : Associe chaque étudiant au cours actif
+2. **Productions → coursId** : Associe chaque production au cours actif
+3. **Présences → coursId** : Associe chaque présence au cours actif
+4. **Cours → trimestreId** : Génère trimestreId depuis session+annee (ex: "h2026")
+
+**Fonction principale** :
+```javascript
+function executerMigrationsBeta935() {
+    const resultats = {
+        etudiants: migrerEtudiantsVersCoursId(),
+        productions: migrerProductionsVersCoursId(),
+        presences: migrerPresencesVersCoursId(),
+        cours: migrerCoursVersTrimestreId()
+    };
+    return resultats;
+}
+```
+
+**Exécution** : Automatique au chargement dans `js/main.js`
+
+### Groupe démo préchargé
+
+**Interface utilisateur** :
+- **Emplacement** : Réglages → Trimestre → Section "Données de démonstration"
+- **Contrôle** : Checkbox "Utiliser les données de démonstration (groupe 9999)"
+- **Fonction** : `basculerDonneesDemo(activer)` dans `js/trimestre.js` (lignes 1152-1280)
+
+**Caractéristiques du groupe demo** :
+- **Trimestre** : H2026 (fictif)
+- **Cours** : 601-101 Écriture et littérature
+- **Enseignant** : Primo Primavera
+- **Groupe** : 9999 (identifiant fictif réservé)
+- **Étudiants** : 10 étudiants fictifs avec programmes variés
+- **Productions** : 4 artefacts avec échéances
+- **Évaluations** : 40 évaluations complètes (notes IDME)
+- **Présences** : 8 semaines générées dynamiquement (92% assiduité moyenne)
+- **Identifiant unique** : `601-101-h2026-9999`
+
+**Contenu du pack** :
+- **Fichier source** : `pack-demarrage-complet.json` (99 KB)
+- **Module chargeur** : `window.PACK_DEMARRAGE` (chargé via script)
+- **Grilles** : Grille SRPNF complète
+- **Échelle** : IDME (4 niveaux)
+- **Cartouches** : Commentaires de rétroaction prédéfinis
+
+**Fonctionnement** :
+
+```javascript
+// Activation (checkbox cochée)
+basculerDonneesDemo(true)
+    ↓
+Fusion intelligente avec données existantes
+    ↓
+Cours demo ajouté (si absent)
+10 étudiants ajoutés (groupe 9999)
+4 productions ajoutées (liées au cours demo)
+40 évaluations ajoutées (réparties sur artefacts)
+Présences générées dynamiquement (pattern 92%)
+Grilles/échelles fusionnées (si absentes)
+    ↓
+Groupe 9999 immédiatement disponible dans l'application
+
+// Désactivation (checkbox décochée)
+basculerDonneesDemo(false)
+    ↓
+supprimerGroupe9999()
+    ↓
+Toutes les données associées au groupe 9999 supprimées
+    ↓
+Application revient à l'état sans demo
+```
+
+**Génération dynamique des présences** :
+- Fonction `genererPresencesDemo()` dans `js/trimestre.js`
+- Pattern réaliste : 92% d'assiduité moyenne
+- Variations individuelles pour réalisme
+- 8 semaines de données générées
+- Dates calculées depuis le calendrier du trimestre
+
+**Suppression propre** :
+- Fonction `supprimerGroupe9999()` supprime :
+  * Le cours demo
+  * Les 10 étudiants (DA 2234567-2234576)
+  * Les productions liées
+  * Les évaluations liées
+  * Les présences liées
+- Données utilisateur préservées intactes
+
+### Bénéfices Beta 93.5
+
+✅ **Architecture évolutive** : Prépare le terrain pour support multi-cours (Beta 95+)
+✅ **Isolation des données** : Chaque cours-groupe est clairement séparé
+✅ **Groupe démo intégré** : Nouveaux utilisateurs peuvent explorer avec données réalistes
+✅ **Migrations automatiques** : Données existantes migrées transparemment
+✅ **Suppression propre** : Groupe démo supprimable en un clic
+
+### Statistiques Beta 93.5
+
+| Métrique | Valeur |
+|----------|--------|
+| **Date** | 11 décembre 2025 |
+| **Fichiers créés** | 1 (migrations.js) |
+| **Fichiers modifiés** | 4 (cours.js, db.js, main.js, pack-demarrage.js) |
+| **Lignes ajoutées** | ~250 lignes |
+| **Migrations** | 4 migrations automatiques |
+
+**Documentation complète** :
+- `Documentation/Plans/PLAN_BETA_93.5_GROUPE_DEMO.md`
+- `Documentation/Plans/PLAN_BETA_93.5_MULTI_COURS.md`
+
+---
+
+**Fichier actuel: Beta 94 (Snapshots et suivi longitudinal)**
+
+**Nom**: `index.html`
+**Date de création**: 10 décembre 2025
+**Version actuelle**: Beta 94
+**Statut**: ✅ Fonctionnel
+
+**Créée à partir de**: Beta 93.5 (architecture multi-cours intégrée)
+**Provenance**: Beta 93 avec système universel 100% complet
+**Changelog**: Développement sur 3 jours (10-12 décembre 2025)
+
+**Développement système de snapshots** (10-12 décembre 2025):
+
+### Session 1 : Système de snapshots hebdomadaires (10 décembre)
+
+**Objectif** : Capturer l'évolution longitudinale des indices A-C-P pour visualiser la progression dans le temps
+
+**Nouveau module** : `js/snapshots.js` (765 lignes)
+
+**Fonctionnalités implémentées** :
+1. **Capture automatique** : À chaque saisie de présences, un snapshot est créé
+2. **Données capturées** : A ponctuel, A_cumulatif, C, P, pattern, niveau RàI
+3. **Reconstruction rétroactive** : Recalcul de tous les snapshots historiques
+4. **Graphiques Chart.js** : Visualisation évolution individuelle et groupe
+
+**Distinction ponctuel vs cumulatif** :
+
+| Graphique | A | C | P | Rationale |
+|-----------|---|---|---|-----------|
+| **Individuel** | Cumulatif | Cumulatif | Cumulatif | Dépistage impact à long terme |
+| **Groupe** | Ponctuel | Ponctuel | Cumulatif | Détection variations récentes |
+
+**Rationale pédagogique** :
+- **Indices cumulatifs (individuel)** : Une absence passée ou un travail non remis peuvent avoir des conséquences durables sur l'apprentissage. Les indices cumulatifs permettent de mieux dépister cet impact à long terme.
+- **Indices ponctuals (groupe)** : Permettent de détecter rapidement les problèmes émergents (ex: séance difficile, échéance problématique).
+
+**Structure des données** :
+```javascript
+{
+    id: "snapshot-2025-09-03",
+    dateSeance: "2025-09-03",
+    numSemaine: 1,
+    etudiants: [
+        {
+            da: "2484602",
+            nom: "Eve Bienvenue",
+            A: 100,              // Ponctuel (pour graphique groupe)
+            A_cumulatif: 100,    // Cumulatif (pour graphique individuel)
+            C: 67,               // Cumulatif
+            P: 75.5,             // Cumulatif
+            pattern: "stable",
+            rai: 1
+        },
+        // ...
+    ]
+}
+```
+
+**Fichiers clés** :
+- `js/snapshots.js` : Capture, reconstruction, API
+- `js/graphiques-progression.js` : Visualisations Chart.js
+- `js/saisie-presences.js` : Déclencheur automatique
+
+### Session 2 : Correction bug A_cumulatif (12 décembre)
+
+**Problème identifié** : Eve affichait 92% d'assiduité au lieu de 100%
+
+**Investigation** :
+- Graphique individuel : A_cumulatif chute à 92% à la semaine 6 (2025-10-01)
+- Calcul : 24h présentes / 26h offertes = 92.3%
+- Cause : **Séance fantôme le 30 septembre 2025** (un mardi sans cours)
+
+**Scripts de diagnostic créés** :
+- `test_graphique_c.js` : Vérification données snapshots
+- `test_c_individuel.js` : Simulation calcul C par semaine
+- `test_eve_presences.js` : Analyse détaillée présences Eve
+- `test_eve_30sept.js` : Investigation séance problématique
+- `supprimer_30sept.js` : Script de correction
+
+**Solution appliquée** :
+1. Identification : 30 étudiants avec absence enregistrée le 30 septembre (jour sans cours)
+2. Suppression : 30 présences fantômes supprimées (911 → 881 présences)
+3. Reconstruction : Snapshots recalculés avec données corrigées
+4. Résultat : Assiduité Eve corrigée 92.3% → 100.0% (24h/24h sur 12 séances)
+
+**Leçon apprise** : Importance de valider la cohérence entre horaire configuré et séances enregistrées
+
+### Session 3 : Documentation complète (12 décembre)
+
+**Documentation ajoutée** :
+
+1. **Section Aide de l'application** (index.html:8600-8666)
+   - Carte "6. Captures de progression (Snapshots hebdomadaires)"
+   - Explication fonctionnement automatique
+   - Distinction ponctuel vs cumulatif (graphiques individuel et groupe)
+   - Procédure reconstruction snapshots
+   - Exemple concret (cas Eve)
+   - Avantages des snapshots
+
+2. **Titres des graphiques** (graphiques-progression.js)
+   - Graphique individuel (ligne 261) : "Évolution des indices A-C-P (par séance) / Indices cumulatifs depuis le début du trimestre"
+   - Graphique groupe (ligne 499) : "Évolution du groupe - Moyennes A-C-P (par séance) / A et C : ponctuals (cette séance) • P : cumulatif (depuis le début)"
+
+3. **CLAUDE.md** (ce fichier)
+   - Documentation complète système snapshots
+   - Rationale pédagogique
+   - Bugs corrigés
+   - Scripts créés
+
+**Impact Beta 94** :
+- ✅ Suivi longitudinal complet de la progression
+- ✅ Visualisation graphique évolution A-C-P
+- ✅ Détection patterns temporels (chutes, paliers, rebonds)
+- ✅ Reconstruction rétroactive pour corrections
+- ✅ Documentation complète pour utilisateurs
+
+### Statistiques Beta 94
+
+| Métrique | Valeur |
+|----------|--------|
+| **Sessions** | 3 (10-12 décembre) |
+| **Commits** | ~8 commits |
+| **Fichiers créés** | 2 (snapshots.js, 5 scripts de test) |
+| **Fichiers modifiés** | 6 fichiers JS + 1 HTML |
+| **Lignes ajoutées** | ~1200 lignes |
+| **Bugs corrigés** | 1 bug critique (séance fantôme) |
+
+**Commits principaux** :
+1. Implémentation système snapshots hebdomadaires
+2. Correction bug A_cumulatif (séance fantôme)
+3. Documentation complète (Aide + CLAUDE.md)
+
+---
+
+**Fichier précédent: Beta 93 (Système universel)**
+
+**Nom**: `index 93.html`
+**Date de création**: 3 décembre 2025
+**Version actuelle**: Beta 93
+**Statut**: ✅ Archivé
+
+---
+
 **Fichier précédent: Beta 92 (Primo Assistant)**
 
 **Nom**: `index 92.html`
